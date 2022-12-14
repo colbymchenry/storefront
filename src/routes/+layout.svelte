@@ -8,9 +8,6 @@
   $: if (data["theme"]) {
       $theme = data["theme"];
   }
-
-  console.log($theme)
-
 </script>
 
 <main>

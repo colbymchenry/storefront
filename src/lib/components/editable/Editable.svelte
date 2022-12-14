@@ -5,6 +5,7 @@
     import {firebaseClientUtils} from "$lib/utils/firebase/firebase-client-utils";
     import Styles from "$lib/components/editable/Styles.svelte";
     import {formHelper} from "$lib/utils/form-helper";
+    import {onDestroy, tick} from "svelte";
 
     export let key: string;
 
@@ -17,16 +18,17 @@
 
     let currentEdits: IThemeObject = JSON.parse(JSON.stringify(themeObj));
 
-    let editorElem;
+    let containerElem, editorElem;
     let visible: boolean = false;
     let loading: boolean = false;
+    let dragging: boolean = false;
     let tab: string = 'styles';
     let propsForm;
 
     function handleWindowClick(e) {
-        if (!editorElem || loading) return;
+        if (!containerElem || !editorElem || loading || dragging) return;
 
-        if (!editorElem.contains(e.target)) {
+        if (!editorElem.contains(e.target) && !containerElem.contains(e.target)) {
             visible = false;
         }
     }
@@ -47,12 +49,40 @@
         loading = false;
     }
 
+    async function showEditor(e) {
+        visible = true;
+        // let editor render
+        await tick();
+        let body = document.querySelector('BODY');
+        body.insertAdjacentElement('beforeend', editorElem);
+        editorElem.style.top = e.y + "px";
+        editorElem.style.left = e.x + "px";
+        editorElem.classList.remove("invisible");
+    }
+
+    function handleDrag(e) {
+        if (editorElem && dragging) {
+            editorElem.style.top = e.y + "px";
+            editorElem.style.left = e.x + "px";
+        }
+    }
+
+    onDestroy(() => {
+        if (editorElem) editorElem.remove();
+    });
+
 </script>
 
-<svelte:window on:click={handleWindowClick}/>
+<svelte:window on:mousedown={handleWindowClick} on:mousemove={handleDrag} on:mouseup={(e) => {
+    if (dragging) {
+        dragging = false;
+        e.preventDefault();
+        e.stopPropagation();
+    }
+}}/>
 
 {#if $editor}
-    <div bind:this={editorElem} class="editable-content" class:visible on:click={() => visible = true}>
+    <div bind:this={containerElem} class="editable-content" class:visible on:click={showEditor}>
         <slot {currentEdits} styles={`
             padding-left: ${currentEdits.padding.left || 0}rem;
             padding-top: ${currentEdits.padding.top || 0}rem;
@@ -76,46 +106,53 @@
              ${currentEdits.isOverline ? "overline" : ""}
          `}/>
 
-        <!-- TODO: Put this as bottom of body and make fixed -->
-        <div class="editor" class:visible>
-            <div class="tabs">
-                <div class:active={tab === 'styles'} on:click={() => tab = 'styles'}>
-                    <span class="material-symbols-outlined mr-2">format_paint</span>
-                    Styles
-                </div>
-                <div class:active={tab === 'properties'} on:click={() => tab = 'properties'}>
-                    <span class="material-symbols-outlined mr-2">settings</span>
-                    Properties
-                </div>
-            </div>
-
-            <div class="w-full flex flex-col overflow-hidden flex-grow">
-
-                <div class="w-full flex flex-col flex-grow overflow-y-auto overflow-x-hidden p-4">
-                    <div class:hidden={tab !== 'styles'}>
-                        <Styles bind:currentEdits/>
+        {#if visible}
+            <div bind:this={editorElem} class="editor invisible">
+                <div class="tabs">
+                    <div class:active={tab === 'styles'} on:click={() => tab = 'styles'}>
+                        <span class="material-symbols-outlined mr-2">format_paint</span>
+                        Styles
+                    </div>
+                    <div class:active={tab === 'properties'} on:click={() => tab = 'properties'}>
+                        <span class="material-symbols-outlined mr-2">settings</span>
+                        Properties
                     </div>
 
-                    <div class:hidden={tab !== 'properties'}>
-                        <form bind:this={propsForm}>
-                            <slot name="props"/>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="footer">
-                    <span class="font-bold">#{key}</span>
-                    <button class="save-btn" class:loading disabled={loading}
-                            on:click={save}>
-                        {#if loading}
-                            Please wait...
-                        {:else}
-                            Save
-                        {/if}
+                    <button class="absolute top-0 left-0 bg-gray-300 rounded" class:cursor-grab={!dragging}
+                            class:cursor-grabbing={dragging}
+                            style="margin-left: -1.75rem;" on:mousedown={() => dragging = true}>
+                        <span class="material-symbols-outlined mt-1 text-gray-700">drag_indicator</span>
                     </button>
                 </div>
+
+                <div class="w-full flex flex-col overflow-hidden flex-grow">
+
+                    <div class="w-full flex flex-col flex-grow overflow-y-auto overflow-x-hidden p-4">
+                        <div class:hidden={tab !== 'styles'}>
+                            <Styles bind:currentEdits/>
+                        </div>
+
+                        <div class:hidden={tab !== 'properties'}>
+                            <form bind:this={propsForm}>
+                                <slot name="props"/>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        <span class="font-bold">#{key}</span>
+                        <button class="save-btn" class:loading disabled={loading}
+                                on:click={save}>
+                            {#if loading}
+                                Please wait...
+                            {:else}
+                                Save
+                            {/if}
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
+        {/if}
     </div>
 {:else}
     <slot {currentEdits} styles={`
@@ -152,18 +189,14 @@
   }
 
   .editor {
-    @apply cursor-auto absolute bottom-0 left-0 flex flex-col overflow-hidden bg-white shadow-md rounded-lg opacity-0 pointer-events-none transition;
+    @apply cursor-auto fixed flex flex-col bg-white shadow-md rounded-lg transition;
     margin-bottom: -480px;
     width: 400px;
     height: 480px;
-
-    &.visible {
-      @apply opacity-100 pointer-events-auto;
-    }
   }
 
   .tabs {
-    @apply flex w-full items-center bg-gray-200;
+    @apply flex w-full items-center bg-gray-200 rounded-t-lg overflow-hidden;
     min-height: 2rem;
     max-height: 2rem;
 
