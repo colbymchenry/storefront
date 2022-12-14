@@ -62,8 +62,8 @@
 
     function handleDrag(e) {
         if (editorElem && dragging) {
-            editorElem.style.top = e.y + "px";
-            editorElem.style.left = e.x + "px";
+            editorElem.style.top = (e.y - 10) + "px";
+            editorElem.style.left = (e.x + 10) + "px";
         }
     }
 
