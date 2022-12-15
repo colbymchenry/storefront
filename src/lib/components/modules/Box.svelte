@@ -1,5 +1,6 @@
 <script lang="ts">
     import Editable from "$lib/components/editable/Editable.svelte";
+    import Slider from "$lib/components/Slider.svelte";
 
     export let key;
     let display;
@@ -11,6 +12,7 @@
         <slot/>
     </div>
 
+    <!-- PROPS -->
     <div slot="props" class="w-full flex flex-col">
         <div class="flex flex-col">
             <label class="font-bold mb-2 text-sm">Display:</label>
@@ -22,7 +24,24 @@
             </select>
 
             {#if display === 'flex'}
-                <p>flex</p>
+                <label class="font-bold mb-2 text-sm">Direction:</label>
+                <select name="direction" value={currentEdits.props.direction || 'block'}>
+                    <option value="flex-row" default>row</option>
+                    <option value="flex-column">column</option>
+                    <option value="flex-row-reverse">row-reverse</option>
+                    <option value="flex-column-reverse">column-reverse</option>
+                </select>
+
+                <label class="font-bold mb-2 text-sm">Wrapping:</label>
+                <select name="wrapping" value={currentEdits.props.wrapping || 'block'}>
+                    <option value="flex-wrap" default>Wrap</option>
+                    <option value="flex-wrap-reverse">Wrap Reverse</option>
+                    <option value="flex-nowrap">No Wrapping</option>
+                </select>
+
+                <label class="font-bold mb-2 text-sm">Gap:</label>
+                <Slider />
+
             {:else if display === 'grid'}
                 <p>grid</p>
             {/if}
