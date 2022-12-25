@@ -5,6 +5,7 @@
     import TailwindColors from "$lib/components/TailwindColors.svelte";
     import {editor} from "$lib/stores/editor";
     import StoreSettingsCog from "$lib/components/store-settings/StoreSettingsCog.svelte";
+    import AgeAuthorization from "$lib/components/modules/AgeAuthorization.svelte";
 
     export let data;
 
@@ -21,6 +22,8 @@
         <slot/>
     </section>
 </main>
+
+<AgeAuthorization />
 
 {#if $editor.enabled}
     <StoreSettingsCog />

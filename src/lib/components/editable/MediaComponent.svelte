@@ -5,13 +5,14 @@
     export let src;
     export let fileName: string;
     export let multiple: boolean = false;
+    export let video: boolean = false;
+    export let name: string;
+    const dispatch = createEventDispatcher();
     let input;
     let uploading: boolean = false;
     const dispatcher = createEventDispatcher();
 
     // TODO: Need to allow single or multiple media upload
-    // TODO: Need to only upload when clicking submit
-    // TODO: Need to delete last tied uploaded file to this component and delete it
     export async function uploadMedia(): Promise<string[]> {
         let files: FileList = input.files;
         if (!files.length) return;
@@ -37,6 +38,7 @@
             }
         }));
 
+
         return result.filter((obj) => obj !== undefined);
     }
 
@@ -49,11 +51,26 @@
                 input.value = '';
                 notified = true;
             }
-        })
+        });
+
+        dispatch('change', {files: e.target.files, uploadMedia})
     }
 </script>
 
-<div class="w-full flex flex-col justify-center items-center">
-    <h1>Video File <strong>(.mp4 only)</strong></h1>
-    <input bind:this={input} on:change={onChange} type="file" accept="video/mp4" alt="" {multiple}/>
+<div class="w-full flex flex-col justify-center items-center gap-2">
+    {#if video}
+        <h1>Video File <strong>(.mp4 only)</strong></h1>
+    {:else}
+        <h1>Image File <strong>(.png,.jpg only)</strong></h1>
+    {/if}
+    {#if src}
+        <button type="button" on:click={() => src = undefined} class="btn bg-gray-200 p-2">Change and Remove</button>
+    {:else}
+        <input bind:this={input} on:change={onChange} type="file" accept={video ? "video/mp4" : "image/*"} alt=""
+               {multiple}/>
+    {/if}
+
+    {#if name}
+        <input type="hidden" bind:value={src} {name} />
+    {/if}
 </div>

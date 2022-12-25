@@ -5,9 +5,10 @@
     import {firebaseClientUtils} from "$lib/utils/firebase/firebase-client-utils";
     import Styles from "$lib/components/editable/Styles.svelte";
     import {formHelper} from "$lib/utils/form-helper";
-    import {onDestroy, tick} from "svelte";
+    import {createEventDispatcher, onDestroy, tick} from "svelte";
 
     export let key: string;
+    let dispatch = createEventDispatcher();
 
     let themeObj: IThemeObject = $theme[key] || {
         styles: "",
@@ -26,6 +27,7 @@
     let dragging: boolean = false;
     let tab: string = 'styles';
     let propsForm;
+    export let clazz: string;
 
     function handleWindowClick(e) {
         if (!containerElem || !editorElem || loading || dragging) return;
@@ -42,9 +44,10 @@
             currentEdits.props = formHelper.getFormData(propsForm);
 
             if (onSave) {
-                await onSave('save', currentEdits);
+                await onSave(currentEdits);
             }
             $theme[key] = currentEdits;
+            themeObj = $theme[key];
             await firebaseClientUtils.set("settings", "theme", $theme);
             loading = false;
             visible = false;
@@ -56,8 +59,8 @@
     }
 
     async function showEditor(e) {
-        currentEdits = JSON.parse(JSON.stringify(themeObj));
         visible = true;
+        dispatch('open');
         // let editor render
         await tick();
         let body = document.querySelector('BODY');
@@ -78,6 +81,11 @@
         if (editorElem) editorElem.remove();
     });
 
+    $: if (!visible) {
+        currentEdits = JSON.parse(JSON.stringify(themeObj));
+        dispatch('close');
+    }
+
 </script>
 
 <svelte:window on:mousedown={handleWindowClick} on:mousemove={handleDrag} on:mouseup={(e) => {
@@ -89,7 +97,7 @@
 }}/>
 
 {#if $editor.enabled}
-    <div bind:this={containerElem} class="editable-content" class:visible on:click={showEditor}>
+    <div bind:this={containerElem} class={`editable-content ${clazz}`} class:visible on:click={showEditor}>
         <slot {currentEdits} styles={`
             padding-left: ${currentEdits.padding.left || 0}rem;
             padding-top: ${currentEdits.padding.top || 0}rem;
@@ -116,11 +124,17 @@
         {#if visible}
             <div bind:this={editorElem} class="editor invisible">
                 <div class="tabs">
-                    <div class:active={tab === 'styles'} on:click={() => tab = 'styles'}>
+                    <div class:active={tab === 'styles'} on:click={() => {
+                        currentEdits = JSON.parse(JSON.stringify(themeObj));
+                        tab = 'styles'
+                    }}>
                         <span class="material-symbols-outlined mr-2">format_paint</span>
                         Styles
                     </div>
-                    <div class:active={tab === 'properties'} on:click={() => tab = 'properties'}>
+                    <div class:active={tab === 'properties'} on:click={() => {
+                        currentEdits = JSON.parse(JSON.stringify(themeObj));
+                        tab = 'properties'
+                    }}>
                         <span class="material-symbols-outlined mr-2">settings</span>
                         Properties
                     </div>

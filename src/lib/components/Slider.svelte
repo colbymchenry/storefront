@@ -1,16 +1,20 @@
 <script lang="ts">
+    import {createEventDispatcher} from "svelte";
+
     export let min: number = 1;
     export let max: number = 10;
     export let step: number = 1;
     export let values: number[] = [];
     export let value: number = min || 0;
+    export let name: string;
 
     if (!values.length) {
-        for(let i = min; i < max; i+=step) {
+        for (let i = min; i < max; i += step) {
             values = [...values, i];
         }
     }
 
+    let dispatch = createEventDispatcher();
     let dragging: boolean = false;
     let thumb: HTMLElement;
     let track: HTMLElement;
@@ -32,6 +36,7 @@
         if (percentVal < 0) percentVal = 0;
 
         value = values[Math.min(Math.floor(values.length * percentVal), values.length - 1)];
+        dispatch('change', value);
     }
 </script>
 
@@ -46,7 +51,10 @@
         <div bind:this={thumb} class="thumb" on:mousedown={() => dragging = true}></div>
         <div bind:this={progress} class="progress"></div>
     </div>
-    <div class="value">{value}</div>
+    <div class="value">{value || 'N/A'}</div>
+    {#if name}
+        <input type="hidden" bind:value {name} />
+    {/if}
 </div>
 
 

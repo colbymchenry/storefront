@@ -461,4 +461,18 @@
     <div class={`text-teal-700`}></div>
     <div class={`text-teal-800`}></div>
     <div class={`text-teal-900`}></div>
+
+    <div class="flex"></div>
+    <div class="flex-col"></div>
+    <div class="flex-col-reverse"></div>
+    <div class="flex-row"></div>
+    <div class="flex-row-reverse"></div>
+
+    <div class="rounded"></div>
+    <div class="rounded-md"></div>
+    <div class="rounded-sm"></div>
+    <div class="rounded-lg"></div>
+    <div class="rounded-xl"></div>
+    <div class="rounded-2xl"></div>
+    <div class="rounded-3xl"></div>
 </div>

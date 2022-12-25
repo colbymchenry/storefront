@@ -26,7 +26,7 @@
 </script>
 
 <Editable {key} let:styles let:classes bind:currentEdits {onSave}>
-    <div class="w-full h-full relative">
+    <div class={`w-full h-full relative overflow-hidden ${classes}`} {styles}>
         <Video src={$theme[key]?.props?.video}/>
     </div>
 
@@ -34,12 +34,10 @@
     <div slot="props" class="w-full flex flex-col">
         {#if currentEdits}
             <div class="flex flex-col">
-                {#if currentEdits?.props?.video}
-                    <button type="button" on:click={changeRemove} class="btn bg-gray-200 p-2">Change and Remove</button>
-                {:else}
-                    <MediaComponent bind:this={heroVideo} fileName={key + "/heroVideo.mp4"}/>
-                {/if}
+                <MediaComponent bind:this={heroVideo} fileName={key + "/heroVideo.mp4"}
+                                src={currentEdits?.props?.video} video/>
             </div>
         {/if}
+
     </div>
 </Editable>

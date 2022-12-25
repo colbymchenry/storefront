@@ -65,11 +65,11 @@
         </div>
 
         <div class="w-full flex flex-wrap justify-between items-center my-2 col-span-2 gap-y-2">
-            <div class="flex items-center font-bold text-sm">Bold: <input type="checkbox" class="ml-2 scale-125" bind:checked={currentEdits.isBold} /></div>
-            <div class="flex items-center font-bold text-sm">Italic: <input type="checkbox" class="ml-2 scale-125" bind:checked={currentEdits.isItalic} /></div>
-            <div class="flex items-center font-bold text-sm">Strike:  <input type="checkbox" class="ml-2 scale-125" bind:checked={currentEdits.isStrikethrough} /></div>
-            <div class="flex items-center font-bold text-sm">Underline:  <input type="checkbox" class="ml-2 scale-125" bind:checked={currentEdits.isUnderline} /></div>
-            <div class="flex items-center font-bold text-sm">Overline:  <input type="checkbox" class="ml-2 scale-125" bind:checked={currentEdits.isOverline} /></div>
+            <div class="flex items-center font-bold text-sm">Bold: <input type="checkbox" name="isBold" class="ml-2 scale-125" bind:checked={currentEdits.isBold} /></div>
+            <div class="flex items-center font-bold text-sm">Italic: <input type="checkbox" name="isItalic" class="ml-2 scale-125" bind:checked={currentEdits.isItalic} /></div>
+            <div class="flex items-center font-bold text-sm">Strike:  <input type="checkbox" name="isStrikethrough" class="ml-2 scale-125" bind:checked={currentEdits.isStrikethrough} /></div>
+            <div class="flex items-center font-bold text-sm">Underline:  <input type="checkbox" name="isUnderline" class="ml-2 scale-125" bind:checked={currentEdits.isUnderline} /></div>
+            <div class="flex items-center font-bold text-sm">Overline:  <input type="checkbox" name="isOverline" class="ml-2 scale-125" bind:checked={currentEdits.isOverline} /></div>
         </div>
 
         <div class="flex flex-col">
