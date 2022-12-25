@@ -16,7 +16,9 @@
         margin: {}
     };
 
-    let currentEdits: IThemeObject = JSON.parse(JSON.stringify(themeObj));
+    // doing this to clone
+    export let currentEdits: IThemeObject = JSON.parse(JSON.stringify(themeObj));
+    export let onSave;
 
     let containerElem, editorElem;
     let visible: boolean = false;
@@ -38,6 +40,10 @@
         loading = true;
         try {
             currentEdits.props = formHelper.getFormData(propsForm);
+
+            if (onSave) {
+                await onSave('save', currentEdits);
+            }
             $theme[key] = currentEdits;
             await firebaseClientUtils.set("settings", "theme", $theme);
             loading = false;
@@ -50,6 +56,7 @@
     }
 
     async function showEditor(e) {
+        currentEdits = JSON.parse(JSON.stringify(themeObj));
         visible = true;
         // let editor render
         await tick();
@@ -81,7 +88,7 @@
     }
 }}/>
 
-{#if $editor}
+{#if $editor.enabled}
     <div bind:this={containerElem} class="editable-content" class:visible on:click={showEditor}>
         <slot {currentEdits} styles={`
             padding-left: ${currentEdits.padding.left || 0}rem;

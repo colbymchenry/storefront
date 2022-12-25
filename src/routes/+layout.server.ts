@@ -1,12 +1,14 @@
 import {firebaseAdminUtils} from "../lib/utils/firebase/firebase-admin-utils";
 
-export async function load() {
+// @ts-ignore
+export async function load(route) {
     let themeDoc = await firebaseAdminUtils.getDoc("settings", "theme");
     if (themeDoc) {
         delete themeDoc['updated_at'];
         delete themeDoc['created_at'];
     }
     return {
-        theme: themeDoc
+        theme: themeDoc,
+        editor: route.url.searchParams.get('editor')
     };
 }

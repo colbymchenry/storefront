@@ -2,10 +2,13 @@
     export let min: number = 1;
     export let max: number = 10;
     export let step: number = 1;
-    export let value: number = 5;
+    export let values: number[] = [];
+    export let value: number = min || 0;
 
-    if (value > max || value < min) {
-        value = min;
+    if (!values.length) {
+        for(let i = min; i < max; i+=step) {
+            values = [...values, i];
+        }
     }
 
     let dragging: boolean = false;
@@ -24,11 +27,17 @@
         thumb.style.marginLeft = marginLeft + 'px';
         progress.style.width = ((marginLeft / trackRect.width) * 100) + '%';
 
-        value = (marginLeft / trackRect.width);
+        let percentVal = (marginLeft / trackRect.width);
+        if (percentVal > 1) percentVal = 1;
+        if (percentVal < 0) percentVal = 0;
+
+        value = values[Math.min(Math.floor(values.length * percentVal), values.length - 1)];
     }
 </script>
 
-<svelte:window on:mouseup={() => {
+<svelte:window on:click={() => {
+    dragging = false;
+}} on:mouseup={() => {
     dragging = false;
 }} on:mousemove={handleDrag}/>
 
@@ -37,7 +46,7 @@
         <div bind:this={thumb} class="thumb" on:mousedown={() => dragging = true}></div>
         <div bind:this={progress} class="progress"></div>
     </div>
-    <div class="value">{value.toFixed(1)}</div>
+    <div class="value">{value}</div>
 </div>
 
 
@@ -63,6 +72,6 @@
   }
 
   .value {
-
+    @apply w-4;
   }
 </style>

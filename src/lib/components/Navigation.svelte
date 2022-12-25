@@ -1,6 +1,7 @@
 <script lang="ts">
     import Editable from "$lib/components/editable/Editable.svelte";
     import Box from "$lib/components/modules/Box.svelte";
+    import HeroVideo from "$lib/components/modules/HeroVideo.svelte";
 </script>
 
 <Editable key="nav" let:styles let:classes let:currentEdits>
@@ -17,8 +18,11 @@
 </Editable>
 
 <Box key="box-1">
-
+    <div class="w-5 h-5 bg-red-500"></div>
+    <div class="w-5 h-5 bg-green-500"></div>
 </Box>
+
+<HeroVideo key="hero"/>
 
 <style lang="scss">
     nav {
