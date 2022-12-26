@@ -13,6 +13,6 @@
 
 <style lang="scss">
     input {
-      @apply px-2 py-3 text-slate-800 bg-gray-200 rounded-lg cursor-pointer;
+      @apply px-2 py-3 text-slate-800 bg-gray-200 rounded-lg cursor-text;
     }
 </style>

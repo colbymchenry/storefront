@@ -7,10 +7,12 @@
     export let visible = false;
     export let title: string;
     export let key: string;
+    export let submit;
 
     let saving: boolean = false;
     let status: 'success' | 'error' | undefined = undefined;
     let form;
+    let backup = JSON.parse(JSON.stringify($theme));
 
     async function onSubmit(e) {
         if (saving || !key) return;
@@ -18,7 +20,12 @@
         await tick();
 
         let formData = formHelper.getFormData(e.target);
-        let backup = JSON.parse(JSON.stringify($theme));
+
+        if (submit) {
+            await submit(formData);
+            formData = formHelper.getFormData(e.target);
+        }
+
         try {
             $theme[key] = formData;
             await firebaseClientUtils.set("settings", "theme", $theme);
@@ -32,9 +39,12 @@
         setTimeout(() => status = undefined, 2500);
     }
 
+    // TODO: RESET NOT WORKING
     function reset() {
-
+        $theme = backup;
     }
+
+    $: if (!visible) reset();
 
     onMount(() => {
         if (!key || !$theme[key]) return;
@@ -66,7 +76,8 @@
             {:else if status === 'error'}
                 <button type="button" class="btn px-3 py-2 bg-red-500 text-white hover:bg-red-500">Error</button>
             {:else}
-                <button type="submit" class="btn px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white">{saving ? 'Saving...' : 'Save'}</button>
+                <button type="submit"
+                        class="btn px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white">{saving ? 'Saving...' : 'Save'}</button>
             {/if}
         </div>
     </form>

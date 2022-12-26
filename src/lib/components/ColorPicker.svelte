@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {createEventDispatcher, tick} from "svelte";
+    import {createEventDispatcher, onMount, tick} from "svelte";
 
     let colors = ['slate', 'gray', 'zinc', 'neutral', 'stone', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose'];
     let colorLevels = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
@@ -8,6 +8,7 @@
     let visible: boolean;
     export let color: string;
     export let name: string;
+    let inputElem;
     let colorBoxElem, colorPaletteElem;
 
     function openColorPalette() {
@@ -33,11 +34,19 @@
         color = c;
         visible = false;
     }
+
+    onMount(() => {
+        setTimeout(() => {
+            if (inputElem && inputElem.value) {
+                color = inputElem.value;
+            }
+        }, 300);
+    })
 </script>
 
 <svelte:window on:click={handleWindowClick}/>
 
-<div class={`${color} w-6 h-6 relative`}>
+<div class={`bg-${color} w-6 h-6 relative`}>
     <div bind:this={colorBoxElem} class={`w-full h-full cursor-pointer border border-solid border-black hover:border-2`}
          on:click={openColorPalette}></div>
 </div>
@@ -49,12 +58,12 @@
         <div class="w-full flex items-center">
             {#each colorLevels as level}
                 <div class={`bg-${color}-${level} h-5 flex-grow transition hover:scale-125`}
-                     on:click={(e) => handleColorClick(`bg-${color}-${level}`)}></div>
+                     on:click={(e) => handleColorClick(`${color}-${level}`)}></div>
             {/each}
         </div>
     {/each}
 </div>
 
 {#if name}
-    <input type="hidden" {name} bind:value={color}/>
+    <input bind:this={inputElem} type="hidden" {name} bind:value={color}/>
 {/if}

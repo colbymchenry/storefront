@@ -8,6 +8,7 @@
     import AgeAuthorization from "$lib/components/modules/AgeAuthorization.svelte";
 
     export let data;
+    let is18 = data["cookies"]["is18"];
 
     if (data["theme"]) {
         $theme = data["theme"];
@@ -23,10 +24,12 @@
     </section>
 </main>
 
-<AgeAuthorization />
+{#if !is18}
+    <AgeAuthorization/>
+{/if}
 
 {#if $editor.enabled}
-    <StoreSettingsCog />
+    <StoreSettingsCog/>
 {/if}
 
 <!--Used to load tailwind colors-->

@@ -7,33 +7,59 @@
     export let key: string;
     export let editorOpen: boolean = false;
     export let clazz: string;
+    export let submit;
+
+    let editing = false;
+
+    function onKeyDown(e) {
+        if (e.code.toLowerCase().includes("alt")) {
+            editing = true;
+        }
+    }
+
+    function onKeyUp(e) {
+        if (e.code.toLowerCase().includes("alt")) {
+            editing = false;
+        }
+    }
 </script>
 
-<div class={'relative ' + clazz} class:editing={$editor.enabled} on:click={() => editorOpen = true}>
-    <slot props={$theme[key]}/>
+<svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
+
+<div class={'relative ' + clazz} class:editing={$editor.enabled && editing} on:click={() => {
+    if (editing) {
+        editorOpen = true;
+    }
+}}>
+    <slot props={{...$theme[key], key}}/>
 </div>
 
 {#if $editor.enabled && $$slots.props}
-    <ComponentDrawer bind:visible={editorOpen} {title} {key}>
-        <slot name="props" />
+    <ComponentDrawer bind:visible={editorOpen} {title} {key} {submit}>
+        <slot name="props"/>
     </ComponentDrawer>
 {/if}
 
 <style lang="scss">
 
-    .editing {
+  .editing {
+    &:after {
+      @apply absolute w-full h-full outline outline-8 outline-green-500 transition cursor-pointer opacity-0;
+      top: 0.4rem;
+      left: 0.4rem;
+      width: calc(100% - 0.8rem);
+      height: calc(100% - 0.8rem);
+      content: '';
+    }
+
+    &:hover {
       &:after {
-        @apply absolute top-0 left-0 w-full h-full bg-indigo-500 bg-opacity-0 transition cursor-pointer;
-        content: '';
-      }
-      &:hover {
-        &:after {
-          @apply bg-opacity-40;
-        }
+        @apply opacity-100;
       }
     }
+  }
 
-    .editing::after {
+  .editing::after {
 
-    }
+  }
 </style>
