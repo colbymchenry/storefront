@@ -45,8 +45,6 @@
             }
         }));
         uploading = false;
-        // Done uploading images
-        console.log(formData)
 
         try {
             if (submit) {
@@ -66,7 +64,6 @@
         setTimeout(() => status = undefined, 2500);
     }
 
-    // TODO: RESET NOT WORKING
     function reset() {
         $theme = backup;
     }

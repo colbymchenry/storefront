@@ -1,5 +1,4 @@
 <script lang="ts">
-
     export let autoplay: boolean = true;
     export let muted: boolean = true;
     export let loop: boolean = true;
