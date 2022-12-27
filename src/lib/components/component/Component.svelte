@@ -33,7 +33,7 @@
             defaultObject[setting.id] = setting.default;
         });
 
-        return {...$theme[schema.tag], ...defaultObject}
+        return {...defaultObject, ...$theme[schema.tag]}
     }
 </script>
 

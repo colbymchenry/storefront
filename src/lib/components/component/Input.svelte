@@ -11,14 +11,15 @@
     export let value;
     export let min, max, step;
     export let options: IOption[];
+    export let unit: string;
 
     function typeAction(node) {
         node.type = type;
     }
 </script>
 
-<div class="flex flex-col">
-    <label for={name} class="mb-2 font-medium">
+<div class="flex" class:flex-row={type === 'color'} class:flex-col={type !== 'color'}>
+    <label for={name} class="font-medium" class:mr-2={type === 'color'} class:mb-2={type !== 'color'}>
         <slot/>
     </label>
     {#if type === 'image'}
@@ -36,7 +37,7 @@
             {/each}
         </select>
     {:else if type === 'range'}
-        <InputRange {name} bind:value />
+        <InputRange {name} bind:value {min} {max} {step} {unit} />
     {:else}
         <input use:typeAction {name} {placeholder} {min} {max} {step} id={name} bind:value/>
     {/if}

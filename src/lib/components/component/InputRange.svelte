@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {createEventDispatcher} from "svelte";
+    import {createEventDispatcher, onMount} from "svelte";
 
     export let min: number = 1;
     export let max: number = 10;
@@ -7,6 +7,7 @@
     export let values: number[] = [];
     export let value: number = min || 0;
     export let name: string;
+    export let unit: string;
 
     if (!values.length) {
         for (let i = min; i < max; i += step) {
@@ -38,6 +39,16 @@
         value = values[Math.min(Math.floor(values.length * percentVal), values.length - 1)];
         dispatch('change', value);
     }
+
+    onMount(() => {
+        let trackRect = track.getBoundingClientRect();
+        let marginLeft = (value - min) / (max - min);
+        console.log(marginLeft)
+        marginLeft = trackRect.width * marginLeft;
+        marginLeft = marginLeft < 0 ? 0 : marginLeft > trackRect.width ? trackRect.width : marginLeft;
+        thumb.style.marginLeft = marginLeft + 'px';
+        progress.style.width = ((marginLeft / trackRect.width) * 100) + '%';
+    })
 </script>
 
 <svelte:window on:click={() => {
@@ -46,12 +57,12 @@
     dragging = false;
 }} on:mousemove={handleDrag}/>
 
-<div class="w-full flex items-center gap-5">
+<div class="w-full flex items-center gap-2">
     <div bind:this={track} class="track">
         <div bind:this={thumb} class="thumb" on:mousedown={() => dragging = true}></div>
         <div bind:this={progress} class="progress"></div>
     </div>
-    <div class="value">{value || 'N/A'}</div>
+    <div class="value">{value ? value + (unit ? unit : "") : "N/A"}</div>
     {#if name}
         <input type="hidden" bind:value {name} />
     {/if}
@@ -60,10 +71,11 @@
 
 <style lang="scss">
   .track {
-    @apply w-full flex items-center relative flex-grow;
+    @apply flex items-center relative;
+    width: calc(100% - 4rem);
 
     &::after {
-      @apply absolute w-full outline outline-gray-500;
+      @apply w-full absolute outline outline-gray-500;
       content: '';
     }
   }
@@ -80,6 +92,6 @@
   }
 
   .value {
-    @apply w-4;
+    @apply w-4 ml-4;
   }
 </style>

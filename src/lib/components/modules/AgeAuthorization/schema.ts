@@ -29,6 +29,16 @@ export const schema: ISchema = {
             "label": "Logo"
         },
         {
+            "type": "range",
+            "id": "logoHeight",
+            "label": "Logo Height",
+            "unit": "px",
+            "min": 100,
+            "max": 300,
+            "step": 5,
+            "default": 200
+        },
+        {
             "type": "textarea",
             "id": "content",
             "label": "Message",
@@ -45,6 +55,6 @@ export const schema: ISchema = {
             "id": "buttonTextColor",
             "label": "Button Text Color",
             "default": "white"
-        },
+        }
     ]
 }
