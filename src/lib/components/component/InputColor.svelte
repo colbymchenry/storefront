@@ -6,7 +6,7 @@
     const dispatch = createEventDispatcher();
 
     let visible: boolean;
-    export let color: string;
+    export let value: string;
     export let name: string;
     let inputElem;
     let colorBoxElem, colorPaletteElem;
@@ -31,14 +31,14 @@
 
     function handleColorClick(c) {
         dispatch('change', c);
-        color = c;
+        value = c;
         visible = false;
     }
 
     onMount(() => {
         setTimeout(() => {
             if (inputElem && inputElem.value) {
-                color = inputElem.value;
+                value = inputElem.value;
             }
         }, 300);
     })
@@ -46,7 +46,7 @@
 
 <svelte:window on:click={handleWindowClick}/>
 
-<div class={`bg-${color} w-6 h-6 relative`}>
+<div class={`bg-${value} w-6 h-6 relative`}>
     <div bind:this={colorBoxElem} class={`w-full h-full cursor-pointer border border-solid border-black hover:border-2`}
          on:click={openColorPalette}></div>
 </div>
@@ -65,5 +65,5 @@
 </div>
 
 {#if name}
-    <input bind:this={inputElem} type="hidden" {name} bind:value={color}/>
+    <input bind:this={inputElem} type="hidden" {name} bind:value/>
 {/if}

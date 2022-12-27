@@ -1,11 +1,12 @@
 <script lang="ts">
     import Component from "$lib/components/component/Component.svelte";
     import Input from "$lib/components/component/Input.svelte";
-    import ColorPicker from "$lib/components/ColorPicker.svelte";
+    import ColorPicker from "$lib/components/component/InputColor.svelte";
     import SectionHeader from "$lib/components/component/SectionHeader.svelte";
     import InputMedia from "$lib/components/component/InputMedia.svelte";
     import InputQuill from "$lib/components/component/InputQuill.svelte";
-    import { enhance } from '$app/forms';
+    import {store} from "$lib/stores/store";
+    import {schema} from "./schema";
 
     let inputLogo;
 </script>
@@ -15,13 +16,11 @@
 <!--    };-->
 <!--}}-->
 <div class="container">
-    <Component title="Age Authorization" key="age-authorization" let:props submit={async (formData) => {
-        await inputLogo.upload();
-    }}>
+    <Component {schema} let:props>
 
         <div class="flex flex-col parent">
             <div class={`w-full p-3 text-center bg-${props?.titleBgColor}`}>
-                <h1 class={`text-${props?.titleTextColor || 'white'}`}>{props?.title || "Age Verification"}</h1>
+                <h1 class={`text-${props?.titleTextColor}`}>{props.title}</h1>
             </div>
 
             {#if inputLogo?.src || props?.logo}
@@ -32,12 +31,9 @@
                 <div class="w-full text-black flex-grow py-12 px-6">
                     {@html props?.content || ""}
                 </div>
-                <form
-                    method="POST"
-                    action="?/enter"
-                >
+                <form method="POST" action="?/enter" class="w-full flex justify-center">
                     <button type="submit"
-                            class={`mb-8 bg-${props?.buttonBgColor || 'red-500'} text-${props?.buttonTextColor || 'white'} py-2 px-5`}
+                            class={`mb-8 bg-${props?.buttonBgColor} text-${props?.buttonTextColor} py-2 px-5`}
                             style="align-self: center;">{props?.buttonText || "ENTER"}</button>
                 </form>
             </div>
@@ -46,15 +42,15 @@
 
         <svelte:fragment slot="props" let:form>
             <SectionHeader>Title</SectionHeader>
-            <Input type="text" name="title" placeholder="Age Verification">Text</Input>
+            <Input type="text" name="title" placeholder="Age Verification" value="AGE VERIFICATION">Text</Input>
             <div class="w-full flex items-center justify-between mt-6 mb-8">
                 <div class="flex items-center">
                     <strong class="mr-2">Text Color</strong>
-                    <ColorPicker name="titleTextColor"/>
+                    <ColorPicker name="titleTextColor" value={$store?.secondaryColor || 'white'}/>
                 </div>
                 <div class="flex items-center">
                     <strong class="mr-2">Background Color</strong>
-                    <ColorPicker name="titleBgColor"/>
+                    <ColorPicker name="titleBgColor" value={$store?.primaryColor || 'red-500'}/>
                 </div>
             </div>
 
@@ -70,12 +66,12 @@
 
                 <div class="flex items-center mt-6 mb-6">
                     <strong class="mr-2">Button BG Color</strong>
-                    <ColorPicker name="buttonBgColor"/>
+                    <ColorPicker name="buttonBgColor" value={$store?.primaryColor || 'red-500'}/>
                 </div>
 
                 <div class="flex items-center mb-6">
                     <strong class="mr-2">Button Text Color</strong>
-                    <ColorPicker name="buttonTextColor"/>
+                    <ColorPicker name="buttonTextColor" value={$store?.secondaryColor || 'white'}/>
                 </div>
 
                 <Input type="text" name="buttonText" placeholder="ENTER">Button Text</Input>
@@ -92,7 +88,8 @@
 
     > div:first-of-type {
       @apply flex flex-col;
-      width: 400px;
+      max-width: 400px;
+      min-width: 400px;
       height: 500px;
     }
   }

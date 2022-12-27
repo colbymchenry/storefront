@@ -21,14 +21,20 @@ function createFormHelper() {
             // take into account multiple select
             if (data[key]) {
                 if (typeof data[key] === 'string') {
-                    setValue(data, key, [data[key], value])
+                    if (value !== "") {
+                        setValue(data, key, [data[key], value]);
+                    }
                 } else if (Array.isArray(data[key])) {
                     setValue(data, key, [...data[key], value])
                 } else {
-                    setValue(data, key, value === "false" || value === "true" ? value === "true" : value);
+                    if (value !== "") {
+                        setValue(data, key, value === "false" || value === "true" ? value === "true" : value);
+                    }
                 }
             } else {
-                setValue(data, key, value === "false" || value === "true" ? value === "true" : value);
+                if (value !== "") {
+                    setValue(data, key, value === "false" || value === "true" ? value === "true" : value);
+                }
             }
         }
 

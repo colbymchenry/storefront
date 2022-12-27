@@ -16,9 +16,16 @@ let cookieStorage: ICookie = {
 export async function load({url, cookies}) {
 
     let themeDoc = await firebaseAdminUtils.getDoc("settings", "theme");
+    let storeDoc = await firebaseAdminUtils.getDoc("settings", "main");
+
     if (themeDoc) {
         delete themeDoc['updated_at'];
         delete themeDoc['created_at'];
+    }
+
+    if (storeDoc) {
+        delete storeDoc['updated_at'];
+        delete storeDoc['created_at'];
     }
 
     if (!cookies.get(project_id)) {
@@ -33,6 +40,7 @@ export async function load({url, cookies}) {
 
     return {
         theme: themeDoc,
+        store: storeDoc,
         editor: url.searchParams.get('editor'),
         cookies: JSON.parse(cookies.get(project_id))
     };

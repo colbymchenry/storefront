@@ -2,12 +2,15 @@
     import ComponentDrawer from "$lib/components/component/ComponentDrawer.svelte";
     import {editor} from "$lib/stores/editor";
     import {theme} from "$lib/stores/theme";
+    import type {ISchema} from "$lib/components/component/ISchema";
 
-    export let title: string;
-    export let key: string;
     export let editorOpen: boolean = false;
-    export let clazz: string;
     export let submit;
+    export let schema: ISchema;
+
+    if (!schema?.tag) {
+        console.error("INVALID SCHEMA!!!")
+    }
 
     let editing = false;
 
@@ -22,22 +25,30 @@
             editing = false;
         }
     }
+
+    $: props = () => {
+        let defaultObject = {};
+
+        schema.settings.filter((setting) => setting.default).forEach((setting) => {
+            defaultObject[setting.id] = setting.default;
+        });
+
+        return {...$theme[schema.tag], ...defaultObject}
+    }
 </script>
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
 
-<div class={'relative ' + clazz} class:editing={$editor.enabled && editing} on:click={() => {
+<div class={`relative ${schema.class}`} class:editing={$editor.enabled && editing} on:click={() => {
     if (editing) {
         editorOpen = true;
     }
 }}>
-    <slot props={{...$theme[key], key}}/>
+    <slot props={props()} />
 </div>
 
 {#if $editor.enabled && $$slots.props}
-    <ComponentDrawer bind:visible={editorOpen} {title} {key} {submit}>
-        <slot name="props"/>
-    </ComponentDrawer>
+    <ComponentDrawer bind:visible={editorOpen} {submit} {schema} />
 {/if}
 
 <style lang="scss">

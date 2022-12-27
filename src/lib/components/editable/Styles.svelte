@@ -1,5 +1,5 @@
 <script lang="ts">
-    import ColorPicker from "$lib/components/ColorPicker.svelte";
+    import ColorPicker from "$lib/components/component/InputColor.svelte";
     import type IThemeObject from "$lib/interfaces/IThemeObject";
 
     export let currentEdits: IThemeObject;
