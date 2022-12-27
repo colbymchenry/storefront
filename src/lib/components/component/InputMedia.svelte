@@ -79,6 +79,9 @@
 
 <div class="flex flex-col gap-2">
     {#if src}
+        {#if !video}
+            <img {src} loading="lazy" style="object-fit: contain;max-width:100%;"/>
+        {/if}
         <button type="button" on:click={() => src = undefined} class="btn bg-gray-200 p-2">Change and Remove</button>
     {:else}
         <input bind:this={input} on:change={onChange} type="file" accept={video ? "video/mp4" : "image/*"} alt=""
