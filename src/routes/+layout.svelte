@@ -7,8 +7,11 @@
     import StoreSettingsCog from "$lib/components/store-settings/StoreSettingsCog.svelte";
     import AgeAuthorization from "$lib/components/modules/AgeAuthorization/AgeAuthorization.svelte";
     import {store} from "$lib/stores/store";
+    import {cookies} from "$lib/stores/cookies";
+    import EditorLogin from "$lib/components/EditorLogin.svelte";
 
     export let data;
+
     let is18 = data["cookies"]["is18"];
 
     if (data["theme"]) {
@@ -19,31 +22,39 @@
         }
     }
 
+    if (data["cookies"]) {
+        $cookies = data["cookies"];
+    }
+
     theme.subscribe((conf) => {
         $store = conf["store"] || {};
     })
 
-    $editor.enabled = data["editor"] !== null;
+    $editor.enabled = data["editor"] !== null && data?.cookies?.authenticated;
 </script>
 
-<main>
-    <Navigation/>
-    <section>
-        <slot/>
-    </section>
-</main>
+{#if data["editor"] !== null && !data?.cookies?.authenticated}
+    <main>
+        <EditorLogin/>
+    </main>
+{:else}
+    <main>
+        <Navigation/>
+        <section>
+            <slot/>
+        </section>
+    </main>
 
-{#if !is18}
-    <AgeAuthorization/>
+    {#if !is18}
+        <AgeAuthorization/>
+    {/if}
+
+    {#if $editor.enabled}
+        <StoreSettingsCog/>
+    {/if}
+
+    <TailwindColors/>
 {/if}
-
-{#if $editor.enabled}
-    <StoreSettingsCog/>
-{/if}
-
-<!--Used to load tailwind colors-->
-
-<TailwindColors/>
 
 <style lang="scss">
   main {

@@ -4,6 +4,7 @@
     import InputQuill from "$lib/components/component/InputQuill.svelte";
     import {IOption} from "$lib/components/component/ISchema";
     import InputRange from "$lib/components/component/InputRange.svelte";
+    import {onMount} from "svelte";
 
     export let name: string;
     export let type: string = 'text';
@@ -13,15 +14,32 @@
     export let options: IOption[];
     export let unit: string;
     export let regex: string;
+    export let required: boolean = false;
+
+    let products, collections;
 
     function typeAction(node) {
-        node.type = type;
+        node.type = type === 'url' ? 'text' : type;
     }
+
+    async function fetchCatalogData() {
+        try {
+
+        } catch (error) {
+
+        }
+    }
+
+    onMount(() => {
+       if (type === 'url' || type === 'product' || type === 'collection') {
+
+       }
+    });
 </script>
 
 <div class="flex" class:flex-row={type === 'color'} class:flex-col={type !== 'color'}>
     <label for={name} class="font-medium" class:mr-2={type === 'color'} class:mb-2={type !== 'color'}>
-        <slot/>
+        <slot/> {#if required}*{/if}
     </label>
     {#if type === 'image'}
         <InputMedia {name} bind:src={value} />

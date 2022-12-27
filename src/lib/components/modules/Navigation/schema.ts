@@ -84,5 +84,18 @@ export const schema: ISchema = {
             "label": "Text Color",
             "default": "gray-700"
         }
+    ],
+    "blocks": [
+        {
+            "name": "Route",
+            "type": "route",
+            "settings": [
+                {
+                    "type": "url",
+                    "id": "href",
+                    "label": "Link"
+                }
+            ]
+        }
     ]
 }

@@ -23,7 +23,7 @@
 
             <div style="width: 400px;" class={`items-center pl-4 pr-2 py-2 flex-grow hidden md:flex
                 bg-${props?.searchBgColor} text-${props?.searchTextColor} ${props?.searchTextColor}`}>
-                <input type="text" placeholder="Search" class="outline-none flex-grow" style="background: none;"/>
+                <input type="text" placeholder="Search entire store..." class="outline-none flex-grow" style="background: none;"/>
                 <span class="material-symbols-outlined">search</span>
             </div>
 

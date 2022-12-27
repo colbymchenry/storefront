@@ -3,10 +3,11 @@ export interface ISchema {
     tag: string;
     class?: string;
     settings?: ISetting[];
+    blocks?: IBlock[];
 }
 
 export interface ISetting {
-    type: 'header' | 'checkbox' | 'number' | 'radio' | 'range' | 'select' | 'text' | 'textarea' | 'collection' | 'color' | 'product' | 'image' | 'video';
+    type: 'header' | 'checkbox' | 'number' | 'radio' | 'range' | 'select' | 'text' | 'textarea' | 'collection' | 'color' | 'product' | 'image' | 'video' | 'url';
     id?: string;
     label: string;
     default?: boolean | number | string;
@@ -23,4 +24,10 @@ export interface ISetting {
 export interface IOption {
     value: string;
     label: string;
+}
+
+export interface IBlock {
+    name: string;
+    type: string;
+    settings: ISetting[];
 }

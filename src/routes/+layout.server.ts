@@ -2,13 +2,15 @@ import {firebaseAdminUtils} from "../lib/utils/firebase/firebase-admin-utils";
 
 export interface ICookie {
     is18: boolean;
+    authenticated: boolean;
 }
 
 export const {project_id} = JSON.parse(process.env.FIREBASE_CONFIG);
 
 
 let cookieStorage: ICookie = {
-    "is18": false
+    "is18": false,
+    "authenticated": false
 }
 
 
