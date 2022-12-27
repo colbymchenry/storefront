@@ -14,6 +14,8 @@
     let status: 'success' | 'error' | undefined = undefined;
     let form;
     let backup = JSON.parse(JSON.stringify($theme));
+    let uploading = false;
+
 
     async function onSubmit(e) {
         if (saving || !schema?.tag) return;
@@ -21,6 +23,30 @@
         await tick();
 
         let formData = formHelper.getFormData(e.target);
+
+        // Uploading images
+        uploading = true;
+        await Promise.all(Object.keys(formData).map(async (key: string) => {
+            let value = formData[key];
+            if (value instanceof File) {
+                if (value?.name) {
+                    try {
+                        // Upload image to Cloud Storage
+                        let extension = value.name.split(".")[value.name.split(".").length - 1];
+                        formData[key] = await firebaseClientUtils.uploadFile(value, schema.tag + '/' + key + "." + extension);
+                    } catch (error) {
+                        console.error(error);
+                        delete formData[key];
+                    }
+                } else {
+                    await firebaseClientUtils.deleteFile($theme[schema.tag][key]);
+                    delete formData[key];
+                }
+            }
+        }));
+        uploading = false;
+        // Done uploading images
+        console.log(formData)
 
         try {
             if (submit) {
@@ -67,7 +93,7 @@
                     {:else if setting.type === 'product'}
                     {:else}
                         <Input {...setting} name={setting.id}
-                               value={$theme[schema.tag][setting.id] || setting.default}>
+                               value={$theme && schema.tag in $theme && $theme[schema.tag][setting.id] ? $theme[schema.tag][setting.id] : setting.default}>
                             {setting.label}
                         </Input>
                     {/if}

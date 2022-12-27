@@ -22,9 +22,9 @@
         <slot/>
     </label>
     {#if type === 'image'}
-        <InputMedia {name} bind:value/>
+        <InputMedia {name} bind:src={value} />
     {:else if type === 'video'}
-        <InputMedia {name} video={true} bind:value/>
+        <InputMedia {name} video={true} bind:src={value}/>
     {:else if type === 'color'}
         <InputColor {name} bind:value/>
     {:else if type === 'textarea'}

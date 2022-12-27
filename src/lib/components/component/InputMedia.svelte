@@ -82,7 +82,7 @@
         <button type="button" on:click={() => src = undefined} class="btn bg-gray-200 p-2">Change and Remove</button>
     {:else}
         <input bind:this={input} on:change={onChange} type="file" accept={video ? "video/mp4" : "image/*"} alt=""
-               {multiple}/>
+               {multiple} {name}/>
     {/if}
 
     {#if video}
@@ -91,7 +91,7 @@
         <small>Image File <strong>(.png,.jpg only)</strong></small>
     {/if}
 
-    {#if name}
+    {#if name && src}
         <input bind:this={inputForForm} type="hidden" bind:value={src} {name}/>
     {/if}
 </div>
