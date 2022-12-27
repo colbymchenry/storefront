@@ -9,12 +9,28 @@ export const schema: ISchema = {
             "type": "color",
             "id": "bgColor",
             "label": "Background Color",
-            "default": "red-500"
+            "default": "white"
+        },
+        {
+            "type": "color",
+            "id": "textColor",
+            "label": "Text Color",
+            "default": "slate-800"
         },
         {
             "type": "image",
             "id": "logo",
             "label": "Logo"
+        },
+        {
+            "type": "range",
+            "id": "logoHeight",
+            "label": "Logo Height",
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": '%',
+            "default": 100
         },
         {
             "type": "select",
