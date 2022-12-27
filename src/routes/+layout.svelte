@@ -13,11 +13,15 @@
 
     if (data["theme"]) {
         $theme = data["theme"];
+
+        if (data["theme"]["store"]) {
+            $store = data["theme"]["store"];
+        }
     }
 
-    if (data["store"]) {
-        $store = data["store"];
-    }
+    theme.subscribe((conf) => {
+        $store = conf["store"] || {};
+    })
 
     $editor.enabled = data["editor"] !== null;
 </script>
@@ -43,6 +47,6 @@
 
 <style lang="scss">
   main {
-    @apply flex flex-col w-screen h-screen bg-red-500;
+    @apply flex flex-col w-screen h-screen;
   }
 </style>

@@ -1,8 +1,8 @@
 <script lang="ts">
     import Component from "$lib/components/component/Component.svelte";
     import {schema} from "./schema";
+    import {store} from "$lib/stores/store.js";
 
-    let inputLogo;
 </script>
 <!--use:enhance={() => {-->
 <!--    return ({ update }) => {-->
@@ -11,16 +11,16 @@
 <!--}}-->
 <div class="container">
     <Component {schema} let:props>
-        <div class="flex flex-col parent">
+        <div class="flex flex-col parent bg-white">
             <div class={`w-full p-3 text-center bg-${props?.titleBgColor}`}>
                 <h1 class={`text-${props?.titleTextColor}`}>{props.title}</h1>
             </div>
 
-            {#if inputLogo?.src || props?.logo}
-                <img src={inputLogo?.src || props.logo} loading="lazy" alt="company logo"/>
+            {#if props?.logo || $store?.logo}
+                <img src={props?.logo || $store?.logo} loading="lazy" alt="company logo" style={`height: ${props?.logoHeight}px;object-fit: contain;`}/>
             {/if}
 
-            <div class="w-full flex flex-col bg-white">
+            <div class="w-full flex flex-col">
                 <div class="w-full text-black flex-grow py-12 px-6">
                     {@html props?.content || ""}
                 </div>

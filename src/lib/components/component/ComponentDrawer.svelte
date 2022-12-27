@@ -5,6 +5,7 @@
     import type {ISchema} from "$lib/components/component/ISchema";
     import Input from "$lib/components/component/Input.svelte";
     import {tick} from "svelte";
+    import SectionHeader from "$lib/components/component/SectionHeader.svelte";
 
     export let visible = false;
     export let submit;
@@ -39,7 +40,13 @@
                         delete formData[key];
                     }
                 } else {
-                    await firebaseClientUtils.deleteFile($theme[schema.tag][key]);
+                    if ($theme[schema.tag] && $theme[schema.tag][key]) {
+                        try {
+                            await firebaseClientUtils.deleteFile($theme[schema.tag][key]);
+                        } catch (error) {
+
+                        }
+                    }
                     delete formData[key];
                 }
             }
@@ -88,6 +95,8 @@
                     {:else if setting.type === 'radio'}
                     {:else if setting.type === 'collection'}
                     {:else if setting.type === 'product'}
+                    {:else if setting.type === 'header'}
+                        <SectionHeader>{setting.label}</SectionHeader>
                     {:else}
                         <Input {...setting} name={setting.id}
                                value={$theme && schema.tag in $theme && $theme[schema.tag][setting.id] ? $theme[schema.tag][setting.id] : setting.default}>

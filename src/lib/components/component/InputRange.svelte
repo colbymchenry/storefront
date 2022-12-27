@@ -43,7 +43,6 @@
     onMount(() => {
         let trackRect = track.getBoundingClientRect();
         let marginLeft = (value - min) / (max - min);
-        console.log(marginLeft)
         marginLeft = trackRect.width * marginLeft;
         marginLeft = marginLeft < 0 ? 0 : marginLeft > trackRect.width ? trackRect.width : marginLeft;
         thumb.style.marginLeft = marginLeft + 'px';

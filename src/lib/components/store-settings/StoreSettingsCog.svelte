@@ -1,7 +1,8 @@
 <script lang="ts">
 
-    import StoreSettingDrawer from "$lib/components/store-settings/StoreSettingDrawer.svelte";
     import {editor} from "$lib/stores/editor";
+    import Component from "$lib/components/component/Component.svelte";
+    import {schema} from "./schema";
 
     let visible = false;
 
@@ -28,7 +29,7 @@
     </div>
 </div>
 
-<StoreSettingDrawer bind:visible/>
+<Component {schema} bind:editorOpen={visible}/>
 
 <style lang="scss">
   .settings {

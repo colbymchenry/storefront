@@ -7,7 +7,7 @@ export interface ISchema {
 
 export interface ISetting {
     type: 'header' | 'checkbox' | 'number' | 'radio' | 'range' | 'select' | 'text' | 'textarea' | 'collection' | 'color' | 'product' | 'image' | 'video';
-    id: string;
+    id?: string;
     label: string;
     default?: boolean | number | string;
     placeholder?: string;
@@ -16,6 +16,8 @@ export interface ISetting {
     max?: number;
     step?: number;
     unit?: string;
+    regex?: string;
+    hint?: string;
 }
 
 export interface IOption {

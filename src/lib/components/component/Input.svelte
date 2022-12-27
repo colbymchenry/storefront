@@ -12,6 +12,7 @@
     export let min, max, step;
     export let options: IOption[];
     export let unit: string;
+    export let regex: string;
 
     function typeAction(node) {
         node.type = type;
@@ -39,13 +40,13 @@
     {:else if type === 'range'}
         <InputRange {name} bind:value {min} {max} {step} {unit} />
     {:else}
-        <input use:typeAction {name} {placeholder} {min} {max} {step} id={name} bind:value/>
+        <input use:typeAction {name} {placeholder} {min} {max} {step} pattern={regex} id={name} bind:value/>
     {/if}
 
 </div>
 
 <style lang="scss">
-  input {
+  input, select {
     @apply px-2 py-3 text-slate-800 bg-gray-200 rounded-lg cursor-text;
   }
 </style>
