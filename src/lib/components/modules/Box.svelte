@@ -1,6 +1,6 @@
 <script lang="ts">
     import Editable from "$lib/components/editable/Editable.svelte";
-    import Slider from "$lib/components/Slider.svelte";
+    import Slider from "$lib/components/component/InputRange.svelte";
     import {gapValues} from "$lib/stores/theme";
 
     export let key: string;

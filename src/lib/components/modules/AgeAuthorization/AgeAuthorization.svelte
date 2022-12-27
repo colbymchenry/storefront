@@ -1,11 +1,5 @@
 <script lang="ts">
     import Component from "$lib/components/component/Component.svelte";
-    import Input from "$lib/components/component/Input.svelte";
-    import ColorPicker from "$lib/components/component/InputColor.svelte";
-    import SectionHeader from "$lib/components/component/SectionHeader.svelte";
-    import InputMedia from "$lib/components/component/InputMedia.svelte";
-    import InputQuill from "$lib/components/component/InputQuill.svelte";
-    import {store} from "$lib/stores/store";
     import {schema} from "./schema";
 
     let inputLogo;
@@ -17,7 +11,6 @@
 <!--}}-->
 <div class="container">
     <Component {schema} let:props>
-
         <div class="flex flex-col parent">
             <div class={`w-full p-3 text-center bg-${props?.titleBgColor}`}>
                 <h1 class={`text-${props?.titleTextColor}`}>{props.title}</h1>
@@ -39,45 +32,6 @@
             </div>
 
         </div>
-
-        <svelte:fragment slot="props" let:form>
-            <SectionHeader>Title</SectionHeader>
-            <Input type="text" name="title" placeholder="Age Verification" value="AGE VERIFICATION">Text</Input>
-            <div class="w-full flex items-center justify-between mt-6 mb-8">
-                <div class="flex items-center">
-                    <strong class="mr-2">Text Color</strong>
-                    <ColorPicker name="titleTextColor" value={$store?.secondaryColor || 'white'}/>
-                </div>
-                <div class="flex items-center">
-                    <strong class="mr-2">Background Color</strong>
-                    <ColorPicker name="titleBgColor" value={$store?.primaryColor || 'red-500'}/>
-                </div>
-            </div>
-
-
-            <SectionHeader>Body</SectionHeader>
-
-            <div class="w-full flex flex-col">
-                <strong class="mb-2">Logo</strong>
-                <InputMedia name="logo" fileName={props.key + '/logo.png'} bind:to={inputLogo}/>
-
-                <strong class="mt-6 mb-2">Content</strong>
-                <InputQuill name="content"/>
-
-                <div class="flex items-center mt-6 mb-6">
-                    <strong class="mr-2">Button BG Color</strong>
-                    <ColorPicker name="buttonBgColor" value={$store?.primaryColor || 'red-500'}/>
-                </div>
-
-                <div class="flex items-center mb-6">
-                    <strong class="mr-2">Button Text Color</strong>
-                    <ColorPicker name="buttonTextColor" value={$store?.secondaryColor || 'white'}/>
-                </div>
-
-                <Input type="text" name="buttonText" placeholder="ENTER">Button Text</Input>
-            </div>
-        </svelte:fragment>
-
     </Component>
 </div>
 

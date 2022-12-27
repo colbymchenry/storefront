@@ -5,9 +5,6 @@
     import type {ISchema} from "$lib/components/component/ISchema";
     import Input from "$lib/components/component/Input.svelte";
     import {tick} from "svelte";
-    import InputMedia from "$lib/components/component/InputMedia.svelte";
-    import InputColor from "$lib/components/component/InputColor.svelte";
-    import InputQuill from "$lib/components/component/InputQuill.svelte";
 
     export let visible = false;
     export let submit;
@@ -61,31 +58,18 @@
         <h1 class="text-xl mr-2">{schema?.name} - Settings</h1>
     </div>
     <form bind:this={form} class="flex flex-col w-full flex-grow" on:submit|preventDefault={onSubmit}>
-        <div class="flex flex-col w-full flex-grow px-3 py-3">
+        <div class="flex flex-col w-full flex-grow px-3 py-3 gap-5">
             {#if schema?.settings}
                 {#each schema.settings as setting}
-                    {#if setting.type === 'text'}
-                        <Input type="text" name={setting.id} value={$theme[schema.tag][setting.id] || setting.default}
-                               placeholder={setting.placeholder}>{setting.label}</Input>
-                    {:else if setting.type === 'number'}
-                        <Input type="number" name={setting.id} value={$theme[schema.tag][setting.id] || setting.default}
-                               min={setting.min} max={setting.max} step={setting.step}
-                               placeholder={setting.placeholder}>{setting.label}</Input>
-                    {:else if setting.type === 'checkbox'}
-
+                    {#if setting.type === 'checkbox'}
                     {:else if setting.type === 'radio'}
-                    {:else if setting.type === 'range'}
-                    {:else if setting.type === 'select'}
-                    {:else if setting.type === 'textarea'}
-                        <InputQuill name={setting.id} />
                     {:else if setting.type === 'collection'}
                     {:else if setting.type === 'product'}
-                    {:else if setting.type === 'image'}
-                        <InputMedia name={setting.id} value={$theme[schema.tag][setting.id]} />
-                    {:else if setting.type === 'video'}
-                        <InputMedia name={setting.id} video={true} value={$theme[schema.tag][setting.id]} />
-                    {:else if setting.type === 'color'}
-                        <InputColor name={setting.id} value={$theme[schema.tag][setting.id] || setting.default} />
+                    {:else}
+                        <Input {...setting} name={setting.id}
+                               value={$theme[schema.tag][setting.id] || setting.default}>
+                            {setting.label}
+                        </Input>
                     {/if}
                 {/each}
             {/if}

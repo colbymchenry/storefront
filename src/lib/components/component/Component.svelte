@@ -47,7 +47,7 @@
     <slot props={props()} />
 </div>
 
-{#if $editor.enabled && $$slots.props}
+{#if $editor.enabled}
     <ComponentDrawer bind:visible={editorOpen} {submit} {schema} />
 {/if}
 
