@@ -80,7 +80,7 @@
 </script>
 
 <div class="main" class:visible>
-    <div class="flex items-center justify-between shadow-md px-3 py-2 border-b border-solid border-gray-300 bg-indigo-700 text-white sticky top-0 left-0">
+    <div class="flex items-center justify-between shadow-md px-3 py-2 border-b border-solid border-gray-300 bg-indigo-700 text-white sticky top-0 left-0 z-20">
         <button class="bg-none border-none outline-none" type="button" on:click={() => visible = false}>
             <span class="material-symbols-outlined text-3xl">close</span>
         </button>

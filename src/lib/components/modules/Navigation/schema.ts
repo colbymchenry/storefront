@@ -83,19 +83,46 @@ export const schema: ISchema = {
             "id": "searchTextColor",
             "label": "Text Color",
             "default": "gray-700"
-        }
-    ],
-    "blocks": [
+        },
         {
-            "name": "Route",
-            "type": "route",
-            "settings": [
-                {
-                    "type": "url",
-                    "id": "href",
-                    "label": "Link"
-                }
-            ]
+            "type": "header",
+            "label": "Desktop Navbar"
+        },
+        {
+            "type": "color",
+            "id": "navbarBgColor",
+            "label": "Background Color",
+            "default": "black"
+        },
+        {
+            "type": "color",
+            "id": "navbarTextColor",
+            "label": "Link Color",
+            "default": "white"
+        },
+        {
+            "type": "color",
+            "id": "navbarHoverTextColor",
+            "label": "Link Hover Color",
+            "default": "red-700"
+        },
+        {
+            "type": "color",
+            "id": "navbarHoverMenuBgColor",
+            "label": "Hover Menu BG Color",
+            "default": "white"
+        },
+        {
+            "type": "color",
+            "id": "navbarHoverMenuTextColor",
+            "label": "Hover Menu Link Color",
+            "default": "black"
+        },
+        {
+            "type": "color",
+            "id": "navbarHoverMenuHoverTextColor",
+            "label": "Hover Menu Link Hover Color",
+            "default": "red-700"
         }
     ]
 }

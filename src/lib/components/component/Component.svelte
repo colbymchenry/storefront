@@ -39,7 +39,7 @@
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
 
-<div class={`relative ${schema.class}`} class:editing={$editor.enabled && editing} on:click={() => {
+<div data-editor={true} class={`relative ${schema.class}`} class:editing={$editor.enabled && editing} on:click={() => {
     if (editing) {
         editorOpen = true;
     }

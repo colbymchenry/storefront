@@ -46,7 +46,7 @@
 
 <svelte:window on:click={handleWindowClick}/>
 
-<div class={`bg-${value} w-6 h-6 relative`}>
+<div class={`bg-${value} w-6 h-6 relative z-10`}>
     <div bind:this={colorBoxElem} class={`w-full h-full cursor-pointer border border-solid border-black hover:border-2`}
          on:click={openColorPalette}></div>
 </div>

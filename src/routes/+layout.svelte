@@ -2,7 +2,6 @@
     import "../app.postcss";
     import Navigation from "$lib/components/modules/Navigation/Navigation.svelte";
     import {theme} from "$lib/stores/theme";
-    import TailwindColors from "$lib/components/TailwindColors.svelte";
     import {editor} from "$lib/stores/editor";
     import StoreSettingsCog from "$lib/components/store-settings/StoreSettingsCog.svelte";
     import AgeAuthorization from "$lib/components/modules/AgeAuthorization/AgeAuthorization.svelte";
@@ -30,7 +29,7 @@
         $store = conf["store"] || {};
     })
 
-    $editor.enabled = data["editor"] !== null && data?.cookies?.authenticated;
+    $editor.enabled = data?.cookies?.authenticated;
 </script>
 
 {#if data["editor"] !== null && !data?.cookies?.authenticated}
@@ -53,7 +52,6 @@
         <StoreSettingsCog/>
     {/if}
 
-    <TailwindColors/>
 {/if}
 
 <style lang="scss">

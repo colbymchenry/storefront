@@ -1,6 +1,7 @@
 import axios from "axios";
 import {get} from "svelte/store";
 import {firebaseClientUtils} from "../utils/firebase/firebase-client-utils";
+import {cookies} from "./cookies";
 
 function createApi() {
 
@@ -8,12 +9,14 @@ function createApi() {
 
     return {
         post: async (route: string, payload?: any, headers?: any) => {
-            let token = fb?.auth?.currentUser ? await fb.auth.currentUser.getIdToken() : undefined;
+            let cookieStore: any = get(cookies);
+
+            let token = fb?.auth?.currentUser ? await fb.auth.currentUser.getIdToken() : cookieStore?.idToken;
 
             return await axios.post(route, payload || {}, token ? {
                 headers: {
                     ...(headers && {...headers}), // add headers if any are passed
-                    Authorization: `Bearer ${token}`
+                    Authorization: token
                 }
             } : {});
         },
@@ -31,13 +34,17 @@ function createApi() {
             })
             const query = parameterSlice.join("&");
 
-            let token = fb?.auth?.currentUser ? await fb.auth.currentUser.getIdToken() : undefined;
+            let cookieStore: any = get(cookies);
+
+            let token = fb?.auth?.currentUser ? await fb.auth.currentUser.getIdToken() : cookieStore?.idToken;
+
+            console.log(token);
 
             // get the token from the store
             return await axios.get(route + (route.includes("?") ? "&" : "?") + query, token ? {
                 headers: {
                     ...(headers && {...headers}),
-                    Authorization: `Bearer ${token}`
+                    Authorization: token
                 }
             } : {});
         }
