@@ -4,13 +4,17 @@
     import {schema} from "./schema";
     import {cookies} from "$lib/stores/cookies";
 
-    const categories = () => {
-        let object = [];
-    }
-
     function innerWidth(node) {
         let rect = node.getBoundingClientRect();
+        let parentRect = node.parentNode.getBoundingClientRect();
+
         node.style.width = (rect.innerWidth + 20) + 'px';
+        node.style.left = parentRect.left + 'px';
+        node.style.top = parentRect.bottom + 'px';
+    }
+
+    function flexCol(node) {
+        node.parentNode.style.flexDirection = 'column';
     }
 </script>
 
@@ -31,6 +35,7 @@
                     {/if}
                 {/if}
 
+                <!-- Search Bar -->
                 <div style="width: 400px;" class={`items-center pl-4 pr-2 py-2 flex-grow hidden md:flex
                 bg-${props?.searchBgColor} text-${props?.searchTextColor} ${props?.searchTextColor}`}>
                     <input type="text" placeholder="Search entire store..." class="outline-none flex-grow"
@@ -56,7 +61,8 @@
                 </div>
             </div>
 
-            <div class={`flex w-full items-stretch items-center h-10 bg-${props.navbarBgColor} text-${props.navbarTextColor} px-4`}>
+            <!-- Desktop Navbar -->
+            <div class={`hidden md:flex w-full items-stretch items-center h-10 bg-${props.navbarBgColor} text-${props.navbarTextColor} px-4 overflow-auto`}>
                 {#each $cookies.categories.items as category}
                     {#if !category.parentId}
                         <a href={`/collections?id=${category.id}`}
@@ -65,10 +71,21 @@
 
                             {#if $cookies.categories.items.filter((cat) => cat.parentId === category.id).length}
                                 <div use:innerWidth
-                                     class={`absolute left-0 bottom-0 flex flex-col bg-${props.navbarHoverMenuBgColor} text-${props.navbarHoverMenuTextColor} px-4 opacity-0`}>
+                                     class={`bg-${props.navbarHoverMenuBgColor} text-${props.navbarHoverMenuTextColor} url-container`}>
                                     {#each $cookies.categories.items.filter((cat) => cat.parentId === category.id) as cat}
-                                        <a href={`/collections?id=${cat.id}`}
-                                           class={`relative whitespace-nowrap transition hover:text-${props.navbarHoverMenuHoverTextColor}`}>{cat.name}</a>
+                                        {#if $cookies.categories.items.filter((c) => c.parentId === cat.id).length}
+                                            <div class="relative flex flex-col min-w-10 mx-4">
+                                                <strong>{cat.name}</strong>
+                                                <div class={`mb-2 h-1 bg-${props.navbarHoverTextColor}`}></div>
+                                                {#each $cookies.categories.items.filter((c) => c.parentId === cat.id) as c}
+                                                    <a href={`/collections?id=${c.id}`}
+                                                       class={`relative whitespace-nowrap transition my-1 hover:text-${props.navbarHoverMenuHoverTextColor}`}>{c.name}</a>
+                                                {/each}
+                                            </div>
+                                        {:else}
+                                            <a use:flexCol href={`/collections?id=${cat.id}`}
+                                               class={`relative whitespace-nowrap transition my-1 hover:text-${props.navbarHoverMenuHoverTextColor}`}>{cat.name}</a>
+                                        {/if}
                                     {/each}
                                 </div>
 
@@ -77,6 +94,15 @@
                         </a>
                     {/if}
                 {/each}
+            </div>
+
+            <!-- Mobile searchbar  -->
+            <!-- Search Bar -->
+            <div class={`w-full items-center pl-4 pr-2 py-3 flex-grow md:hidden flex
+                bg-${props?.searchBgColor} text-${props?.searchTextColor} ${props?.searchTextColor}`}>
+                <input type="text" placeholder="Search entire store..." class="outline-none flex-grow"
+                       style="background: none;"/>
+                <span class="material-symbols-outlined">search</span>
             </div>
         </div>
     </Component>
@@ -89,12 +115,11 @@
   }
 
   .url {
-    > div {
-      @apply opacity-0 pointer-events-none transition;
-      margin-bottom: -1.5rem;
+    > .url-container {
+      @apply opacity-0 pointer-events-none transition fixed flex p-4 opacity-0;
     }
 
-    &:hover > div {
+    &:hover > .url-container {
       @apply opacity-100 pointer-events-auto;
     }
   }

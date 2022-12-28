@@ -13,6 +13,26 @@
  @apply bg-gray-200 hover:bg-gray-300 transition cursor-pointer rounded;
 }
 
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    opacity:0.1;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(155,155,155,0.5);
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);*/
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
