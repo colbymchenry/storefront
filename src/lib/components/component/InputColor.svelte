@@ -11,18 +11,27 @@
     let inputElem;
     let colorBoxElem, colorPaletteElem;
 
-    function openColorPalette() {
+    async function openColorPalette() {
         if (!colorBoxElem || !colorPaletteElem) return;
-
+        visible = true;
+        await tick();
         let bounds = colorBoxElem.getBoundingClientRect();
         let colorPaletteBounds = colorPaletteElem.getBoundingClientRect();
+
         colorPaletteElem.style.left = bounds.left + "px";
         colorPaletteElem.style.top = bounds.top + "px";
-        if (bounds.left + 200 > window.innerWidth) {
-            colorPaletteElem.style.left = (bounds.left + (window.innerWidth - (bounds.left + 200))) + 'px';
+
+        await tick();
+        bounds = colorBoxElem.getBoundingClientRect();
+        colorPaletteBounds = colorPaletteElem.getBoundingClientRect();
+
+        if (colorPaletteBounds.right > window.innerWidth) {
+            colorPaletteElem.style.marginLeft = -(colorPaletteBounds.right - window.innerHeight + 10) + 'px';
         }
 
-        visible = true;
+        if (colorPaletteBounds.bottom > window.innerHeight) {
+            colorPaletteElem.style.marginTop = -(colorPaletteBounds.bottom - window.innerHeight + 10) + 'px';
+        }
     }
 
     function handleWindowClick(e) {
@@ -67,3 +76,4 @@
 {#if name}
     <input bind:this={inputElem} type="hidden" {name} bind:value/>
 {/if}
+
