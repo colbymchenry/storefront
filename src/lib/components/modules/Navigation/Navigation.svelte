@@ -149,15 +149,15 @@
                                 } else {
                                     await goto(`/collections?id=${category.id}`);
                                 }
-                            }} class={`url hover:text-${props.navbarHoverTextColor}`}>
+                            }} class={`text-md url hover:text-${props.navbarHoverTextColor}`}>
                                 {category.name}
 
-                                <div class="flex flex-col">
-                                    <div class="flex flex-col items-start">
+                                <div class="flex flex-col" on:click={(e) => e.stopPropagation()}>
+                                    <div class={`flex flex-col gap-4 items-start mx-2 px-2 pb-4 mt-4 border-l border-solid border-${props.navbarHoverTextColor}`}>
                                         {#each $cookies.categories.items.filter((cat) => cat.parentId === category.id) as cat}
                                             {#if $cookies.categories.items.filter((c) => c.parentId === cat.id).length}
-                                                <div class="relative flex flex-col min-w-10 mx-4 items-start">
-                                                    <strong class="mt-4">{cat.name}</strong>
+                                                <div class={`text-sm relative flex flex-col min-w-10 items-start`}>
+                                                    <strong class={`text-${props.navbarTextColor}`}>{cat.name}</strong>
                                                     <div class={`mb-2 h-1 w-full bg-${props.navbarHoverTextColor}`}></div>
                                                     {#each $cookies.categories.items.filter((c) => c.parentId === cat.id) as c}
                                                         <a href={`/collections?id=${c.id}`}
@@ -173,7 +173,7 @@
                                 </div>
 
                                 {#if $cookies.categories.items.filter((cat) => cat.parentId === category.id).length}
-                                    <span class="material-symbols-outlined h-5 ml-2 expand-icon">expand_more</span>
+                                    <span class="material-symbols-outlined ml-2 expand-icon mb-2 transition">expand_more</span>
                                 {/if}
                             </button>
                         {/if}
@@ -228,7 +228,7 @@
     margin-left: 0;
 
     button {
-      @apply text-2xl my-2 flex flex-col px-4 relative whitespace-nowrap transition relative;
+      @apply my-2 flex flex-col px-4 relative whitespace-nowrap transition relative;
 
       > div:first-of-type {
         @apply overflow-hidden;
@@ -238,7 +238,7 @@
     }
 
     .expand-icon {
-      @apply absolute top-0 right-6 text-2xl;
+      @apply absolute right-6;
     }
   }
 </style>
