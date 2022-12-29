@@ -13,7 +13,17 @@ export const actions = {
     },
     // @ts-ignore
     authenticate: async ({request, cookies}) => {
-        const cookie: ICookie = JSON.parse(cookies.get(project_id));
+        let cookie: ICookie;
+        try {
+            cookie = JSON.parse(cookies.get(project_id));
+        } catch (error) {
+            cookie = {
+                authenticated: false,
+                categories: undefined,
+                idToken: "",
+                is18: false
+            };
+        }
         const data = await request.formData();
 
         try {

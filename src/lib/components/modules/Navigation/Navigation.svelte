@@ -3,6 +3,7 @@
     import {store} from "$lib/stores/store";
     import {schema} from "./schema";
     import {cookies} from "$lib/stores/cookies";
+    import {goto} from "$app/navigation";
 
     function innerWidth(node) {
         let rect = node.getBoundingClientRect();
@@ -16,14 +17,24 @@
     function flexCol(node) {
         node.parentNode.style.flexDirection = 'column';
     }
+
+    let showMobileNav: boolean = false;
 </script>
 
 <nav>
     <Component {schema} let:props>
         <div class={`flex flex-col w-full ${props.dropShadow}`}>
             <div class={`flex items-center justify-between w-full relative bg-${props.bgColor} gap-2 md:gap-5 px-4 md:px-6 h-20`}>
-                <button type="button" class="items-center flex md:hidden">
-                    <span class="material-symbols-outlined" style="font-size: 2.5rem;">menu</span>
+                <button type="button" class="z-20 items-center flex lg:hidden"
+                        on:click={() => showMobileNav = !showMobileNav}>
+                    <span class={`material-symbols-outlined ${showMobileNav ? `text-${props.navbarTextColor}` : ''}`}
+                          style="font-size: 2.5rem;">
+                        {#if showMobileNav}
+                            close
+                        {:else}
+                            menu
+                        {/if}
+                    </span>
                 </button>
 
                 {#if props?.logo || $store?.logo}
@@ -36,7 +47,7 @@
                 {/if}
 
                 <!-- Search Bar -->
-                <div style="width: 400px;" class={`items-center pl-4 pr-2 py-2 flex-grow hidden md:flex
+                <div style="width: 400px;" class={`items-center pl-4 pr-2 py-2 flex-grow hidden lg:flex
                 bg-${props?.searchBgColor} text-${props?.searchTextColor} ${props?.searchTextColor}`}>
                     <input type="text" placeholder="Search entire store..." class="outline-none flex-grow"
                            style="background: none;"/>
@@ -45,7 +56,7 @@
 
                 <div class="flex">
                     {#if $store?.businessPhone}
-                        <a href={`tel:${$store.businessPhone}`} class="flex items-center hidden md:flex mr-3">
+                        <a href={`tel:${$store.businessPhone}`} class="flex items-center hidden sm:flex mr-3">
                         <span class={`material-symbols-outlined text-${props.textColor} mr-3`}
                               style="font-size: 2.5rem;">phone_in_talk</span>
                             <div class="flex-col hidden lg:flex">
@@ -62,7 +73,7 @@
             </div>
 
             <!-- Desktop Navbar -->
-            <div class={`hidden md:flex w-full items-stretch items-center h-10 bg-${props.navbarBgColor} text-${props.navbarTextColor} px-4 overflow-auto`}>
+            <div class={`hidden lg:flex w-full items-stretch items-center h-10 bg-${props.navbarBgColor} text-${props.navbarTextColor} px-4 overflow-auto`}>
                 {#each $cookies.categories.items as category}
                     {#if !category.parentId}
                         <a href={`/collections?id=${category.id}`}
@@ -98,11 +109,63 @@
 
             <!-- Mobile searchbar  -->
             <!-- Search Bar -->
-            <div class={`w-full items-center pl-4 pr-2 py-3 flex-grow md:hidden flex
+            <div class={`w-full items-center pl-4 pr-2 py-3 flex-grow lg:hidden flex
                 bg-${props?.searchBgColor} text-${props?.searchTextColor} ${props?.searchTextColor}`}>
                 <input type="text" placeholder="Search entire store..." class="outline-none flex-grow"
                        style="background: none;"/>
                 <span class="material-symbols-outlined">search</span>
+            </div>
+
+            <div class={`mobileNav`} class:hide={!showMobileNav}>
+                <div class={`mobileNav__container bg-${props.navbarBgColor} text-${props.navbarTextColor}`}>
+                    {#each $cookies.categories.items as category}
+                        {#if !category.parentId}
+                            <button on:click={async (e) => {
+                                if ($cookies.categories.items.filter((cat) => cat.parentId === category.id).length) {
+                                    let expanded = e.target.classList.contains('expanded');
+                                    let div = e.target.querySelector("DIV");
+                                    let rect = div.querySelector("DIV").getBoundingClientRect();
+
+                                    if (expanded) {
+                                        e.target.classList.remove('expanded');
+                                        div.style.maxHeight = '0';
+                                    } else {
+                                        e.target.classList.add('expanded');
+                                        div.style.maxHeight = rect.height + 'px';
+                                    }
+                                } else {
+                                    await goto(`/collections?id=${category.id}`);
+                                }
+                            }} class={`url hover:text-${props.navbarHoverTextColor}`}>
+                                {category.name}
+
+                                <div class="flex flex-col">
+                                    <div class="flex flex-col items-start">
+                                        {#each $cookies.categories.items.filter((cat) => cat.parentId === category.id) as cat}
+                                            {#if $cookies.categories.items.filter((c) => c.parentId === cat.id).length}
+                                                <div class="relative flex flex-col min-w-10 mx-4 items-start">
+                                                    <strong class="mt-4">{cat.name}</strong>
+                                                    <div class={`mb-2 h-1 w-full bg-${props.navbarHoverTextColor}`}></div>
+                                                    {#each $cookies.categories.items.filter((c) => c.parentId === cat.id) as c}
+                                                        <a href={`/collections?id=${c.id}`}
+                                                           class={`relative whitespace-nowrap transition my-1 text-${props.navbarTextColor} hover:text-${props.navbarHoverMenuHoverTextColor}`}>{c.name}</a>
+                                                    {/each}
+                                                </div>
+                                            {:else}
+                                                <a href={`/collections?id=${cat.id}`}
+                                                   class={`relative whitespace-nowrap transition mx-4 my-1 text-${props.navbarTextColor} hover:text-${props.navbarHoverMenuHoverTextColor}`}>{cat.name}</a>
+                                            {/if}
+                                        {/each}
+                                    </div>
+                                </div>
+
+                                {#if $cookies.categories.items.filter((cat) => cat.parentId === category.id).length}
+                                    <span class="material-symbols-outlined h-5 ml-2 expand-icon">expand_more</span>
+                                {/if}
+                            </button>
+                        {/if}
+                    {/each}
+                </div>
             </div>
         </div>
     </Component>
@@ -121,6 +184,48 @@
 
     &:hover > .url-container {
       @apply opacity-100 pointer-events-auto;
+    }
+  }
+
+  .mobileNav {
+    @apply fixed top-0 left-0 w-screen h-screen flex-col lg:hidden flex backdrop-blur-sm transition;
+
+    &::before {
+      @apply top-0 left-0 w-screen h-screen bg-white opacity-75 lg:hidden flex transition absolute;
+      content: '';
+    }
+
+    &.hide {
+      @apply backdrop-blur-none pointer-events-none;
+      &::before {
+        @apply opacity-0 transition;
+      }
+    }
+  }
+
+  .hide .mobileNav__container {
+    margin-left: -600px;
+  }
+
+  .mobileNav__container {
+    @apply top-0 left-0 flex flex-col h-full z-10 py-20 pl-4 overflow-y-auto;
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+    width: clamp(300px, 100vw, 500px);
+    max-width: 500px;
+    margin-left: 0;
+
+    button {
+      @apply text-2xl my-2 flex flex-col px-4 relative whitespace-nowrap transition relative;
+
+      > div:first-of-type {
+        @apply overflow-hidden;
+        transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+        max-height: 0;
+      }
+    }
+
+    .expand-icon {
+      @apply absolute top-0 right-6 text-2xl;
     }
   }
 </style>
