@@ -31,6 +31,7 @@
     }
 
     let showMobileNav: boolean = false;
+    let expanded: any;
 </script>
 
 <svelte:window on:click={handleWindowClick} />
@@ -135,25 +136,26 @@
                         {#if !category.parentId}
                             <button on:click={async (e) => {
                                 if ($cookies.categories.items.filter((cat) => cat.parentId === category.id).length) {
-                                    let expanded = e.target.classList.contains('expanded');
+                                    let isExpanded = expanded === category;
                                     let div = e.target.querySelector("DIV");
                                     let rect = div.querySelector("DIV").getBoundingClientRect();
 
-                                    if (expanded) {
-                                        e.target.classList.remove('expanded');
+                                    if (isExpanded) {
+                                        expanded = undefined;
                                         div.style.maxHeight = '0';
                                     } else {
-                                        e.target.classList.add('expanded');
+                                        expanded = category;
                                         div.style.maxHeight = rect.height + 'px';
                                     }
+
                                 } else {
                                     await goto(`/collections?id=${category.id}`);
                                 }
                             }} class={`text-md url hover:text-${props.navbarHoverTextColor}`}>
                                 {category.name}
 
-                                <div class="flex flex-col" on:click={(e) => e.stopPropagation()}>
-                                    <div class={`flex flex-col gap-4 items-start mx-2 px-2 pb-4 mt-4 border-l border-solid border-${props.navbarHoverTextColor}`}>
+                                <div class="flex flex-col" on:click={(e) => e.stopPropagation()} class:closed={expanded !== category}>
+                                    <div class={`flex flex-col gap-4 items-start mx-2 px-4 pb-4 mt-4 border-l border-solid border-${props.navbarHoverTextColor}`}>
                                         {#each $cookies.categories.items.filter((cat) => cat.parentId === category.id) as cat}
                                             {#if $cookies.categories.items.filter((c) => c.parentId === cat.id).length}
                                                 <div class={`text-sm relative flex flex-col min-w-10 items-start`}>
@@ -166,14 +168,14 @@
                                                 </div>
                                             {:else}
                                                 <a href={`/collections?id=${cat.id}`}
-                                                   class={`relative whitespace-nowrap transition mx-4 my-1 text-${props.navbarTextColor} hover:text-${props.navbarHoverMenuHoverTextColor}`}>{cat.name}</a>
+                                                   class={`relative whitespace-nowrap transition text-${props.navbarTextColor} hover:text-${props.navbarHoverMenuHoverTextColor}`}>{cat.name}</a>
                                             {/if}
                                         {/each}
                                     </div>
                                 </div>
 
                                 {#if $cookies.categories.items.filter((cat) => cat.parentId === category.id).length}
-                                    <span class="material-symbols-outlined ml-2 expand-icon mb-2 transition">expand_more</span>
+                                    <span class="material-symbols-outlined ml-2 expand-icon mb-2 transition" style={expanded === category ? "transform: rotate(180deg);" : ""}>expand_more</span>
                                 {/if}
                             </button>
                         {/if}
@@ -186,6 +188,10 @@
 
 
 <style lang="scss">
+  .closed {
+    max-height: 0 !important;
+  }
+
   nav {
     @apply sticky top-0 left-0 w-screen flex z-50;
   }
@@ -213,6 +219,10 @@
       &::before {
         @apply opacity-0 transition;
       }
+    }
+
+    .expanded {
+
     }
   }
 
