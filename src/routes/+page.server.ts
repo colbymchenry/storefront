@@ -1,7 +1,7 @@
-import {project_id} from "./+layout.server";
 import {fail, redirect} from "@sveltejs/kit";
 import {firebaseAdminUtils} from "../lib/utils/firebase/firebase-admin-utils";
 import type ICookie from "../lib/interfaces/ICookie";
+import {project_id} from "../lib/stores/cookies";
 
 export const actions = {
     // @ts-ignore

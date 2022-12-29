@@ -1,8 +1,7 @@
 import {firebaseAdminUtils} from "../lib/utils/firebase/firebase-admin-utils";
 import type ICookie from "../lib/interfaces/ICookie";
 import {lightspeedUtils} from "../lib/utils/lightspeed-utils";
-
-export const {project_id} = JSON.parse(process.env.FIREBASE_CONFIG);
+import {project_id} from "../lib/stores/cookies";
 
 let cookieStorage: ICookie = {
     "is18": false,
