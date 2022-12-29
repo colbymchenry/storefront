@@ -38,6 +38,7 @@
 <style lang="scss">
   .topContainer {
     @apply fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black;
+    z-index: 1000;
     max-width: none !important;
 
     > div:first-of-type {
