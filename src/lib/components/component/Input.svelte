@@ -60,7 +60,6 @@
     {:else}
         <input use:typeAction {name} {placeholder} {min} {max} {step} pattern={regex} id={name} bind:value/>
     {/if}
-
 </div>
 
 <style lang="scss">

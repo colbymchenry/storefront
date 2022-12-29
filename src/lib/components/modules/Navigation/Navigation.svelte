@@ -8,9 +8,12 @@
     let mobileNavContainer: HTMLElement;
     let mobileMenuButton: HTMLElement;
 
-    function innerWidth(node) {
+    function innerWidth(e) {
+        let node = e.target.querySelector("DIV");
+        if (!node) return;
+
         let rect = node.getBoundingClientRect();
-        let parentRect = node.parentNode.getBoundingClientRect();
+        let parentRect = e.target.getBoundingClientRect();
 
         node.style.width = (rect.innerWidth + 20) + 'px';
         node.style.left = parentRect.left + 'px';
@@ -87,13 +90,12 @@
             <div class={`hidden lg:flex w-full items-stretch items-center h-10 bg-${props.navbarBgColor} text-${props.navbarTextColor} px-4 overflow-auto`}>
                 {#each $cookies.categories.items as category}
                     {#if !category.parentId}
-                        <a href={`/collections?id=${category.id}`}
+                        <a href={`/collections?id=${category.id}`} on:mouseenter={innerWidth}
                            class={`flex items-center px-4 relative whitespace-nowrap url transition hover:text-${props.navbarHoverTextColor}`}>
                             {category.name}
 
                             {#if $cookies.categories.items.filter((cat) => cat.parentId === category.id).length}
-                                <div use:innerWidth
-                                     class={`bg-${props.navbarHoverMenuBgColor} text-${props.navbarHoverMenuTextColor} url-container`}>
+                                <div class={`bg-${props.navbarHoverMenuBgColor} text-${props.navbarHoverMenuTextColor} url-container opacity-0`}>
                                     {#each $cookies.categories.items.filter((cat) => cat.parentId === category.id) as cat}
                                         {#if $cookies.categories.items.filter((c) => c.parentId === cat.id).length}
                                             <div class="relative flex flex-col min-w-10 mx-4">
@@ -190,7 +192,7 @@
 
   .url {
     > .url-container {
-      @apply opacity-0 pointer-events-none transition fixed flex p-4 opacity-0;
+      @apply transition fixed flex p-4 opacity-0 pointer-events-none ;
     }
 
     &:hover > .url-container {

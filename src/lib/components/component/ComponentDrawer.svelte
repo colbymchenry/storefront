@@ -105,6 +105,20 @@
                     {/if}
                 {/each}
             {/if}
+
+            {#if schema?.blocks}
+                {#each schema.blocks as block}
+                    <div class="flex items-center">
+                        <span class="font-medium">{block.name}</span>
+                        <button type="button" class="ml-4 flex justify-center items-center w-8 h-8 bg-gray-300 rounded">
+                            <span class="material-symbols-outlined text-gray-600 pointer-events-none">add_circle</span>
+                        </button>
+                    </div>
+                    <div class="flex flex-col">
+
+                    </div>
+                {/each}
+            {/if}
         </div>
         <div class="flex w-full items-center justify-between sticky left-0 bottom-0 shadow-md px-3 py-2 bg-gray-100">
             <button type="button" class="btn px-3 py-2" on:click={reset}>Reset</button>

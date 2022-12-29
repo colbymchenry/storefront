@@ -9,7 +9,7 @@
 <!--        update({ reset: false });-->
 <!--    };-->
 <!--}}-->
-<div class="container">
+<div class="topContainer">
     <Component {schema} let:props>
         <div class="flex flex-col parent bg-white">
             <div class={`w-full p-3 text-center bg-${props?.titleBgColor}`}>
@@ -36,7 +36,7 @@
 </div>
 
 <style lang="scss">
-  .container {
+  .topContainer {
     @apply fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black;
     max-width: none !important;
 
