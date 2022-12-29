@@ -187,12 +187,12 @@
 
 <style lang="scss">
   nav {
-    @apply sticky top-0 left-0 w-screen flex;
+    @apply sticky top-0 left-0 w-screen flex z-50;
   }
 
   .url {
     > .url-container {
-      @apply transition fixed flex p-4 opacity-0 pointer-events-none ;
+      @apply transition fixed flex p-4 opacity-0 pointer-events-none;
     }
 
     &:hover > .url-container {
