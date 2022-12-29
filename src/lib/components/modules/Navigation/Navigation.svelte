@@ -5,6 +5,9 @@
     import {cookies} from "$lib/stores/cookies";
     import {goto} from "$app/navigation";
 
+    let mobileNavContainer: HTMLElement;
+    let mobileMenuButton: HTMLElement;
+
     function innerWidth(node) {
         let rect = node.getBoundingClientRect();
         let parentRect = node.parentNode.getBoundingClientRect();
@@ -18,14 +21,22 @@
         node.parentNode.style.flexDirection = 'column';
     }
 
+    function handleWindowClick(e) {
+        if (showMobileNav && mobileNavContainer && !mobileNavContainer.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+            showMobileNav = false;
+        }
+    }
+
     let showMobileNav: boolean = false;
 </script>
+
+<svelte:window on:click={handleWindowClick} />
 
 <nav>
     <Component {schema} let:props>
         <div class={`flex flex-col w-full ${props.dropShadow}`}>
             <div class={`flex items-center justify-between w-full relative bg-${props.bgColor} gap-2 md:gap-5 px-4 md:px-6 h-20`}>
-                <button type="button" class="z-20 items-center flex lg:hidden"
+                <button bind:this={mobileMenuButton} type="button" class="z-20 items-center flex lg:hidden"
                         on:click={() => showMobileNav = !showMobileNav}>
                     <span class={`material-symbols-outlined ${showMobileNav ? `text-${props.navbarTextColor}` : ''}`}
                           style="font-size: 2.5rem;">
@@ -117,7 +128,7 @@
             </div>
 
             <div class={`mobileNav`} class:hide={!showMobileNav}>
-                <div class={`mobileNav__container bg-${props.navbarBgColor} text-${props.navbarTextColor}`}>
+                <div bind:this={mobileNavContainer} class={`mobileNav__container bg-${props.navbarBgColor} text-${props.navbarTextColor}`}>
                     {#each $cookies.categories.items as category}
                         {#if !category.parentId}
                             <button on:click={async (e) => {
