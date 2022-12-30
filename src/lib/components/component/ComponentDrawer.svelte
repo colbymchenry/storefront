@@ -33,7 +33,6 @@
 
             // Uploading images
             uploading = true;
-            // TODO: Need to check all nested values too :/ for files
             await Promise.all(Object.keys(formData).map(async (key: string) => {
                 let value = formData[key];
                 if (value instanceof File) {
@@ -96,11 +95,8 @@
             }));
             uploading = false;
 
-            console.log(formData)
             $theme[schema.tag] = formData;
-            console.log($theme)
 
-            console.log(JSON.parse(JSON.stringify($theme)))
             await firebaseClientUtils.set("settings", "theme", JSON.parse(JSON.stringify($theme)));
             backup = JSON.parse(JSON.stringify($theme));
             status = 'success';
