@@ -30,4 +30,5 @@ export interface IBlock {
     name: string;
     type: string;
     settings: ISetting[];
+    id?: string;
 }

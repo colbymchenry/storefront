@@ -33,7 +33,8 @@
 
 <style lang="scss">
   .settings {
-    @apply flex items-center justify-center fixed top-24 right-0 bg-indigo-700 text-white py-2 pl-4 pr-2 shadow-lg rounded-l-full z-20;
+    @apply flex items-center justify-center fixed top-24 right-0 bg-indigo-700 text-white py-2 pl-4 pr-2 shadow-lg rounded-l-full;
+    z-index: 2000;
 
     span {
       animation-duration: 3s !important;
@@ -41,7 +42,8 @@
   }
 
   .devices {
-    @apply flex items-center justify-center fixed top-24 right-0 bg-indigo-700 text-white py-2 pl-4 shadow-lg rounded-l-full z-20 mt-12;
+    @apply flex items-center justify-center fixed top-24 right-0 bg-indigo-700 text-white py-2 pl-4 shadow-lg rounded-l-full mt-12;
+    z-index: 2000;
     margin-right: -8.5rem;
     transition: all 0.2s ease;
 

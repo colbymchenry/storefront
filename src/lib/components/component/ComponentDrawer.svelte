@@ -25,41 +25,83 @@
 
         let formData = formHelper.getFormData(e.target);
 
-        // Uploading images
-        uploading = true;
-        await Promise.all(Object.keys(formData).map(async (key: string) => {
-            let value = formData[key];
-            if (value instanceof File) {
-                if (value?.name) {
-                    try {
-                        // Upload image to Cloud Storage
-                        let extension = value.name.split(".")[value.name.split(".").length - 1];
-                        formData[key] = await firebaseClientUtils.uploadFile(value, schema.tag + '/' + key + "." + extension);
-                    } catch (error) {
-                        console.error(error);
-                        delete formData[key];
-                    }
-                } else {
-                    if ($theme[schema.tag] && $theme[schema.tag][key]) {
-                        try {
-                            await firebaseClientUtils.deleteFile($theme[schema.tag][key]);
-                        } catch (error) {
-
-                        }
-                    }
-                    delete formData[key];
-                }
-            }
-        }));
-        uploading = false;
-
         try {
             if (submit) {
                 await submit(formData);
                 formData = formHelper.getFormData(e.target);
             }
+
+            // Uploading images
+            uploading = true;
+            // TODO: Need to check all nested values too :/ for files
+            await Promise.all(Object.keys(formData).map(async (key: string) => {
+                let value = formData[key];
+                if (value instanceof File) {
+                    if (value?.name) {
+                        try {
+                            // Upload image to Cloud Storage
+                            let extension = value.name.split(".")[value.name.split(".").length - 1];
+                            formData[key] = await firebaseClientUtils.uploadFile(value, schema.tag + '/' + key + "." + extension);
+                        } catch (error) {
+                            console.error(error);
+                            delete formData[key];
+                        }
+                    } else {
+                        if ($theme[schema.tag] && $theme[schema.tag][key]) {
+                            try {
+                                await firebaseClientUtils.deleteFile($theme[schema.tag][key]);
+                            } catch (error) {
+
+                            }
+                        }
+                        delete formData[key];
+                    }
+                } else if (key === "blocks") {
+                    // if we are in blocks we have types of blocks
+                    return await Promise.all(Object.keys(value).map(async (blockType) => {
+                        // now we are iterating over each block KEY = Math.random()
+                        let blockEntries = value[blockType];
+                        // the value is full of settings
+                        await Promise.all(Object.keys(blockEntries).map(async (blockIterationKey: string) => {
+                            return await Promise.all(Object.keys(blockEntries[blockIterationKey]).map(async (key: string) => {
+                                // grab the setting value
+                                let value = blockEntries[blockIterationKey][key];
+                                // if value is a file upload the file
+                                if (value instanceof File) {
+                                    if (value?.name) {
+                                        try {
+                                            // Upload image to Cloud Storage
+                                            let extension = value.name.split(".")[value.name.split(".").length - 1];
+                                            formData["blocks"][blockType][blockIterationKey][key] = await firebaseClientUtils.uploadFile(value, schema.tag + '/' + blockType + '/' + blockIterationKey + '/' + key + "." + extension);
+                                        } catch (error) {
+                                            console.error(error);
+                                            delete formData[key];
+                                        }
+                                    } else {
+                                        if ($theme[schema.tag] && $theme[schema.tag][key]) {
+                                            try {
+                                                await firebaseClientUtils.deleteFile($theme[schema.tag][key]);
+                                            } catch (error) {
+
+                                            }
+                                        }
+                                        delete formData[key];
+                                    }
+                                }
+                            }));
+
+                        }));
+                    }));
+                }
+            }));
+            uploading = false;
+
+            console.log(formData)
             $theme[schema.tag] = formData;
-            await firebaseClientUtils.set("settings", "theme", $theme);
+            console.log($theme)
+
+            console.log(JSON.parse(JSON.stringify($theme)))
+            await firebaseClientUtils.set("settings", "theme", JSON.parse(JSON.stringify($theme)));
             backup = JSON.parse(JSON.stringify($theme));
             status = 'success';
         } catch (error) {
@@ -69,6 +111,26 @@
         }
         saving = false;
         setTimeout(() => status = undefined, 2500);
+    }
+
+    function addBlock(block) {
+        let defaultValue = {
+            id: Math.random().toString().split(".")[1]
+        };
+        block.settings.forEach((setting) => {
+            if (setting.default) {
+                defaultValue[setting.id] = setting.default;
+            }
+        });
+
+        if (!$theme[schema.tag]["blocks"] || !$theme[schema.tag]["blocks"][block.name]) {
+            if (!$theme[schema.tag]["blocks"]) {
+                $theme[schema.tag]["blocks"] = {};
+            }
+            $theme[schema.tag]["blocks"][block.name] = [];
+        }
+
+        $theme[schema.tag]["blocks"][block.name] = [...$theme[schema.tag]["blocks"][block.name], defaultValue];
     }
 
     function reset() {
@@ -110,12 +172,34 @@
                 {#each schema.blocks as block}
                     <div class="flex items-center">
                         <span class="font-medium">{block.name}</span>
-                        <button type="button" class="ml-4 flex justify-center items-center w-8 h-8 bg-gray-300 rounded">
+                        <button type="button" class="ml-4 flex justify-center items-center w-8 h-8 bg-gray-300 rounded"
+                                on:click={() => addBlock(block)}>
                             <span class="material-symbols-outlined text-gray-600 pointer-events-none">add_circle</span>
                         </button>
                     </div>
                     <div class="flex flex-col">
-
+                        {#key $theme[schema.tag]?.blocks?.length}
+                            {#if $theme[schema.tag]?.blocks && $theme[schema.tag].blocks[block.name]}
+                                {#each Object.keys($theme[schema.tag].blocks[block.name]) as blockId}
+                                    {#if block?.settings}
+                                        {#each block.settings as setting}
+                                            {#if setting.type === 'checkbox'}
+                                            {:else if setting.type === 'radio'}
+                                            {:else if setting.type === 'collection'}
+                                            {:else if setting.type === 'product'}
+                                            {:else if setting.type === 'header'}
+                                                <SectionHeader>{setting.label}</SectionHeader>
+                                            {:else}
+                                                <Input {...setting} name={'blocks.' + block.name + '.' + blockId + '.' + setting.id}
+                                                       value={$theme[schema.tag]?.blocks && $theme[schema.tag]["blocks"][block.name] && $theme[schema.tag]["blocks"][block.name][blockId] ? $theme[schema.tag]["blocks"][block.name][blockId][setting.id] || setting.default : setting.default}>
+                                                    {setting.label}
+                                                </Input>
+                                            {/if}
+                                        {/each}
+                                    {/if}
+                                {/each}
+                            {/if}
+                        {/key}
                     </div>
                 {/each}
             {/if}

@@ -74,7 +74,6 @@
         }, 300);
     })
 
-
 </script>
 
 <div class="flex flex-col gap-2">
