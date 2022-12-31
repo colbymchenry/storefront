@@ -26,7 +26,7 @@
         }
     }
 
-    $: props = () => {
+    export function props() {
         let defaultObject = {};
 
         if (schema?.settings?.length) {

@@ -6,6 +6,7 @@
     import Input from "$lib/components/component/Input.svelte";
     import {tick} from "svelte";
     import SectionHeader from "$lib/components/component/SectionHeader.svelte";
+    import Accordion from "$lib/components/Accordion.svelte";
 
     export let visible = false;
     export let submit;
@@ -133,6 +134,9 @@
 
     $: if (!visible) reset();
 
+    async function deleteBlock(blockId, block) {
+
+    }
 </script>
 
 <div class="main" class:visible>
@@ -182,24 +186,43 @@
                         {#key $theme[schema.tag]?.blocks?.length}
                             {#if $theme[schema.tag]?.blocks && $theme[schema.tag].blocks[block.name]}
                                 {#each Object.keys($theme[schema.tag].blocks[block.name]) as blockId}
-                                    <SectionHeader fontSize="md">{block.name}: {blockId}</SectionHeader>
-                                    {#if block?.settings}
-                                        {#each block.settings as setting}
-                                            {#if setting.type === 'checkbox'}
-                                            {:else if setting.type === 'radio'}
-                                            {:else if setting.type === 'collection'}
-                                            {:else if setting.type === 'product'}
-                                            {:else if setting.type === 'header'}
-                                                <SectionHeader>{setting.label}</SectionHeader>
-                                            {:else}
-                                                <Input {...setting}
-                                                       name={'blocks.' + block.name + '.' + blockId + '.' + setting.id}
-                                                       value={$theme[schema.tag]?.blocks && $theme[schema.tag]["blocks"][block.name] && $theme[schema.tag]["blocks"][block.name][blockId] ? $theme[schema.tag]["blocks"][block.name][blockId][setting.id] || setting.default : setting.default}>
-                                                    {setting.label}
-                                                </Input>
-                                            {/if}
-                                        {/each}
-                                    {/if}
+                                    <div class="flex items-start">
+                                        <div class="flex items-center flex-shrink py-4 mr-4">
+                                            <button type="button" class="cursor-grab" on:click={() => deleteBlock(blockId, block)}>
+                                                <span class="material-symbols-outlined">
+                                                    drag_indicator
+                                                </span>
+                                            </button>
+                                            <button type="button" on:click={() => deleteBlock(blockId, block)}>
+                                                <span class="material-symbols-outlined">
+                                                    delete
+                                                </span>
+                                            </button>
+                                        </div>
+
+                                        <Accordion title={`${block.name}: ${blockId}`}
+                                                   clazz="bg-white shadow-sm my-1 rounded border border-solid border-gray-200 flex-grow">
+                                            <div class="flex flex-col w-full gap-2">
+                                                {#if block?.settings}
+                                                    {#each block.settings as setting}
+                                                        {#if setting.type === 'checkbox'}
+                                                        {:else if setting.type === 'radio'}
+                                                        {:else if setting.type === 'collection'}
+                                                        {:else if setting.type === 'product'}
+                                                        {:else if setting.type === 'header'}
+                                                            <SectionHeader>{setting.label}</SectionHeader>
+                                                        {:else}
+                                                            <Input {...setting}
+                                                                   name={'blocks.' + block.name + '.' + blockId + '.' + setting.id}
+                                                                   value={$theme[schema.tag]?.blocks && $theme[schema.tag]["blocks"][block.name] && $theme[schema.tag]["blocks"][block.name][blockId] ? $theme[schema.tag]["blocks"][block.name][blockId][setting.id] || setting.default : setting.default}>
+                                                                {setting.label}
+                                                            </Input>
+                                                        {/if}
+                                                    {/each}
+                                                {/if}
+                                            </div>
+                                        </Accordion>
+                                    </div>
                                 {/each}
                             {/if}
                         {/key}

@@ -7,20 +7,11 @@ export const schema: ISchema = {
     "information": `<p>Please make sure all uploaded images are the same dimensions or else clipping will occur.`,
     "settings": [
         {
-            "type": "number",
-            "id": "height",
-            "label": "Height (px)",
-            "min": 20,
-            "max": 400,
-            "step": 5,
-            "default": 50
-        },
-        {
             "type": "color",
             "id": "controlsColor",
             "label": "Controls Color",
             "default": "white"
-        },
+        }
     ],
     "blocks": [
         {
