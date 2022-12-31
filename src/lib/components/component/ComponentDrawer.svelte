@@ -145,6 +145,13 @@
     </div>
     <form bind:this={form} class="flex flex-col w-full flex-grow" on:submit|preventDefault={onSubmit}>
         <div class="flex flex-col w-full flex-grow px-3 py-3 gap-5">
+
+            {#if schema.information}
+                <div class="text-gray-400 font-medium">
+                    {@html schema.information}
+                </div>
+            {/if}
+
             {#if schema?.settings}
                 {#each schema.settings as setting}
                     {#if setting.type === 'checkbox'}
@@ -185,7 +192,8 @@
                                             {:else if setting.type === 'header'}
                                                 <SectionHeader>{setting.label}</SectionHeader>
                                             {:else}
-                                                <Input {...setting} name={'blocks.' + block.name + '.' + blockId + '.' + setting.id}
+                                                <Input {...setting}
+                                                       name={'blocks.' + block.name + '.' + blockId + '.' + setting.id}
                                                        value={$theme[schema.tag]?.blocks && $theme[schema.tag]["blocks"][block.name] && $theme[schema.tag]["blocks"][block.name][blockId] ? $theme[schema.tag]["blocks"][block.name][blockId][setting.id] || setting.default : setting.default}>
                                                     {setting.label}
                                                 </Input>

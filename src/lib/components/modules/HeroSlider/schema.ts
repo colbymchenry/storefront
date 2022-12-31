@@ -4,14 +4,14 @@ import type {ISchema} from "../../component/ISchema";
 export const schema: ISchema = {
     "name": "Hero Slider",
     "tag": "hero-slider",
+    "information": `<p>Please make sure all uploaded images are the same dimensions or else clipping will occur.`,
     "settings": [
         {
-            "type": "range",
+            "type": "number",
             "id": "height",
-            "label": "Height",
-            "unit": "%",
+            "label": "Height (px)",
             "min": 20,
-            "max": 100,
+            "max": 400,
             "step": 5,
             "default": 50
         },

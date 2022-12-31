@@ -1,6 +1,7 @@
 export interface ISchema {
     name: string;
     tag: string;
+    information?: string;
     class?: string;
     settings?: ISetting[];
     blocks?: IBlock[];
