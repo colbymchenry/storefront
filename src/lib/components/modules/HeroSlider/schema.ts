@@ -14,7 +14,13 @@ export const schema: ISchema = {
             "max": 100,
             "step": 5,
             "default": 50
-        }
+        },
+        {
+            "type": "color",
+            "id": "controlsColor",
+            "label": "Controls Color",
+            "default": "white"
+        },
     ],
     "blocks": [
         {

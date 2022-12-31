@@ -34,7 +34,7 @@
     let expanded: any;
 </script>
 
-<svelte:window on:click={handleWindowClick} />
+<svelte:window on:click={handleWindowClick}/>
 
 <nav>
     <Component {schema} let:props>
@@ -53,8 +53,10 @@
                 </button>
 
                 {#if props?.logo || $store?.logo}
-                    <img src={props?.logo || $store?.logo} loading="lazy" alt="company logo"
-                         style={`max-height: 100%;object-fit: contain;height: ${props.logoHeight}%;`}/>
+                    <a href="/" style={`max-height: 100%;height: ${props.logoHeight}%;`}>
+                        <img src={props?.logo || $store?.logo} loading="lazy" alt="company logo"
+                             style={`max-height: 100%;object-fit: contain;height: 100%;`}/>
+                    </a>
                 {:else}
                     {#if $store?.businessName}
                         <h1>{$store.businessName}</h1>
@@ -131,7 +133,8 @@
             </div>
 
             <div class={`mobileNav`} class:hide={!showMobileNav}>
-                <div bind:this={mobileNavContainer} class={`mobileNav__container bg-${props.navbarBgColor} text-${props.navbarTextColor}`}>
+                <div bind:this={mobileNavContainer}
+                     class={`mobileNav__container bg-${props.navbarBgColor} text-${props.navbarTextColor}`}>
                     {#each $cookies.categories.items as category}
                         {#if !category.parentId}
                             <button on:click={async (e) => {
@@ -154,7 +157,8 @@
                             }} class={`text-md url hover:text-${props.navbarHoverTextColor}`}>
                                 {category.name}
 
-                                <div class="flex flex-col" on:click={(e) => e.stopPropagation()} class:closed={expanded !== category}>
+                                <div class="flex flex-col" on:click={(e) => e.stopPropagation()}
+                                     class:closed={expanded !== category}>
                                     <div class={`flex flex-col gap-4 items-start mx-2 px-4 pb-4 mt-4 border-l border-solid border-${props.navbarHoverTextColor}`}>
                                         {#each $cookies.categories.items.filter((cat) => cat.parentId === category.id) as cat}
                                             {#if $cookies.categories.items.filter((c) => c.parentId === cat.id).length}
@@ -175,7 +179,8 @@
                                 </div>
 
                                 {#if $cookies.categories.items.filter((cat) => cat.parentId === category.id).length}
-                                    <span class="material-symbols-outlined ml-2 expand-icon mb-2 transition" style={expanded === category ? "transform: rotate(180deg);" : ""}>expand_more</span>
+                                    <span class="material-symbols-outlined ml-2 expand-icon mb-2 transition"
+                                          style={expanded === category ? "transform: rotate(180deg);" : ""}>expand_more</span>
                                 {/if}
                             </button>
                         {/if}
