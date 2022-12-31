@@ -29,11 +29,41 @@
     $: props = () => {
         let defaultObject = {};
 
-        schema.settings.filter((setting) => setting.default).forEach((setting) => {
-            defaultObject[setting.id] = setting.default;
-        });
+        if (schema?.settings?.length) {
+            schema.settings.filter((setting) => setting.default).forEach((setting) => {
+                defaultObject[setting.id] = setting.default;
+            });
+        }
 
-        return {...defaultObject, ...$theme[schema.tag]}
+        let blocks = {};
+
+        if ($theme[schema.tag]?.blocks) {
+            blocks = {...$theme[schema.tag].blocks};
+
+            Object.keys($theme[schema.tag].blocks).forEach((blockName) => {
+                let blockSchema = schema.blocks.find((b) => b.name === blockName);
+
+                let defaultBlockObject = {};
+                if (blockSchema?.settings?.length) {
+                    blockSchema.settings.filter((setting) => setting.default).forEach((setting) => {
+                        defaultBlockObject[setting.id] = setting.default;
+                    });
+                }
+
+                let blockIds = Object.keys($theme[schema.tag].blocks[blockName]);
+
+                blockIds.forEach((blockId) => {
+                    blocks[blockName][blockId] = {...defaultBlockObject, ...$theme[schema.tag].blocks[blockName][blockId]}
+                })
+            })
+        }
+
+        return {...defaultObject, ...$theme[schema.tag], blocks, getBlocks}
+    }
+
+    function getBlocks(key: string) {
+        let {blocks} = props();
+        return Object.values(blocks[key]) || [];
     }
 </script>
 

@@ -6,10 +6,17 @@
 <div class="w-full">
     <Component {schema} let:props>
         <div class={`flex flex-col bg-black`} style={`height: ${props.height}vh;`}>
+            {#each props.getBlocks("Slide") as block}
+                {#if block.image}
+                    <img src={block.image} loading="lazy" alt={props.alt}/>
+                {/if}
+            {/each}
         </div>
     </Component>
 </div>
 
 <style lang="scss">
-
+    img {
+      @apply w-full h-full object-cover;
+    }
 </style>

@@ -30,6 +30,11 @@ export const schema: ISchema = {
                     "type": "url",
                     "id": "url",
                     "label": "URL"
+                },
+                {
+                    "type": "text",
+                    "id": "alt",
+                    "label": "Img Alt (SEO)"
                 }
             ]
         }

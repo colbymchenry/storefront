@@ -110,9 +110,7 @@
     }
 
     function addBlock(block) {
-        let defaultValue = {
-            id: Math.random().toString().split(".")[1]
-        };
+        let defaultValue = {};
         block.settings.forEach((setting) => {
             if (setting.default) {
                 defaultValue[setting.id] = setting.default;
@@ -123,10 +121,10 @@
             if (!$theme[schema.tag]["blocks"]) {
                 $theme[schema.tag]["blocks"] = {};
             }
-            $theme[schema.tag]["blocks"][block.name] = [];
+            $theme[schema.tag]["blocks"][block.name] = {};
         }
 
-        $theme[schema.tag]["blocks"][block.name] = [...$theme[schema.tag]["blocks"][block.name], defaultValue];
+        $theme[schema.tag]["blocks"][block.name][Math.random().toString().split(".")[1]] = defaultValue;
     }
 
     function reset() {
@@ -177,6 +175,7 @@
                         {#key $theme[schema.tag]?.blocks?.length}
                             {#if $theme[schema.tag]?.blocks && $theme[schema.tag].blocks[block.name]}
                                 {#each Object.keys($theme[schema.tag].blocks[block.name]) as blockId}
+                                    <SectionHeader fontSize="md">{block.name}: {blockId}</SectionHeader>
                                     {#if block?.settings}
                                         {#each block.settings as setting}
                                             {#if setting.type === 'checkbox'}
