@@ -4,13 +4,15 @@
 
     let slide: number = 0;
 
+    let useFilter = (b) => b.image instanceof Object ? false : b.image?.includes('http')
+
     function handleNext(props) {
-        let blocks = props.getBlocks("Slide").filter((b) => b.image);
+        let blocks = props.getBlocks("Slide").filter(useFilter);
         slide = slide + 1 > blocks.length - 1 ? 0 : slide + 1;
     }
 
     function handleBack(props) {
-        let blocks = props.getBlocks("Slide").filter((b) => b.image);
+        let blocks = props.getBlocks("Slide").filter(useFilter);
         slide = slide - 1 === -1 ? blocks.length - 1 : slide - 1;
     }
 </script>
@@ -19,7 +21,7 @@
     <Component {schema} let:props>
         <div class={`flex relative bg-black overflow-hidden`}>
             <div class={`flex flex-nowrap w-full slider-container`} style={`margin-left: -${100 * slide}%;`}>
-                {#each props.getBlocks("Slide").filter((b) => b.image) as block, index}
+                {#each props.getBlocks("Slide").filter(useFilter) as block, index}
                     <img src={block.image} loading="lazy" alt={props.alt}/>
                 {/each}
             </div>
@@ -35,7 +37,7 @@
                     </button>
                 </div>
                 <div class="flex justify-center items-end h-full">
-                    {#each props.getBlocks("Slide").filter((b) => b.image) as block, index}
+                    {#each props.getBlocks("Slide").filter(useFilter) as block, index}
                         <button type="button" class="hover:opacity-100 transition" on:click={() => slide = index}
                                 class:opacity-100={slide === index} class:opacity-80={slide !== index}>
                             <span class="material-symbols-outlined mx-1 shadow-2xl text-sm md:text-lg pointer-events-none">

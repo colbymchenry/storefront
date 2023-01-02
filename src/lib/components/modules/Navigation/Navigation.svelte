@@ -30,6 +30,10 @@
         }
     }
 
+    function useFlex(node) {
+        node.style.display = 'flex';
+    }
+
     let showMobileNav: boolean = false;
     let expanded: any;
 </script>
@@ -94,11 +98,12 @@
                 {#each $cookies.categories.items as category}
                     {#if !category.parentId}
                         <a href={`/collections?id=${category.id}`} on:mouseenter={innerWidth}
+                           class:pr-8={$cookies.categories.items.filter((cat) => cat.parentId === category.id).length}
                            class={`flex items-center px-4 relative whitespace-nowrap url transition hover:text-${props.navbarHoverTextColor}`}>
                             {category.name}
 
                             {#if $cookies.categories.items.filter((cat) => cat.parentId === category.id).length}
-                                <div class={`bg-${props.navbarHoverMenuBgColor} text-${props.navbarHoverMenuTextColor} url-container opacity-0`}>
+                                <div use:useFlex class={`bg-${props.navbarHoverMenuBgColor} text-${props.navbarHoverMenuTextColor} url-container opacity-0`} style="display: none;">
                                     {#each $cookies.categories.items.filter((cat) => cat.parentId === category.id) as cat}
                                         {#if $cookies.categories.items.filter((c) => c.parentId === cat.id).length}
                                             <div class="relative flex flex-col min-w-10 mx-4">
@@ -116,7 +121,7 @@
                                     {/each}
                                 </div>
 
-                                <span class="material-symbols-outlined h-5 ml-2">expand_more</span>
+                                <span class="absolute right-0 material-symbols-outlined">expand_more</span>
                             {/if}
                         </a>
                     {/if}
@@ -203,7 +208,7 @@
 
   .url {
     > .url-container {
-      @apply transition fixed flex p-4 opacity-0 pointer-events-none;
+      @apply transition fixed flex p-4 opacity-0 pointer-events-none ml-4;
     }
 
     &:hover > .url-container {

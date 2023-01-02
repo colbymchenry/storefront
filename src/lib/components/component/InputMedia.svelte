@@ -74,6 +74,9 @@
         }, 300);
     })
 
+    $: if (src instanceof Object || (src && !src?.includes('base64') && !src?.includes('http'))) {
+        src = undefined;
+    }
 </script>
 
 <div class="flex flex-col gap-2">

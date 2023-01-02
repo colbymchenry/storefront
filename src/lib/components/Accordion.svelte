@@ -21,13 +21,13 @@
 </script>
 
 <div class={`flex flex-col w-full bg-blue-50 ${clazz}`}>
-    <button class="transition flex text-left items-center w-full py-3 px-3 bg-white text-gray-500" on:click={() => open = !open} class:open>
+    <button type="button" class="transition flex text-left items-center w-full py-3 px-3 bg-white text-gray-500" on:click={() => open = !open} class:open>
         <div class="flex-grow">
             {#if title}
                 {@html title}
             {/if}
         </div>
-        <div type="button" class="flex items-center">
+        <div class="flex items-center">
             <span class="material-symbols-outlined transition" style={open ? 'transform: rotate(180deg);' : ''}>expand_more</span>
         </div>
     </button>
