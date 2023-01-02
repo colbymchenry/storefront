@@ -63,7 +63,12 @@
 
     function getBlocks(key: string) {
         let {blocks} = props();
-        return Object.values(blocks[key]) || [];
+        let values = [];
+        for (let property in blocks[key]) {
+            values.push(blocks[key][property])
+            // console.log(`${property}: ${blocks[property]}`);
+        }
+        return values
     }
 </script>
 
