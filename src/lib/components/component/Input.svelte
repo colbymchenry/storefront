@@ -6,14 +6,14 @@
     import InputRange from "$lib/components/component/InputRange.svelte";
     import {onMount} from "svelte";
 
-    export let name: string;
+    export let name: string = undefined;
     export let type: string = 'text';
     export let placeholder: string;
-    export let value;
-    export let min, max, step;
-    export let options: IOption[];
-    export let unit: string;
-    export let regex: string;
+    export let value = undefined;
+    export let min = undefined, max = undefined, step = undefined;
+    export let options: IOption[] = undefined;
+    export let unit: string = undefined;
+    export let regex: string = undefined;
     export let required: boolean = false;
 
     let products, collections;

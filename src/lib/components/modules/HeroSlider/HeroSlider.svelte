@@ -19,7 +19,7 @@
 
 <div class="w-full">
     <Component {schema} let:props>
-        <div class={`flex relative bg-black overflow-hidden`}>
+        <div class={`flex relative bg-black overflow-hidden`} style={!props.getBlocks("Slide").filter(useFilter).length ? 'min-height: 20vh;': ''}>
             <div class={`flex flex-nowrap w-full slider-container`} style={`margin-left: -${100 * slide}%;`}>
                 {#each props.getBlocks("Slide").filter(useFilter) as block, index}
                     <img src={block.image} loading="lazy" alt={props.alt}/>

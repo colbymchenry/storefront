@@ -21,10 +21,15 @@
 </script>
 
 <div class={`flex flex-col w-full bg-blue-50 ${clazz}`}>
-    <button type="button" class="transition flex text-left items-center w-full py-3 px-3 bg-white text-gray-500" on:click={() => open = !open} class:open>
-        <div class="flex-grow">
-            {#if title}
-                {@html title}
+    <button type="button" class="transition flex text-left items-center w-full py-3 px-3 bg-white text-gray-500"
+            on:click={() => open = !open} class:open>
+        <div class="flex-grow relative">
+            {#if $$slots.title}
+                <slot name="title" {open}/>
+            {:else}
+                {#if title}
+                    {@html title}
+                {/if}
             {/if}
         </div>
         <div class="flex items-center">

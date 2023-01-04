@@ -7,6 +7,7 @@
     import {tick} from "svelte";
     import SectionHeader from "$lib/components/component/SectionHeader.svelte";
     import Accordion from "$lib/components/Accordion.svelte";
+    import {objectHelper} from "$lib/utils/object-helper";
 
     export let visible = false;
     export let submit;
@@ -17,7 +18,6 @@
     let form;
     let backup = JSON.parse(JSON.stringify($theme));
     let uploading = false;
-
 
     async function onSubmit(e) {
         if (saving || !schema?.tag) return;
@@ -31,6 +31,7 @@
                 await submit(formData);
                 formData = formHelper.getFormData(e.target);
             }
+
 
             // Uploading images
             uploading = true;
@@ -96,6 +97,17 @@
             }));
             uploading = false;
 
+            if (formData?.blocks) {
+                let blocks = {};
+                for (let property in formData.blocks) {
+                    blocks[property] = [];
+                    for (let value in formData.blocks[property]) {
+                        blocks[property].push(formData.blocks[property][value])
+                    }
+                }
+                formData.blocks = blocks;
+            }
+
             $theme[schema.tag] = formData;
 
             await firebaseClientUtils.set("settings", "theme", JSON.parse(JSON.stringify($theme)));
@@ -118,14 +130,17 @@
             }
         });
 
-        if (!$theme[schema.tag]["blocks"] || !$theme[schema.tag]["blocks"][block.name]) {
+        if (!$theme[schema.tag] || !$theme[schema.tag]["blocks"] || !$theme[schema.tag]["blocks"][block.name]) {
+            if (!$theme[schema.tag]) {
+                $theme[schema.tag] = {};
+            }
             if (!$theme[schema.tag]["blocks"]) {
                 $theme[schema.tag]["blocks"] = {};
             }
-            $theme[schema.tag]["blocks"][block.name] = {};
+            $theme[schema.tag]["blocks"][block.name] = [];
         }
 
-        $theme[schema.tag]["blocks"][block.name][Math.random().toString().split(".")[1]] = defaultValue;
+        $theme[schema.tag]["blocks"][block.name] = [...$theme[schema.tag]["blocks"][block.name], defaultValue];
     }
 
     function reset() {
@@ -134,15 +149,53 @@
 
     $: if (!visible) reset();
 
-    async function deleteBlock(blockId, block) {
-        let blocks = {...$theme[schema.tag]["blocks"][block.name]};
-        delete blocks[blockId];
+    async function deleteBlock(blockIndex, block) {
+        let blocks = [...$theme[schema.tag]["blocks"][block.name]];
+
+        blocks.splice(blockIndex, 1); // 2nd parameter means remove one item only
+
         $theme[schema.tag]["blocks"][block.name] = blocks;
         await tick();
         await onSubmit({
             target: form
         });
     }
+
+    async function move(blockIndex, block, up: boolean) {
+        let blocks = [...$theme[schema.tag]["blocks"][block.name]];
+        if (up) {
+            if (blockIndex > 0) {
+                objectHelper.arrayMove(blocks, blockIndex, blockIndex - 1);
+            }
+        } else {
+            if (blockIndex < blocks.length - 1) {
+                objectHelper.arrayMove(blocks, blockIndex, blockIndex + 1);
+            }
+        }
+
+        $theme[schema.tag]["blocks"][block.name] = blocks;
+        await tick();
+        await onSubmit({
+            target: form
+        });
+    }
+
+    async function renameBlock(blockIndex, block, name) {
+        if (!name || !name.length) {
+            return;
+        }
+
+        let input: any = Array.from(document.getElementsByName('blocks.' + block.name + '.' + blockIndex + '.id'))[0];
+        if (!input) return;
+
+        input.value = name;
+        $theme[schema.tag]["blocks"][block.name][blockIndex]["id"] = name;
+        await tick();
+        await onSubmit({
+            target: form
+        });
+    }
+
 </script>
 
 <div class="main" class:visible>
@@ -188,26 +241,48 @@
                             <span class="material-symbols-outlined text-gray-600 pointer-events-none">add_circle</span>
                         </button>
                     </div>
-                    <div class="flex flex-col">
+                    <div class="flex flex-col relative">
                         {#if $theme[schema.tag]?.blocks && $theme[schema.tag].blocks[block.name]}
-                            {#each Object.keys($theme[schema.tag].blocks[block.name]) as blockId}
-                                <div class="flex items-start">
+                            {#each $theme[schema.tag].blocks[block.name] as blockData, blockIndex (blockData)}
+                                <div class="flex items-start block">
                                     <div class="flex items-center flex-shrink py-4 mr-4">
-                                        <button type="button" class="cursor-grab"
-                                                on:click={() => deleteBlock(blockId, block)}>
-                                                <span class="material-symbols-outlined">
-                                                    drag_indicator
-                                                </span>
-                                        </button>
-                                        <button type="button" on:click={() => deleteBlock(blockId, block)}>
-                                                <span class="material-symbols-outlined">
-                                                    delete
-                                                </span>
+                                        <button type="button" on:click={() => deleteBlock(blockIndex, block)}
+                                                style="height: 1.5rem;">
+                                            <span class="material-symbols-outlined">
+                                                delete
+                                            </span>
                                         </button>
                                     </div>
 
-                                    <Accordion title={`${block.name}: ${blockId}`}
+                                    <Accordion title={``}
                                                clazz="bg-white shadow-sm my-1 rounded border border-solid border-gray-200 flex-grow">
+                                        <svelte:fragment slot="title" let:open>
+                                            <div class="flex">
+                                                <div class="reorder" class:open>
+                                                    <button type="button"
+                                                            on:click|preventDefault|stopPropagation={() => move(blockIndex, block, true)}>
+                                                        <span class="material-symbols-outlined">arrow_drop_down</span>
+                                                    </button>
+                                                    <button type="button"
+                                                            on:click|preventDefault|stopPropagation={() => move(blockIndex, block, false)}>
+                                                        <span class="material-symbols-outlined">arrow_drop_down</span>
+                                                    </button>
+                                                </div>
+
+                                                <!-- TODO: Need to add labels to blocks -->
+                                                <div class="flex ml-8">
+                                                    <span contenteditable="true"
+                                                          on:click|preventDefault|stopPropagation
+                                                          on:focusout|preventDefault|stopPropagation={(e) => renameBlock(blockIndex, block, e.target.innerHTML)}>
+                                                        {$theme[schema.tag]["blocks"][block.name][blockIndex]["id"]  || block.name}
+                                                    </span>
+                                                    <input type="hidden"
+                                                           name={'blocks.' + block.name + '.' + blockIndex + '.id'}
+                                                           value={$theme[schema.tag]["blocks"][block.name][blockIndex]["id"] }/>
+                                                </div>
+                                            </div>
+                                        </svelte:fragment>
+
                                         <div class="flex flex-col w-full gap-2">
                                             {#if block?.settings}
                                                 {#each block.settings as setting}
@@ -219,8 +294,8 @@
                                                         <SectionHeader>{setting.label}</SectionHeader>
                                                     {:else}
                                                         <Input {...setting}
-                                                               name={'blocks.' + block.name + '.' + blockId + '.' + setting.id}
-                                                               value={$theme[schema.tag]?.blocks && $theme[schema.tag]["blocks"][block.name] && $theme[schema.tag]["blocks"][block.name][blockId] ? $theme[schema.tag]["blocks"][block.name][blockId][setting.id] || setting.default : setting.default}>
+                                                               name={'blocks.' + block.name + '.' + blockIndex + '.' + setting.id}
+                                                               value={$theme[schema.tag]?.blocks && $theme[schema.tag]["blocks"][block.name] && $theme[schema.tag]["blocks"][block.name][blockIndex] ? $theme[schema.tag]["blocks"][block.name][blockIndex][setting.id] || setting.default : setting.default}>
                                                             {setting.label}
                                                         </Input>
                                                     {/if}
@@ -258,6 +333,32 @@
 
     &.visible {
       margin-right: 0;
+    }
+  }
+
+  .reorder {
+    @apply absolute top-0 left-0 flex flex-col justify-center items-center border-r border-solid border-inherit bg-inherit text-inherit;
+    height: calc(100% + 1rem);
+    margin-top: -0.5rem;
+    margin-left: -0.5rem;
+
+    > button:first-of-type {
+      @apply border-b border-solid border-gray-200;
+
+      > span {
+        transform: rotate(180deg);
+      }
+    }
+
+    button {
+      @apply text-inherit;
+      height: 1.25rem;
+    }
+
+    &.open {
+      button:hover {
+        @apply bg-blue-400;
+      }
     }
   }
 </style>
