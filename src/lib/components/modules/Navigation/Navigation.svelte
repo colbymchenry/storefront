@@ -4,6 +4,7 @@
     import {schema} from "./schema";
     import {cookies} from "$lib/stores/cookies";
     import {goto} from "$app/navigation";
+    import {objectHelper} from "$lib/utils/object-helper.js";
 
     let mobileNavContainer: HTMLElement;
     let mobileMenuButton: HTMLElement;
@@ -97,7 +98,7 @@
             <div class={`hidden lg:flex w-full items-stretch items-center h-10 bg-${props.navbarBgColor} text-${props.navbarTextColor} px-4 overflow-auto`}>
                 {#each $cookies.categories.items as category}
                     {#if !category.parentId}
-                        <a href={`/collections?id=${category.id}`} on:mouseenter={innerWidth}
+                        <a href={`/collection/${objectHelper.slugify(category.name)}`} on:mouseenter={innerWidth}
                            class:pr-8={$cookies.categories.items.filter((cat) => cat.parentId === category.id).length}
                            class={`flex items-center px-4 relative whitespace-nowrap url transition hover:text-${props.navbarHoverTextColor}`}>
                             {category.name}
@@ -110,12 +111,12 @@
                                                 <strong>{cat.name}</strong>
                                                 <div class={`mb-2 h-1 bg-${props.navbarHoverTextColor}`}></div>
                                                 {#each $cookies.categories.items.filter((c) => c.parentId === cat.id) as c}
-                                                    <a href={`/collections?id=${c.id}`}
+                                                    <a href={`/collection/${objectHelper.slugify(cat.name)}`}
                                                        class={`relative whitespace-nowrap transition my-1 hover:text-${props.navbarHoverMenuHoverTextColor}`}>{c.name}</a>
                                                 {/each}
                                             </div>
                                         {:else}
-                                            <a use:flexCol href={`/collections?id=${cat.id}`}
+                                            <a use:flexCol href={`/collection/${objectHelper.slugify(cat.name)}`}
                                                class={`relative whitespace-nowrap transition my-1 hover:text-${props.navbarHoverMenuHoverTextColor}`}>{cat.name}</a>
                                         {/if}
                                     {/each}
@@ -171,12 +172,12 @@
                                                     <strong class={`text-${props.navbarTextColor}`}>{cat.name}</strong>
                                                     <div class={`mb-2 h-1 w-full bg-${props.navbarHoverTextColor}`}></div>
                                                     {#each $cookies.categories.items.filter((c) => c.parentId === cat.id) as c}
-                                                        <a href={`/collections?id=${c.id}`}
+                                                        <a href={`/collection/${objectHelper.slugify(cat.name)}`}
                                                            class={`relative whitespace-nowrap transition my-1 text-${props.navbarTextColor} hover:text-${props.navbarHoverMenuHoverTextColor}`}>{c.name}</a>
                                                     {/each}
                                                 </div>
                                             {:else}
-                                                <a href={`/collections?id=${cat.id}`}
+                                                <a href={`/collection/${objectHelper.slugify(cat.name)}`}
                                                    class={`relative whitespace-nowrap transition text-${props.navbarTextColor} hover:text-${props.navbarHoverMenuHoverTextColor}`}>{cat.name}</a>
                                             {/if}
                                         {/each}

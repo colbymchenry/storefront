@@ -6,7 +6,7 @@ import {fail, json} from "@sveltejs/kit";
 export async function GET({request, url}) {
     try {
         await firebaseAdminUtils.auth().verifyIdToken(request.headers.get("authorization"));
-        let res = await lightspeedUtils.getCategories();
+        let res = await lightspeedUtils.getProducts(url.searchParams.get('keyword'));
         return json(res.data);
     } catch (error) {
         console.error(error);

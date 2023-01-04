@@ -5,6 +5,7 @@
     import {IOption} from "$lib/components/component/ISchema";
     import InputRange from "$lib/components/component/InputRange.svelte";
     import {onMount} from "svelte";
+    import InputURL from "$lib/components/component/InputURL.svelte";
 
     export let name: string = undefined;
     export let type: string = 'text';
@@ -57,6 +58,8 @@
         </select>
     {:else if type === 'range'}
         <InputRange {name} bind:value {min} {max} {step} {unit} />
+        {:else if type === 'url'}
+        <InputURL {name} bind:value />
     {:else}
         <input use:typeAction {name} {placeholder} {min} {max} {step} pattern={regex} id={name} bind:value/>
     {/if}

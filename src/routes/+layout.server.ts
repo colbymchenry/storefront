@@ -38,7 +38,7 @@ export async function load({url, cookies}) {
         cookie.categories = res.data;
         cookies.set(project_id, JSON.stringify(cookie));
     } catch (error) {
-    console.error(error)
+        console.error(error)
     }
 
     return {

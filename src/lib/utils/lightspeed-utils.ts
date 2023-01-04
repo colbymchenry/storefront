@@ -41,9 +41,13 @@ function createLightspeed() {
         })
     }
 
+    const getProducts = async (keyword?: any) => await get('products' + (keyword ? `?keyword=${keyword}` : ''));
+
+
+    const getCategories = async () => await get('categories');
 
     return {
-        post, get
+        post, get, getProducts, getCategories
     };
 }
 
