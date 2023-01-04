@@ -28,6 +28,14 @@
     }
 
     let elem;
+
+    $: if (elem) {
+        let result = elem.querySelector("DIV");
+        let bounds = elem.getBoundingClientRect();
+        result.style.left = bounds.left + 'px';
+        result.style.top = bounds.top + 'px';
+        result.style.width = bounds.width + 'px';
+    }
 </script>
 
 <!-- TODO: Need to add popup of options from typing -->
@@ -44,17 +52,17 @@
     />
 
     <div class="results" class:visible={value !== undefined && focused}>
-        {#if products && categories}
+        {#if products && categories && value}
             <div class="flex flex-col relative">
                 <div class="sticky top-0 bg-white px-1 py-1 bg-gray-100 border-y border-solid border-gray-300"><strong>Products</strong></div>
-                {#each products.items.filter((item) => item.name.toLowerCase()?.includes(value.toLowerCase())) as product}
+                {#each products.items.filter((item) => item.name.toLowerCase().includes(value.toLowerCase())) as product}
                     <span on:click|preventDefault|stopPropagation={() => setValue(`/product/${objectHelper.slugify(product.name)}`)}>{product.name}</span>
                 {/each}
                 <div style="height: 1.5rem;"></div>
             </div>
             <div class="flex flex-col relative">
                 <div class="sticky top-0 bg-white px-1 py-1 bg-gray-100 border-y border-solid border-gray-300"><strong>Categories</strong></div>
-                {#each categories.items.filter((item) => item.name.toLowerCase()?.includes(value.toLowerCase())) as category}
+                {#each categories.items.filter((item) => item.name.toLowerCase().includes(value?.toLowerCase())) as category}
                     <span on:click|preventDefault|stopPropagation={() => setValue(`/collection/${objectHelper.slugify(category.name)}`)}>{category.name}</span>
                 {/each}
             </div>
@@ -68,7 +76,7 @@
   }
 
   .results {
-    @apply w-full absolute top-0 left-0 bg-white shadow-md rounded-lg;
+    @apply w-full fixed bg-white shadow-md rounded-lg;
     overflow-y: auto;
     overflow-x: hidden;
     flex-direction: column !important;

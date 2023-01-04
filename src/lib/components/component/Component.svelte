@@ -3,10 +3,12 @@
     import {editor} from "$lib/stores/editor";
     import {theme} from "$lib/stores/theme";
     import type {ISchema} from "$lib/components/component/ISchema";
+    import _ from 'lodash';
 
     export let editorOpen: boolean = false;
     export let submit;
     export let schema: ISchema;
+    export let key: string = undefined;
 
     if (!schema?.tag) {
         console.error("INVALID SCHEMA!!!")
@@ -37,10 +39,12 @@
 
         let blocks = {};
 
-        if ($theme[schema.tag]?.blocks) {
-            blocks = {...$theme[schema.tag].blocks};
+        let tempSchema = {...schema, ...(key && {tag: schema.tag + '_' + key})};
 
-            Object.keys($theme[schema.tag].blocks).forEach((blockName) => {
+        if ($theme[tempSchema.tag]?.blocks) {
+            blocks = {...$theme[tempSchema.tag].blocks};
+
+            Object.keys($theme[tempSchema.tag].blocks).forEach((blockName) => {
                 let blockSchema = schema.blocks.find((b) => b.name === blockName);
 
                 let defaultBlockObject = {};
@@ -50,15 +54,15 @@
                     });
                 }
 
-                let blockIds = Object.keys($theme[schema.tag].blocks[blockName]);
+                let blockIds = Object.keys($theme[tempSchema.tag].blocks[blockName]);
 
                 blockIds.forEach((blockId) => {
-                    blocks[blockName][blockId] = {...defaultBlockObject, ...$theme[schema.tag].blocks[blockName][blockId]}
+                    blocks[blockName][blockId] = {...defaultBlockObject, ...$theme[tempSchema.tag].blocks[blockName][blockId]}
                 })
             })
         }
 
-        return {...defaultObject, ...$theme[schema.tag], blocks, getBlocks}
+        return {...defaultObject, ...$theme[tempSchema.tag], blocks, getBlocks}
     }
 
     function getBlocks(key: string) {
@@ -72,18 +76,21 @@
     }
 </script>
 
-<svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
+<svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp}/>
 
 <div data-editor={true} class={`relative ${schema.class}`} class:editing={$editor.enabled && editing} on:click={() => {
     if (editing) {
         editorOpen = true;
     }
 }}>
-    <slot props={props()} />
+    {#key $theme}
+        <slot props={props()}/>
+    {/key}
 </div>
 
 {#if $editor.enabled && editorOpen}
-    <ComponentDrawer bind:visible={editorOpen} {submit} {schema} />
+    <ComponentDrawer bind:visible={editorOpen} {submit}
+                     schema={{...schema, ...(key && { tag: schema.tag + '_' + key})}}/>
 {/if}
 
 <style lang="scss">
@@ -96,6 +103,7 @@
       width: calc(100% - 0.8rem);
       height: calc(100% - 0.8rem);
       content: '';
+      z-index: 50000;
     }
 
     &:hover {

@@ -10,8 +10,8 @@
     import {objectHelper} from "$lib/utils/object-helper";
 
     export let visible = false;
-    export let submit;
-    export let schema: ISchema;
+    export let submit = undefined;
+    export let schema: ISchema = undefined;
 
     let saving: boolean = false;
     let status: 'success' | 'error' | undefined = undefined;
@@ -184,11 +184,6 @@
         if (!name || !name.length) {
             return;
         }
-
-        let input: any = Array.from(document.getElementsByName('blocks.' + block.name + '.' + blockIndex + '.id'))[0];
-        if (!input) return;
-
-        input.value = name;
         $theme[schema.tag]["blocks"][block.name][blockIndex]["id"] = name;
         await tick();
         await onSubmit({
@@ -269,16 +264,17 @@
                                                     </button>
                                                 </div>
 
-                                                <!-- TODO: Need to add labels to blocks -->
                                                 <div class="flex ml-8">
                                                     <span contenteditable="true"
                                                           on:click|preventDefault|stopPropagation
                                                           on:focusout|preventDefault|stopPropagation={(e) => renameBlock(blockIndex, block, e.target.innerHTML)}>
-                                                        {$theme[schema.tag]["blocks"][block.name][blockIndex]["id"]  || block.name}
+                                                        {$theme[schema.tag]["blocks"][block.name][blockIndex]["id"] || block.name}
                                                     </span>
-                                                    <input type="hidden"
-                                                           name={'blocks.' + block.name + '.' + blockIndex + '.id'}
-                                                           value={$theme[schema.tag]["blocks"][block.name][blockIndex]["id"] }/>
+                                                    {#if $theme[schema.tag]["blocks"][block.name][blockIndex]["id"]}
+                                                        <input type="hidden"
+                                                               name={'blocks.' + block.name + '.' + blockIndex + '.id'}
+                                                               value={$theme[schema.tag]["blocks"][block.name][blockIndex]["id"]}/>
+                                                    {/if}
                                                 </div>
                                             </div>
                                         </svelte:fragment>
@@ -326,7 +322,8 @@
 
 <style lang="scss">
   .main {
-    @apply flex flex-col fixed top-0 right-0 max-h-screen min-h-screen shadow-lg bg-white overflow-y-auto z-50;
+    @apply flex flex-col fixed top-0 right-0 max-h-screen min-h-screen shadow-lg bg-white overflow-y-auto;
+    z-index: 60000;
     transition: all 0.2s ease;
     width: 500px;
     margin-right: -600px;
