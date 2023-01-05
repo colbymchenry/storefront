@@ -32,7 +32,6 @@
                 formData = formHelper.getFormData(e.target);
             }
 
-
             // Uploading images
             uploading = true;
             await Promise.all(Object.keys(formData).map(async (key: string) => {
@@ -194,7 +193,7 @@
 </script>
 
 <div class="main" class:visible>
-    <div class="flex items-center justify-between shadow-md px-3 py-2 border-b border-solid border-gray-300 bg-indigo-700 text-white sticky top-0 left-0 z-20">
+    <div class="flex items-center justify-between shadow-md px-3 py-2 border-b border-solid border-gray-300 bg-indigo-700 text-white sticky top-0 left-0 z-50">
         <button class="bg-none border-none outline-none" type="button" on:click={() => visible = false}>
             <span class="material-symbols-outlined text-3xl">close</span>
         </button>
@@ -212,17 +211,18 @@
 
             {#if schema?.settings}
                 {#each schema.settings as setting}
-                    {#if setting.type === 'checkbox'}
-                    {:else if setting.type === 'radio'}
+                    {#if setting.type === 'radio'}
                     {:else if setting.type === 'collection'}
                     {:else if setting.type === 'product'}
                     {:else if setting.type === 'header'}
                         <SectionHeader>{setting.label}</SectionHeader>
                     {:else}
-                        <Input {...setting} name={setting.id}
-                               value={$theme && schema.tag in $theme && $theme[schema.tag][setting.id] ? $theme[schema.tag][setting.id] : setting.default}>
-                            {setting.label}
-                        </Input>
+                        {#if $theme && schema.tag in $theme}
+                            <Input {...setting} name={setting.id}
+                                   value={setting.id in $theme[schema.tag] ? $theme[schema.tag][setting.id] : setting.default}>
+                                {setting.label}
+                            </Input>
+                        {/if}
                     {/if}
                 {/each}
             {/if}
@@ -289,11 +289,13 @@
                                                     {:else if setting.type === 'header'}
                                                         <SectionHeader>{setting.label}</SectionHeader>
                                                     {:else}
-                                                        <Input {...setting}
-                                                               name={'blocks.' + block.name + '.' + blockIndex + '.' + setting.id}
-                                                               value={$theme[schema.tag]?.blocks && $theme[schema.tag]["blocks"][block.name] && $theme[schema.tag]["blocks"][block.name][blockIndex] ? $theme[schema.tag]["blocks"][block.name][blockIndex][setting.id] || setting.default : setting.default}>
-                                                            {setting.label}
-                                                        </Input>
+                                                        {#if $theme && schema.tag in $theme && 'blocks' in $theme[schema.tag]}
+                                                            <Input {...setting}
+                                                                   name={'blocks.' + block.name + '.' + blockIndex + '.' + setting.id}
+                                                                   value={setting.id in $theme[schema.tag]["blocks"][block.name][blockIndex] ? $theme[schema.tag]["blocks"][block.name][blockIndex][setting.id] : setting.default}>
+                                                                {setting.label}
+                                                            </Input>
+                                                        {/if}
                                                     {/if}
                                                 {/each}
                                             {/if}

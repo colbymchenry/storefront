@@ -4,7 +4,6 @@
     import InputQuill from "$lib/components/component/InputQuill.svelte";
     import {IOption} from "$lib/components/component/ISchema";
     import InputRange from "$lib/components/component/InputRange.svelte";
-    import {onMount} from "svelte";
     import InputURL from "$lib/components/component/InputURL.svelte";
 
     export let name: string = undefined;
@@ -17,33 +16,23 @@
     export let regex: string = undefined;
     export let required: boolean = false;
 
-    let products, collections;
-
     function typeAction(node) {
         node.type = type === 'url' ? 'text' : type;
     }
 
-    async function fetchCatalogData() {
-        try {
-
-        } catch (error) {
-
-        }
-    }
-
-    onMount(() => {
-       if (type === 'url' || type === 'product' || type === 'collection') {
-
-       }
-    });
+    let localCheck = value;
 </script>
 
-<div class="flex" class:flex-row={type === 'color'} class:flex-col={type !== 'color'}>
-    <label for={name} class="font-medium" class:mr-2={type === 'color'} class:mb-2={type !== 'color'}>
-        <slot/> {#if required}*{/if}
+<div class="flex relative"
+     class:items-center={type === 'checkbox'}
+     class:flex-row={type === 'color'}
+     class:flex-col={type !== 'color' && type !== 'checkbox'}>
+    <label for={name} class="font-medium" class:mr-2={type === 'color'} class:mb-2={type !== 'color' && type !== 'checkbox'}>
+        <slot/>
+        {#if required}*{/if}
     </label>
     {#if type === 'image'}
-        <InputMedia {name} bind:src={value} />
+        <InputMedia {name} bind:src={value}/>
     {:else if type === 'video'}
         <InputMedia {name} video={true} bind:src={value}/>
     {:else if type === 'color'}
@@ -57,9 +46,12 @@
             {/each}
         </select>
     {:else if type === 'range'}
-        <InputRange {name} bind:value {min} {max} {step} {unit} />
-        {:else if type === 'url'}
-        <InputURL {name} bind:value />
+        <InputRange {name} bind:value {min} {max} {step} {unit}/>
+    {:else if type === 'url'}
+        <InputURL {name} bind:value/>
+    {:else if type === 'checkbox'}
+        <input type="checkbox" id={name} checked={value} class:checkbox={type === 'checkbox'} on:change={(e) => localCheck = e.target.checked}/>
+        <input type="hidden" {name} value={localCheck} />
     {:else}
         <input use:typeAction {name} {placeholder} {min} {max} {step} pattern={regex} id={name} bind:value/>
     {/if}
@@ -68,5 +60,11 @@
 <style lang="scss">
   input, select {
     @apply px-2 py-3 text-slate-800 bg-gray-200 rounded-lg cursor-text;
+  }
+
+  .checkbox {
+    @apply ml-2 cursor-pointer;
+    width: 1.25rem;
+    height: 1.25rem;
   }
 </style>

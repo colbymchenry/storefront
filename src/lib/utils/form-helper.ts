@@ -41,7 +41,7 @@ function createFormHelper() {
         return data;
     }
 
-    return { getFormData }
+    return {getFormData}
 
 }
 

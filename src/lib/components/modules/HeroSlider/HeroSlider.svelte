@@ -22,16 +22,21 @@
 <div class="w-full">
     <Component {schema} {key} let:props>
         <div class={`flex relative bg-black overflow-hidden`}
-             style={!props.getBlocks("Slide").filter(useFilter).length ? 'min-height: 10vh;': ''}>
+             style={
+             (!props.getBlocks("Slide").filter(useFilter).length ? 'min-height: 10vh;': '') +
+             (!props.autoHeight ? `min-height: ${props.height}vh;max-height: ${props.height}vh;` : '')
+             }>
             <div class={`flex flex-nowrap w-full slider-container z-10`} style={`margin-left: -${100 * slide}%;`}>
                 {#each props.getBlocks("Slide").filter(useFilter) as block, index}
                     {#if block.url}
                         <a href={block.url} class="min-w-full h-full">
-                            <img src={block.image} loading="lazy" alt={props.alt}/>
+                            <img src={block.image} loading="lazy" alt={props.alt} class={props.objectFit}
+                                 style={!props.autoHeight ? `object-position: ${block.objectPosX}% ${block.objectPosY}%;` : ``}/>
                         </a>
                     {:else}
                         <div class="min-w-full h-full">
-                            <img src={block.image} loading="lazy" alt={props.alt}/>
+                            <img src={block.image} loading="lazy" alt={props.alt} class={props.objectFit}
+                                 style={!props.autoHeight ? `object-position: ${block.objectPosX}% ${block.objectPosY}%;` : ``}/>
                         </div>
                     {/if}
                 {/each}
@@ -75,7 +80,7 @@
 
 <style lang="scss">
   img {
-    @apply w-full h-full object-contain;
+    @apply w-full h-full;
   }
 
   .slider-container {
