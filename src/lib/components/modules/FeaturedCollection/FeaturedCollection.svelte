@@ -58,7 +58,7 @@
   }
 
   h1 {
-    @apply text-lg mb-8;
+    @apply text-lg mb-1 md:mb-8;
     font-family: 'IBM Plex Sans', sans-serif;
   }
 

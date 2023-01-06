@@ -56,6 +56,6 @@
 
 <style lang="scss">
   main {
-    @apply flex flex-col w-screen h-screen;
+    @apply flex flex-col w-screen h-screen overflow-x-hidden relative;
   }
 </style>
