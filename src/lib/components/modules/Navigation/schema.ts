@@ -1,10 +1,25 @@
 import type {ISchema} from "../../component/ISchema";
+import {heightValues} from "../../component/ISchema";
 
 export const schema: ISchema = {
     "name": "Navigation",
     "tag": "navigation",
     "class": "w-full",
     "settings": [
+        {
+            "type": "range",
+            "id": "desktopHeight",
+            "label": "Desktop Height",
+            "values": heightValues,
+            "default": 22
+        },
+        {
+            "type": "range",
+            "id": "mobileHeight",
+            "label": "Mobile Height",
+            "values": heightValues,
+            "default": 14
+        },
         {
             "type": "color",
             "id": "bgColor",

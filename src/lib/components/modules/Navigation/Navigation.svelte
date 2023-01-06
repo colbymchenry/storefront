@@ -44,11 +44,10 @@
 <nav>
     <Component {schema} let:props>
         <div class={`flex flex-col w-full ${props.dropShadow}`}>
-            <div class={`flex items-center justify-between w-full relative bg-${props.bgColor} gap-2 md:gap-5 px-4 md:px-6 h-20`}>
+            <div class={`flex items-center justify-between w-full relative bg-${props.bgColor} gap-2 md:gap-5 px-4 md:px-6 h-${props.mobileHeight} md:h-${props.desktopHeight}`}>
                 <button bind:this={mobileMenuButton} type="button" class="z-20 items-center flex lg:hidden"
                         on:click={() => showMobileNav = !showMobileNav}>
-                    <span class={`material-symbols-outlined ${showMobileNav ? `text-${props.navbarTextColor}` : ''}`}
-                          style="font-size: 2.5rem;">
+                    <span class={`material-symbols-outlined ${showMobileNav ? `text-${props.navbarTextColor}` : ''} text-2xl`}>
                         {#if showMobileNav}
                             close
                         {:else}
@@ -89,7 +88,7 @@
                     {/if}
 
                     <button type="button" class="flex items-center">
-                        <span class="material-symbols-outlined" style="font-size: 2.5rem;">shopping_basket</span>
+                        <span class="material-symbols-outlined text-2xl md:text-4xl">shopping_basket</span>
                     </button>
                 </div>
             </div>
