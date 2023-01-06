@@ -15,14 +15,13 @@
     export let unit: string = undefined;
     export let regex: string = undefined;
     export let required: boolean = false;
+    export let values: any[] = undefined;
 
     function typeAction(node) {
         node.type = type;
     }
 
     let localCheck = value;
-
-    console.log(type)
 </script>
 
 <div class="flex relative"
@@ -48,13 +47,13 @@
             {/each}
         </select>
     {:else if type === 'range'}
-        <InputRange {name} bind:value {min} {max} {step} {unit}/>
+        <InputRange {name} bind:value {min} {max} {step} {unit} {values}/>
     {:else if type === 'url'}
         <InputURL {name} bind:value/>
     {:else if type === 'collection'}
-        <InputURL {name} bind:value hideProducts useIds />
+        <InputURL {name} bind:value hideProducts />
     {:else if type === 'product'}
-        <InputURL {name} bind:value hideCollections useIds />
+        <InputURL {name} bind:value hideCollections />
     {:else if type === 'checkbox'}
         <input type="checkbox" id={name} checked={value} class:checkbox={type === 'checkbox'} on:change={(e) => localCheck = e.target.checked}/>
         <input type="hidden" {name} value={localCheck} />

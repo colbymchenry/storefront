@@ -82,21 +82,23 @@
     onMount(() => {
         getProps();
     });
+
+    theme.subscribe(() => {
+        getProps();
+    })
 </script>
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp}/>
-
-<div data-editor={true} class={`relative ${schema.class}`} class:editing={$editor.enabled && editing} on:click={() => {
+    <div data-editor={true} class={`relative ${schema.class}`} class:editing={$editor.enabled && editing} on:click={() => {
     if (editing) {
         editorOpen = true;
     }
 }}>
-    {#key $theme}
         {#if props}
             <slot {props}/>
         {/if}
-    {/key}
-</div>
+    </div>
+
 
 {#if $editor.enabled && editorOpen}
     <ComponentDrawer bind:visible={editorOpen} {submit}

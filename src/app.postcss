@@ -1,5 +1,16 @@
 /* Write your global styles here, in PostCSS syntax */
 
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@700&display=swap');
+
+:root {
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "salt";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}
+
 .editor select {
     @apply bg-gray-200 rounded;
 }
@@ -35,6 +46,10 @@ section {
     border-radius: 10px;
     background: rgba(155,155,155,0.5);
     /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);*/
+}
+
+html,body {
+    overflow-x: hidden;
 }
 
 @tailwind base;

@@ -9,8 +9,6 @@
     export let hideProducts: boolean = false;
     export let hideCollections: boolean = false;
 
-    export let useIds: boolean = false;
-
     let categories = $cookies.categories;
     let products: ILSProductResponse;
     let focused: boolean = false;
@@ -70,7 +68,7 @@
                     <strong>Products</strong></div>
                 {#if products && value}
                     {#each products.items.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()) || item.id.toString().includes(value.toLowerCase())) as product}
-                        <span on:click|preventDefault|stopPropagation={() => setValue(useIds ? product.id.toString() : `/product/${objectHelper.slugify(product.name)}`)}>{product.name}</span>
+                        <span on:click|preventDefault|stopPropagation={() => setValue(`/product/${product.id}`)}>{product.name}</span>
                     {/each}
                 {/if}
                 <div style="height: 1.5rem;"></div>
@@ -83,7 +81,7 @@
                 </div>
                 {#if categories && value}
                     {#each categories.items.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()) ||  item.id.toString().includes(value.toLowerCase())) as category}
-                        <span on:click|preventDefault|stopPropagation={() => setValue(useIds ? category.id.toString() : `/collection/${objectHelper.slugify(category.name)}`)}>{category.name}</span>
+                        <span on:click|preventDefault|stopPropagation={() => setValue(`/collection/${category.id}`)}>{category.name}</span>
                     {/each}
                 {/if}
             </div>

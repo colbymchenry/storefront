@@ -108,6 +108,7 @@
             }
 
             $theme[schema.tag] = formData;
+            $theme = $theme;
 
             await firebaseClientUtils.set("settings", "theme", JSON.parse(JSON.stringify($theme)));
             backup = JSON.parse(JSON.stringify($theme));

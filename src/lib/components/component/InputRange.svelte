@@ -5,7 +5,7 @@
     export let max: number = 10;
     export let step: number = 1;
     export let values: number[] = [];
-    export let value: number = min || 0;
+    export let value: number = values?.length ? values[0] : min || 0;
     export let name: string;
     export let unit: string;
 
@@ -42,11 +42,20 @@
 
     onMount(() => {
         let trackRect = track.getBoundingClientRect();
-        let marginLeft = (value - min) / (max - min);
-        marginLeft = trackRect.width * marginLeft;
-        marginLeft = marginLeft < 0 ? 0 : marginLeft > trackRect.width ? trackRect.width : marginLeft;
-        thumb.style.marginLeft = marginLeft + 'px';
-        progress.style.width = ((marginLeft / trackRect.width) * 100) + '%';
+        let marginLeft = 0;
+        if (values?.length) {
+            let indexOf = values.indexOf(parseInt(value.toString()));
+            marginLeft = indexOf / values.length;
+            thumb.style.marginLeft = (marginLeft * 100) + '%';
+            progress.style.width = (marginLeft * 100) + '%';
+        } else {
+            marginLeft = (value - min) / (max - min);
+            marginLeft = trackRect.width * marginLeft;
+            marginLeft = marginLeft < 0 ? 0 : marginLeft > trackRect.width ? trackRect.width : marginLeft;
+            thumb.style.marginLeft = marginLeft + 'px';
+            progress.style.width = ((marginLeft / trackRect.width) * 100) + '%';
+        }
+
     })
 </script>
 
@@ -63,7 +72,7 @@
     </div>
     <div class="value">{value ? value + (unit ? unit : "") : "N/A"}</div>
     {#if name}
-        <input type="hidden" bind:value {name} />
+        <input type="hidden" bind:value {name}/>
     {/if}
 </div>
 

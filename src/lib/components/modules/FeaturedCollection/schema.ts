@@ -1,4 +1,5 @@
 import type {ISchema} from "../../component/ISchema";
+import {heightValues} from "../../component/ISchema";
 
 export const schema: ISchema = {
     "name": "Featured Collection",
@@ -17,12 +18,10 @@ export const schema: ISchema = {
         },
         {
             "type": "range",
-            "id": "height",
-            "label": "Height",
-            "min": 20,
-            "max": 50,
-            "step": 1,
-            "default": 30
+            "id": "imgHeight",
+            "label": "Image Height",
+            "values": heightValues,
+            "default": 22
         }
     ]
 }
