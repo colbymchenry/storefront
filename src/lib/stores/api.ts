@@ -38,8 +38,6 @@ function createApi() {
 
             let token = fb?.auth?.currentUser ? await fb.auth.currentUser.getIdToken() : cookieStore?.idToken;
 
-            console.log(token);
-
             // get the token from the store
             return await axios.get(route + (route.includes("?") ? "&" : "?") + query, token ? {
                 headers: {

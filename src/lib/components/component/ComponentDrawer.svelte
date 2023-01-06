@@ -212,14 +212,12 @@
             {#if schema?.settings}
                 {#each schema.settings as setting}
                     {#if setting.type === 'radio'}
-                    {:else if setting.type === 'collection'}
-                    {:else if setting.type === 'product'}
                     {:else if setting.type === 'header'}
                         <SectionHeader>{setting.label}</SectionHeader>
                     {:else}
-                        {#if $theme && schema.tag in $theme}
+                        {#if $theme}
                             <Input {...setting} name={setting.id}
-                                   value={setting.id in $theme[schema.tag] ? $theme[schema.tag][setting.id] : setting.default}>
+                                   value={schema.tag in $theme && setting.id in $theme[schema.tag] ? $theme[schema.tag][setting.id] : setting.default}>
                                 {setting.label}
                             </Input>
                         {/if}
@@ -282,10 +280,7 @@
                                         <div class="flex flex-col w-full gap-2">
                                             {#if block?.settings}
                                                 {#each block.settings as setting}
-                                                    {#if setting.type === 'checkbox'}
-                                                    {:else if setting.type === 'radio'}
-                                                    {:else if setting.type === 'collection'}
-                                                    {:else if setting.type === 'product'}
+                                                    {#if setting.type === 'radio'}
                                                     {:else if setting.type === 'header'}
                                                         <SectionHeader>{setting.label}</SectionHeader>
                                                     {:else}

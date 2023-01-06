@@ -1,12 +1,10 @@
-import {firebaseAdminUtils} from "$lib/utils/firebase/firebase-admin-utils";
-import {lightspeedUtils} from "$lib/utils/lightspeed-utils";
 import {fail, json} from "@sveltejs/kit";
+import {lightspeedServerUtils} from "../_utils/lightspeed-utils";
 
 // @ts-ignore
 export async function GET({request, url}) {
     try {
-        await firebaseAdminUtils.auth().verifyIdToken(request.headers.get("authorization"));
-        let res = await lightspeedUtils.getCategories();
+        let res = await lightspeedServerUtils.getCategories(url.searchParams);
         return json(res.data);
     } catch (error) {
         console.error(error);

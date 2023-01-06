@@ -17,10 +17,12 @@
     export let required: boolean = false;
 
     function typeAction(node) {
-        node.type = type === 'url' ? 'text' : type;
+        node.type = type;
     }
 
     let localCheck = value;
+
+    console.log(type)
 </script>
 
 <div class="flex relative"
@@ -49,6 +51,10 @@
         <InputRange {name} bind:value {min} {max} {step} {unit}/>
     {:else if type === 'url'}
         <InputURL {name} bind:value/>
+    {:else if type === 'collection'}
+        <InputURL {name} bind:value hideProducts useIds />
+    {:else if type === 'product'}
+        <InputURL {name} bind:value hideCollections useIds />
     {:else if type === 'checkbox'}
         <input type="checkbox" id={name} checked={value} class:checkbox={type === 'checkbox'} on:change={(e) => localCheck = e.target.checked}/>
         <input type="hidden" {name} value={localCheck} />

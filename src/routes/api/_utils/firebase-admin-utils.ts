@@ -1,6 +1,5 @@
 import admin from 'firebase-admin';
 import {config} from "dotenv";
-import firebase from "firebase/compat";
 
 config()
 

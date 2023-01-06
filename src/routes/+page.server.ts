@@ -1,5 +1,5 @@
 import {fail, redirect} from "@sveltejs/kit";
-import {firebaseAdminUtils} from "../lib/utils/firebase/firebase-admin-utils";
+import {firebaseAdminUtils} from "./api/_utils/firebase-admin-utils";
 import type ICookie from "../lib/interfaces/ICookie";
 import {project_id} from "../lib/stores/cookies";
 

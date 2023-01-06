@@ -1,7 +1,7 @@
-import {firebaseAdminUtils} from "../lib/utils/firebase/firebase-admin-utils";
+import {firebaseAdminUtils} from "./api/_utils/firebase-admin-utils";
 import type ICookie from "../lib/interfaces/ICookie";
-import {lightspeedUtils} from "../lib/utils/lightspeed-utils";
 import {project_id} from "../lib/stores/cookies";
+import {lightspeedServerUtils} from "./api/_utils/lightspeed-utils";
 
 let cookieStorage: ICookie = {
     "is18": false,
@@ -34,7 +34,7 @@ export async function load({url, cookies}) {
 
     // TODO: Figure out refreshing this, caching and waiting
     try {
-        let res = await lightspeedUtils.get("categories");
+        let res = await lightspeedServerUtils.get("categories");
         cookie.categories = res.data;
         cookies.set(project_id, JSON.stringify(cookie));
     } catch (error) {

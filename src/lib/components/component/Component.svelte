@@ -4,11 +4,14 @@
     import {theme} from "$lib/stores/theme";
     import type {ISchema} from "$lib/components/component/ISchema";
     import _ from 'lodash';
+    import {onMount} from "svelte";
 
     export let editorOpen: boolean = false;
     export let submit;
     export let schema: ISchema;
     export let key: string = undefined;
+
+    export let props: any = undefined;
 
     if (!schema?.tag) {
         console.error("INVALID SCHEMA!!!")
@@ -28,7 +31,7 @@
         }
     }
 
-    export function props() {
+    function getProps() {
         let defaultObject = {};
 
         if (schema?.settings?.length) {
@@ -62,11 +65,12 @@
             })
         }
 
-        return {...defaultObject, ...$theme[tempSchema.tag], blocks, getBlocks}
+        props = {...defaultObject, ...$theme[tempSchema.tag], blocks, getBlocks};
+        return props;
     }
 
     function getBlocks(key: string) {
-        let {blocks} = props();
+        let {blocks} = props;
         let values = [];
         for (let property in blocks[key]) {
             values.push(blocks[key][property])
@@ -74,6 +78,10 @@
         }
         return values
     }
+
+    onMount(() => {
+        getProps();
+    });
 </script>
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp}/>
@@ -84,7 +92,9 @@
     }
 }}>
     {#key $theme}
-        <slot props={props()}/>
+        {#if props}
+            <slot {props}/>
+        {/if}
     {/key}
 </div>
 
