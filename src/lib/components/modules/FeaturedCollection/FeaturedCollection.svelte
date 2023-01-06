@@ -4,6 +4,7 @@
     import {lightspeedClientUtils} from "$lib/utils/lightspeed-utils";
     import {store} from "$lib/stores/store.js";
     import ProductGridItem from "$lib/components/ProductGridItem.svelte";
+    import {browser} from "$app/environment";
 
     export let key: string = undefined;
 
@@ -27,7 +28,7 @@
         fetching = false;
     }
 
-    $: if (props?.collection && !products && !fetching) {
+    $: if (props?.collection && !products && !fetching && browser) {
         fetchProducts();
     }
 </script>

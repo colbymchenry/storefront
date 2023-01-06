@@ -9,6 +9,18 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
+    --doc-height: 100%;
+}
+
+html,
+body {
+    height: 100vh; /* fallback for Js load */
+    height: var(--doc-height);
+    overflow: hidden;
+}
+
+body > div:first-of-type {
+    overflow: hidden;
 }
 
 .editor select {
@@ -46,10 +58,6 @@ section {
     border-radius: 10px;
     background: rgba(155,155,155,0.5);
     /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);*/
-}
-
-html,body {
-    overflow-x: hidden;
 }
 
 @tailwind base;

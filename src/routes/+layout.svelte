@@ -8,6 +8,7 @@
     import {store} from "$lib/stores/store";
     import {cookies} from "$lib/stores/cookies";
     import EditorLogin from "$lib/components/EditorLogin.svelte";
+    import {browser} from "$app/environment";
 
     export let data;
 
@@ -30,6 +31,17 @@
     })
 
     $editor.enabled = data?.cookies?.authenticated;
+
+    const documentHeight = () => {
+        if (browser) {
+            const doc = document.documentElement
+            doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
+        }
+    }
+    if (browser) {
+        window.addEventListener("resize", documentHeight)
+        documentHeight()
+    }
 </script>
 
 {#if data["editor"] !== null && !data?.cookies?.authenticated}
