@@ -1,10 +1,13 @@
 import {api} from "../stores/api";
 import type ILSOrderRequest from "../interfaces/lightspeed/ILSOrderRequest";
 import type ILSOrderResponse from "../interfaces/lightspeed/ILSOrderResponse";
+import type ILSProduct from "../interfaces/lightspeed/ILSProduct";
 
 function createLightspeed() {
 
-    const getProducts = async (queryParams?: URLSearchParams) => await api.get('api/products' + (queryParams ? '?' + queryParams.toString() : ''));
+    const getProducts = async (queryParams?: URLSearchParams): Promise<ILSProduct> => {
+        let {data} = await api.get('api/products' + (queryParams ? '?' + queryParams.toString() : ''));;
+    }
 
     const getCategories = async (queryParams?: URLSearchParams) => await api.get('api/categories' + (queryParams ? '?' + queryParams.toString() : ''));
 
