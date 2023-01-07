@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios, {type AxiosResponse} from "axios";
 import {firebaseAdminUtils} from "./firebase-admin-utils";
 
 function createLightspeed() {
-    const post = async (path: string, payload: object) => {
+    const post = async (path: string, payload: object): Promise<AxiosResponse> => {
         let settings = await firebaseAdminUtils.getDoc("settings", "main");
         if (!settings?.lightspeed?.store_id || !settings?.lightspeed?.private_token) {
             throw('Go to settings and configure Lightspeed API.');
@@ -15,7 +15,7 @@ function createLightspeed() {
         })
     }
 
-    const put = async (path: string, payload: object) => {
+    const put = async (path: string, payload: object): Promise<AxiosResponse> => {
         let settings = await firebaseAdminUtils.getDoc("settings", "main");
         if (!settings?.lightspeed?.store_id || !settings?.lightspeed?.private_token) {
             throw('Go to settings and configure Lightspeed API.');
@@ -28,7 +28,7 @@ function createLightspeed() {
         })
     }
 
-    const get = async (path: string) => {
+    const get = async (path: string): Promise<AxiosResponse> => {
         let settings = await firebaseAdminUtils.getDoc("settings", "main");
         if (!settings?.lightspeed?.store_id || !settings?.lightspeed?.private_token) {
             throw('Go to settings and configure Lightspeed API.');
@@ -46,7 +46,7 @@ function createLightspeed() {
     const getCategories = async (queryParams?: URLSearchParams) => await get('categories' + (queryParams ? '?' + queryParams.toString() : ''));
 
     return {
-        post, get, getProducts, getCategories
+        post, get, put, getProducts, getCategories
     };
 }
 

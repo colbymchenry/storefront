@@ -22,10 +22,10 @@
             params.append('categories', props.collection);
             let res = await lightspeedClientUtils.getProducts(params);
             products = res.data.items;
+            fetching = false;
         } catch (error) {
             console.error(error);
         }
-        fetching = false;
     }
 
     $: if (props?.collection && !products && !fetching && browser) {

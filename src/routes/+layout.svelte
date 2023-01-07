@@ -9,6 +9,7 @@
     import {cookies} from "$lib/stores/cookies";
     import EditorLogin from "$lib/components/EditorLogin.svelte";
     import {browser} from "$app/environment";
+    import {onMount} from "svelte";
 
     export let data;
 
@@ -40,8 +41,27 @@
     }
     if (browser) {
         window.addEventListener("resize", documentHeight)
-        documentHeight()
+        documentHeight();
+
+        if (window.EcwidApp) {
+            console.log(window.EcwidApp)
+            try {
+                window.EcwidApp.init({
+                    app_id: "custom-app-81408535-1",
+                    autoloadedflag: true,
+                    autoheight: true
+                });
+                let storeData = window.EcwidApp?.getPayload();
+                console.log(storeData);
+
+            } catch (error) {
+                console.error(error);
+            }
+
+
+        }
     }
+
 </script>
 
 {#if data["editor"] !== null && !data?.cookies?.authenticated}
