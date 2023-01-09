@@ -13,6 +13,7 @@ import type ILSRibbon from "./ILSRibbon";
 import type ILSProductFile from "./ILSProductFile";
 import type ILSAttributeValue from "./ILSAttributeValue";
 import type ILSRelatedProducts from "./ILSRelatedProducts";
+import type ILSubscriptionSettings from "./ILSubscriptionSettings";
 
 export default interface ILSProduct {
     id?:number;//	Unique integer product identifier
@@ -50,6 +51,7 @@ export default interface ILSProduct {
     defaultCombinationId?:number;//	Identifier of the default product variation, which is defined by the default values of product options.
     originalImage?:Array<ILSOriginalImage>;//	Original image information
     description?:string;//	Product description in HTML
+    hdThumbnailUrl?:string;//	Product description in HTML
     galleryImages?:Array<ILSGalleryImages>;//	List of the product gallery images (for updating alt tags and sort order)
     media?:Array<ILSProductImage>;//	Media files for a product (images)
     categoryIds?:Array<number>;//	Private token: List of the categories, which the product belongs to. Public token: List of the enabled categories the product belongs to. Any access token: If no categories provided, product is displayed on the store front page, see showOnFrontpage field, or all categories of that product are disabled
@@ -71,7 +73,7 @@ export default interface ILSProduct {
     isGiftCard?:boolean;//	true if a product is a gift card. false if it's a regular store product. Read only field
     discountsAllowed?:boolean;//	true if Ecwid can apply discounts to this product at checkout. false otherwise
     nameYourPriceEnabled?:boolean;//	true if the "Pay What You Want " feature is enabled. false otherwise.
-    subscriptionSettings?:Array<SubscriptionSettings>;//	Subscription settings
+    subscriptionSettings?:Array<ILSubscriptionSettings>;//	Subscription settings
     subtitle?:string;//	Short product description for categories or search pages.
     ribbon?:ILSRibbon;//	Small product label visible on categories and product pages.
     externalReferenceId?:string;//	External ID for products synced from external services (e.g. POS)

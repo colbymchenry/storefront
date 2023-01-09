@@ -29,6 +29,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@ecwid/sdk": "^0.3.0",
     "axios": "^1.2.1",
     "dotenv": "^16.0.3",
     "firebase": "^9.15.0",

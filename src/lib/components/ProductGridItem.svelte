@@ -1,5 +1,7 @@
 <script lang="ts">
-    export let product: any = undefined;
+    import ILSProduct from "$lib/interfaces/lightspeed/ILSProduct";
+
+    export let product: ILSProduct = undefined;
     export let props: any = undefined;
 
 </script>

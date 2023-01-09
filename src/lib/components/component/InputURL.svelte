@@ -1,8 +1,7 @@
 <script lang="ts">
     import {cookies} from "$lib/stores/cookies";
-    import {api} from "$lib/stores/api";
-    import ILSProductResponse from "$lib/interfaces/lightspeed/ILSProductResponse";
-    import {objectHelper} from "$lib/utils/object-helper.js";
+    import {lightspeedClientUtils} from "$lib/utils/lightspeed-utils";
+    import ILSProduct from "$lib/interfaces/lightspeed/ILSProduct";
 
     export let name: string = undefined;
     export let value = undefined;
@@ -10,14 +9,14 @@
     export let hideCollections: boolean = false;
 
     let categories = $cookies.categories;
-    let products: ILSProductResponse;
+    let products: ILSProduct[];
     let focused: boolean = false;
 
     async function getProducts() {
         if (products) return;
         try {
-            let res = await api.get('/api/products');
-            products = res.data;
+            let res = await lightspeedClientUtils.getProducts();
+            products = res;
         } catch (error) {
             console.error(error);
         }

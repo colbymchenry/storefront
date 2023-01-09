@@ -2,6 +2,7 @@ import axios, {type AxiosResponse} from "axios";
 import {firebaseAdminUtils} from "./firebase-admin-utils";
 
 function createLightspeed() {
+
     const post = async (path: string, payload: object): Promise<AxiosResponse> => {
         let settings = await firebaseAdminUtils.getDoc("settings", "main");
         if (!settings?.lightspeed?.store_id || !settings?.lightspeed?.private_token) {

@@ -5,11 +5,12 @@
     import {store} from "$lib/stores/store.js";
     import ProductGridItem from "$lib/components/ProductGridItem.svelte";
     import {browser} from "$app/environment";
+    import ILSProduct from "$lib/interfaces/lightspeed/ILSProduct";
 
     export let key: string = undefined;
 
     let props: any;
-    let products = undefined;
+    let products: ILSProduct[] | undefined = undefined;
     let fetching: boolean = false;
 
     // TODO: Get products
@@ -21,7 +22,7 @@
             let params = new URLSearchParams();
             params.append('categories', props.collection);
             let res = await lightspeedClientUtils.getProducts(params);
-            products = res.data.items;
+            products = res;
             fetching = false;
         } catch (error) {
             console.error(error);
