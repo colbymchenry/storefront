@@ -1,9 +1,15 @@
 <script lang="ts">
     import ILSProduct from "$lib/interfaces/lightspeed/ILSProduct";
+    import {cart} from "$lib/stores/cart";
 
     export let product: ILSProduct = undefined;
     export let props: any = undefined;
 
+    async function addToCart(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        await cart.addProduct(product);
+    }
 </script>
 
 <a href={`/product/${product.id}`} class="product">
@@ -12,6 +18,8 @@
     {#if product?.attributes?.length && product.attributes.find((att) => att.type === "UPC")}
         <small>UPC: {product.attributes.find((att) => att.type === "UPC").value}</small>
     {/if}
+
+    <button type="button" on:click={addToCart} class={`bg-${props?.buttonBgColor || 'black'} text-${props?.buttonTextColor || 'white'}`}>Add to Cart</button>
 </a>
 
 <style lang="scss">
@@ -27,7 +35,7 @@
     }
 
     small {
-      @apply mt-2;
+      @apply my-2;
     }
 
     img {

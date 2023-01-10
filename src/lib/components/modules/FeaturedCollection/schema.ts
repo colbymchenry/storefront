@@ -22,6 +22,18 @@ export const schema: ISchema = {
             "label": "Image Height",
             "values": heightValues,
             "default": 22
-        }
+        },
+        {
+            "type": "color",
+            "id": "buttonBgColor",
+            "label": "Add to Cart BG Color",
+            "default": "slate-800"
+        },
+        {
+            "type": "color",
+            "id": "buttonTextColor",
+            "label": "Add to Cart Text Color",
+            "default": "slate-50"
+        },
     ]
 }

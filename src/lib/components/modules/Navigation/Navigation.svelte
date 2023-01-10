@@ -5,6 +5,8 @@
     import {cookies} from "$lib/stores/cookies";
     import {goto} from "$app/navigation";
     import {objectHelper} from "$lib/utils/object-helper.js";
+    import {cart, cartStore} from "$lib/stores/cart.js";
+    import ICartStore from "$lib/interfaces/ICartStore";
 
     let mobileNavContainer: HTMLElement;
     let mobileMenuButton: HTMLElement;
@@ -87,8 +89,12 @@
                         </a>
                     {/if}
 
-                    <button type="button" class="flex items-center">
+                    <button type="button" class="flex items-center relative">
                         <span class="material-symbols-outlined text-2xl md:text-4xl">shopping_basket</span>
+
+                        <span class={`badge bg-${props.cartBgColor} text-${props.cartTextColor}`}>
+                            {$cartStore?.cart?.productsQuantity || 0}
+                        </span>
                     </button>
                 </div>
             </div>
@@ -200,6 +206,11 @@
 <style lang="scss">
   .closed {
     max-height: 0 !important;
+  }
+
+  .badge {
+    @apply absolute top-0 right-0 rounded-2xl py-1 px-2 text-xs border-2 border-solid border-white;
+    margin-right: -0.5rem;
   }
 
   nav {

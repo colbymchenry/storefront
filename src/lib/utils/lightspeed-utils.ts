@@ -3,6 +3,7 @@ import type ILSOrderRequest from "../interfaces/lightspeed/ILSOrderRequest";
 import type ILSOrderResponse from "../interfaces/lightspeed/ILSOrderResponse";
 import type ILSProduct from "../interfaces/lightspeed/ILSProduct";
 import Ecommerce from "@ecwid/sdk";
+import {cart} from "../stores/cart";
 
 function createLightspeed() {
 
@@ -10,8 +11,16 @@ function createLightspeed() {
         storeId: 81408535
     });
 
+    ecommerce.cart.get().then((c) => {
+        cart.update((oldVal) => {
+            return {
+                ...oldVal, cartId: c.cartId
+            }
+        })
+    })
+
     const getProducts = async (queryParams?: URLSearchParams): Promise<ILSProduct[]> => {
-        let {data} = await api.get('api/products' + (queryParams ? '?' + queryParams.toString() : ''));;
+        let {data} = await api.get('api/products' + (queryParams ? '?' + queryParams.toString() : ''));
         return data.items.map((item: any) => {
             let prod:ILSProduct = {...item};
             return prod;
@@ -29,7 +38,12 @@ function createLightspeed() {
     };
 
     return {
-       getProducts, getCategories, createOrder, sdk: ecommerce
+       getProducts, getCategories, createOrder, sdk: ecommerce, ecwid: () => {
+           if (typeof window !== undefined) {
+               // @ts-ignore
+               return window.Ecwid;
+           }
+        }
     };
 }
 

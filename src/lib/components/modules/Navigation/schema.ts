@@ -138,6 +138,18 @@ export const schema: ISchema = {
             "id": "navbarHoverMenuHoverTextColor",
             "label": "Hover Menu Link Hover Color",
             "default": "red-700"
+        },
+        {
+            "type": "color",
+            "id": "cartBgColor",
+            "label": "Cart Pill BG Color",
+            "default": "green-600"
+        },
+        {
+            "type": "color",
+            "id": "cartTextColor",
+            "label": "Cart Pill Text Color",
+            "default": "white"
         }
     ]
 }

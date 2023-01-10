@@ -42,24 +42,6 @@
     if (browser) {
         window.addEventListener("resize", documentHeight)
         documentHeight();
-
-        if (window.EcwidApp) {
-            console.log(window.EcwidApp)
-            try {
-                window.EcwidApp.init({
-                    app_id: "custom-app-81408535-1",
-                    autoloadedflag: true,
-                    autoheight: true
-                });
-                let storeData = window.EcwidApp?.getPayload();
-                console.log(storeData);
-
-            } catch (error) {
-                console.error(error);
-            }
-
-
-        }
     }
 
 </script>
