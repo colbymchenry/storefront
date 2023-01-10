@@ -211,6 +211,14 @@
   .badge {
     @apply absolute top-0 right-0 rounded-2xl py-1 px-2 text-xs border-2 border-solid border-white;
     margin-right: -0.5rem;
+    opacity: 0.75;
+
+    @media screen and (max-width: 500px) {
+      margin-top: -0.5rem;
+      margin-right: -0.75rem;
+      font-size: 0.65rem;
+      padding: 0.25rem 0.5rem;
+    }
   }
 
   nav {

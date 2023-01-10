@@ -11,7 +11,7 @@ export const schema: ISchema = {
             "id": "desktopHeight",
             "label": "Desktop Height",
             "values": heightValues,
-            "default": 22
+            "default": 24
         },
         {
             "type": "range",

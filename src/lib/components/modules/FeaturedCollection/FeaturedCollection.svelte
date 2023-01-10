@@ -60,12 +60,12 @@
   }
 
   h1 {
-    @apply text-lg mb-1 md:mb-8;
+    @apply text-lg mb-1 md:mb-4;
     font-family: 'IBM Plex Sans', sans-serif;
   }
 
   .products {
-    @apply overflow-x-auto overflow-y-hidden max-h-full relative flex flex-nowrap gap-10;
+    @apply overflow-x-auto overflow-y-hidden max-h-full relative flex flex-nowrap gap-10 py-4;
   }
 </style>
 

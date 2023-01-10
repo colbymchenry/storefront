@@ -194,7 +194,7 @@
 </script>
 
 <div class="main" class:visible>
-    <div class="flex items-center justify-between shadow-md px-3 py-2 border-b border-solid border-gray-300 bg-indigo-700 text-white sticky top-0 left-0 z-50">
+    <div class="flex items-center justify-between shadow-md px-3 py-2 border-b border-solid border-gray-300 bg-indigo-700 text-white sticky top-0 left-0" style="z-index: 5000;">
         <button class="bg-none border-none outline-none" type="button" on:click={() => visible = false}>
             <span class="material-symbols-outlined text-3xl">close</span>
         </button>
@@ -304,7 +304,7 @@
                 {/each}
             {/if}
         </div>
-        <div class="flex w-full items-center justify-between sticky left-0 bottom-0 shadow-md px-3 py-2 bg-gray-100">
+        <div class="flex w-full items-center justify-between sticky left-0 bottom-0 shadow-md px-3 py-2 bg-gray-100" style="z-index: 5000;">
             <button type="button" class="btn px-3 py-2" on:click={reset}>Reset</button>
             {#if status === 'success'}
                 <button type="button" class="btn px-3 py-2 bg-green-500 text-white hover:bg-green-500">Saved!</button>
