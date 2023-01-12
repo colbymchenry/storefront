@@ -1,5 +1,3 @@
-import type ILSProduct from "./lightspeed/ILSProduct";
-
 export default interface ICartStore {
     cart?: ICart;
     couponDiscount?: number;
@@ -21,7 +19,7 @@ export default interface ICartStore {
 
 export interface ICart {
     cartId?: string;
-    items?: ILSProduct[];
+    items?: ICartProduct[];
     orderId?: number;
     productsQuantity?: number;
     shippingPerson?: IShippingPerson;
@@ -32,4 +30,20 @@ export interface IShippingPerson {
     countryCode?: string;
     stateOrProvinceCode?: string;
     countryName?: string;
+}
+
+
+export interface ICartProduct {
+    quantity: number;
+    product: ICartProductItem;
+}
+
+export interface ICartProductItem {
+    id: number;
+    name: string;
+    price: number;
+    shortDescription: string;
+    sku: string;
+    url: string;
+    weight: number;
 }

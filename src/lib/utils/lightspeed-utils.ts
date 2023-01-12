@@ -11,13 +11,20 @@ function createLightspeed() {
         storeId: 81408535
     });
 
-    ecommerce.cart.get().then((c) => {
+    ecommerce.cart.get().then((c: any) => {
         cart.update((oldVal) => {
-            return {
-                ...oldVal, cartId: c.cartId
-            }
+            return {...oldVal, cart: c};
         })
     })
+
+    if (typeof window !== 'undefined') {
+        window.Ecwid.OnCartChanged.add(function(c: any){
+            cart.update((oldVal) => c)
+            window.Ecwid.Cart.calculateTotal((order: any) => {
+                cart.update((oldVal) => order)
+            });
+        });
+    }
 
     const getProducts = async (queryParams?: URLSearchParams): Promise<ILSProduct[]> => {
         let {data} = await api.get('api/products' + (queryParams ? '?' + queryParams.toString() : ''));
@@ -39,7 +46,7 @@ function createLightspeed() {
 
     return {
        getProducts, getCategories, createOrder, sdk: ecommerce, ecwid: () => {
-           if (typeof window !== undefined) {
+           if (typeof window !== 'undefined') {
                // @ts-ignore
                return window.Ecwid;
            }

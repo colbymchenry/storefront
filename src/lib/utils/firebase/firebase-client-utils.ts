@@ -43,7 +43,7 @@ function removeUndefined(obj: any) {
 let app: FirebaseApp, analytics: Analytics, firestore: Firestore, auth: Auth, storage: FirebaseStorage;
 
 function createFirebase() {
-
+    if (typeof window === 'undefined') return;
     let config = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
 
     let defaultValue: IFirebase = {

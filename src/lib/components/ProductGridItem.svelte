@@ -8,7 +8,7 @@
     async function addToCart(e) {
         e.preventDefault();
         e.stopPropagation();
-        await cart.addProduct(product);
+        await cart.addProduct(product.id);
     }
 </script>
 

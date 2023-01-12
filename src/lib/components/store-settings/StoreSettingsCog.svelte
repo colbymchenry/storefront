@@ -1,5 +1,4 @@
 <script lang="ts">
-
     import {editor} from "$lib/stores/editor";
     import Component from "$lib/components/component/Component.svelte";
     import {schema} from "./schema";

@@ -5,8 +5,8 @@
     import {cookies} from "$lib/stores/cookies";
     import {goto} from "$app/navigation";
     import {objectHelper} from "$lib/utils/object-helper.js";
-    import {cart, cartStore} from "$lib/stores/cart.js";
-    import ICartStore from "$lib/interfaces/ICartStore";
+    import {cartStore} from "$lib/stores/cart.js";
+    import CartDrawer from "$lib/components/modules/Navigation/CartDrawer.svelte";
 
     let mobileNavContainer: HTMLElement;
     let mobileMenuButton: HTMLElement;
@@ -39,6 +39,7 @@
 
     let showMobileNav: boolean = false;
     let expanded: any;
+    let cartVisible: boolean = false;
 </script>
 
 <svelte:window on:click={handleWindowClick}/>
@@ -89,7 +90,9 @@
                         </a>
                     {/if}
 
-                    <button type="button" class="flex items-center relative">
+                    <button type="button" class="flex items-center relative" on:click={() => {
+                        cartVisible = true;
+                    }}>
                         <span class="material-symbols-outlined text-2xl md:text-4xl">shopping_basket</span>
 
                         <span class={`badge bg-${props.cartBgColor} text-${props.cartTextColor}`}>
@@ -202,6 +205,7 @@
     </Component>
 </nav>
 
+<CartDrawer bind:visible={cartVisible} />
 
 <style lang="scss">
   .closed {
