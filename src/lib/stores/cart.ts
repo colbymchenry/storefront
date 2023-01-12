@@ -1,6 +1,7 @@
-import {writable} from "svelte/store";
+import {get, writable} from "svelte/store";
 import type ICartStore from "../interfaces/ICartStore";
 import {lightspeedClientUtils} from "../utils/lightspeed-utils";
+import {page} from "$app/stores";
 
 export const cartStore = writable<ICartStore>();
 
@@ -23,7 +24,8 @@ function createCart() {
     }
 
     async function gotoCheckout(path?: string) {
-        await lightspeedClientUtils.sdk.cart.goToCheckout(path);
+        let p = get(page);
+        await lightspeedClientUtils.sdk.cart.goToCheckout(path || p.url.pathname);
     }
 
     return {

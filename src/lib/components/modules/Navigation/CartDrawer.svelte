@@ -20,7 +20,9 @@
         try {
             let products = await lightspeedClientUtils.getProducts(new URLSearchParams(`productId=${productsToFetch.join(",")}`));
             products.forEach((item: ILSProduct) => {
-                productImages[item.id] = item.originalImage.url;
+                if (item?.originalImage) {
+                    productImages[item.id] = item.originalImage.url;
+                }
             })
             productImages = productImages;
         } catch (error) {
@@ -87,7 +89,7 @@
             <span>{formatter.format($cartStore?.subtotal || 0)}</span>
         </div>
 
-        <button type="button" class="checkout-btn" disabled={!canGoToCheckout}>
+        <button type="button" class="checkout-btn" disabled={!canGoToCheckout || !$cartStore?.cart?.items?.length} on:click={() => cart.gotoCheckout()}>
             Checkout
         </button>
 
@@ -118,6 +120,10 @@
 
     &:hover,&:disabled {
       background-color: rgb(48, 48, 48);
+    }
+
+    &:disabled {
+      @apply cursor-not-allowed;
     }
   }
 

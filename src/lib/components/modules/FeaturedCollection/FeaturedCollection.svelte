@@ -13,7 +13,6 @@
     let products: ILSProduct[] | undefined = undefined;
     let fetching: boolean = false;
 
-    // TODO: Get products
     async function fetchProducts() {
         if (fetching) return;
         fetching = true;
