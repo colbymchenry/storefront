@@ -70,6 +70,6 @@
 
 <style lang="scss">
   main {
-    @apply flex flex-col w-screen h-screen overflow-x-hidden relative;
+    @apply flex flex-col w-full h-full max-h-full overflow-x-hidden overflow-y-auto relative;
   }
 </style>
