@@ -42,13 +42,6 @@
     if (browser) {
         window.addEventListener("resize", documentHeight)
         documentHeight();
-
-        const appHeight = () => {
-            const doc = document.documentElement
-            doc.style.setProperty('--app-height', `${window.innerHeight}px`)
-        }
-        window.addEventListener('resize', appHeight)
-        appHeight()
     }
 
 </script>
