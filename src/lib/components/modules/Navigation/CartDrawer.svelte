@@ -64,7 +64,7 @@
                     <img src={productImages[item.product.id]} loading="lazy" alt={item.product.name + " image"}/>
                 {:else}
                     <!--show stock photo-->
-                    <span>IMG</span>
+                    <span class="material-symbols-outlined text-gray-300" style="font-size: 4rem;">category</span>
                 {/if}
                 <div class="flex flex-col mx-3">
                     <a href={"#"}>{item.product.name}</a>

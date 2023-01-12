@@ -13,13 +13,21 @@
 </script>
 
 <a href={`/product/${product.id}`} class="product">
-    <img src={product.hdThumbnailUrl} loading="lazy" class={`h-${props?.imgHeight}`}/>
-    <span><strong>{product.name}</strong></span>
+    {#if product.hdThumbnailUrl}
+        <img src={product.hdThumbnailUrl} loading="lazy" class={`h-${props?.imgHeight}`}/>
+    {:else}
+        <div class="flex items-center justify-center flex-grow">
+            <span class="material-symbols-outlined text-gray-300" style="font-size: 8rem;">category</span>
+        </div>
+    {/if}
+    <span class="productName"><strong>{product.name}</strong></span>
     {#if product?.attributes?.length && product.attributes.find((att) => att.type === "UPC")}
-        <small>UPC: {product.attributes.find((att) => att.type === "UPC").value}</small>
+        <small class="text-gray-400 flex-shrink">UPC: {product.attributes.find((att) => att.type === "UPC").value}</small>
     {/if}
 
-    <button type="button" on:click={addToCart} class={`bg-${props?.buttonBgColor || 'black'} text-${props?.buttonTextColor || 'white'}`}>Add to Cart</button>
+    <button type="button" on:click={addToCart}
+            class={`flex-shrink bg-${props?.buttonBgColor || 'black'} text-${props?.buttonTextColor || 'white'}`}>Add to Cart
+    </button>
 </a>
 
 <style lang="scss">
@@ -29,8 +37,8 @@
     width: 20vh;
     min-width: 20vh;
 
-    span {
-      @apply text-xs md:text-sm mt-4 flex-grow;
+    .productName {
+      @apply text-xs md:text-sm mt-4 flex-shrink;
       font-family: 'IBM Plex Sans', sans-serif;
     }
 
@@ -39,6 +47,7 @@
     }
 
     img {
+      flex-grow: 1;
       width: auto;
       object-fit: contain;
     }
