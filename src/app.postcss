@@ -14,15 +14,13 @@
 
 html,
 body {
-    height: 100vh; /* fallback for Js load */
-    height: var(--doc-height);
+    max-height: -webkit-fill-available;
     overflow: hidden;
 }
 
 body > div:first-of-type {
     overflow: hidden;
-    height: 100vh; /* fallback for Js load */
-    height: var(--doc-height);
+    max-height: -webkit-fill-available;
 }
 
 .editor select {
