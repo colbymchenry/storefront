@@ -89,7 +89,7 @@
             <span>{formatter.format($cartStore?.subtotal || 0)}</span>
         </div>
 
-        <button type="button" class="checkout-btn" disabled={!canGoToCheckout || !$cartStore?.cart?.items?.length} on:click={() => cart.gotoCheckout()}>
+        <button type="button" class="checkout-btn" disabled={!$cartStore?.cart?.items?.length} on:click={() => cart.gotoCheckout()}>
             Checkout
         </button>
 
