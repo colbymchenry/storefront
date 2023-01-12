@@ -21,6 +21,8 @@ body {
 
 body > div:first-of-type {
     overflow: hidden;
+    height: 100vh; /* fallback for Js load */
+    height: var(--doc-height);
 }
 
 .editor select {
