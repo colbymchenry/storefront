@@ -31,7 +31,7 @@
 
 <style lang="scss">
   button {
-    @apply flex justify-center items-center flex-grow;
+    @apply flex justify-center items-center flex-grow bg-white;
 
     &:hover {
       @apply bg-gray-200;
@@ -39,7 +39,7 @@
   }
 
   input {
-    @apply min-h-full flex-grow;
+    @apply min-h-full flex-grow bg-white;
 
     &:focus {
       outline: none;
