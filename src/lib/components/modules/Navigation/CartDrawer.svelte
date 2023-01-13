@@ -44,8 +44,6 @@
         style: 'currency',
         currency: 'USD',
     });
-
-    $: console.log($cartStore)
 </script>
 
 <div class="cart-drawer" class:visible>
@@ -128,7 +126,7 @@
   }
 
   .cart-drawer {
-    @apply fixed top-0 right-0 h-screen max-h-full bg-white overflow-hidden flex flex-col;
+    @apply fixed top-0 right-0 h-screen max-h-full bg-white overflow-hidden flex flex-col shadow-md;
     width: 400px;
     z-index: 4000;
     margin-right: -500px;
