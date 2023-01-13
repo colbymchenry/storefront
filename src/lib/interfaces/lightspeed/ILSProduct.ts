@@ -53,7 +53,7 @@ export default interface ILSProduct {
     description?:string;//	Product description in HTML
     hdThumbnailUrl?:string;//	Product description in HTML
     galleryImages?:Array<ILSGalleryImages>;//	List of the product gallery images (for updating alt tags and sort order)
-    media?:Array<ILSProductImage>;//	Media files for a product (images)
+    media?:ILSMedia;//	Media files for a product (images)
     categoryIds?:Array<number>;//	Private token: List of the categories, which the product belongs to. Public token: List of the enabled categories the product belongs to. Any access token: If no categories provided, product is displayed on the store front page, see showOnFrontpage field, or all categories of that product are disabled
     categories?:Array<ILSCategoriesInfo>;//	List of the categories the product belongs to with brief details (for any access token). If no categories provided, product belogs to store front page, see showOnFrontpage field
     defaultCategoryId?:number;//	Default category ID of the product. If value is 0, then product does not have a default category and is not shown anywhere in storefront
@@ -79,4 +79,8 @@ export default interface ILSProduct {
     externalReferenceId?:string;//	External ID for products synced from external services (e.g. POS)
     customsHsTariffCode?:string;//	Product code for customs reference. Omitted if empty
     outOfStockVisibilityBehaviour?:string;//	Indicates whether an out of stock product should visible or not. One of: SHOW, HIDE, ALLOW_PREORDER.
+}
+
+export interface ILSMedia {
+    images?: ILSProductImage[];
 }

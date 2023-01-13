@@ -1,7 +1,6 @@
 <script lang="ts">
     export let value: number = 0;
     export let name: string = undefined;
-
     export let min: number = 0;
     export let max: number = undefined;
 </script>
