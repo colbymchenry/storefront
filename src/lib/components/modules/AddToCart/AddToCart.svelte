@@ -23,8 +23,11 @@
                     if (Object.values(formData["variant"]).find((amount) => parseInt(amount) > 0)) {
                         isDisabled = false;
                     } else {
+                        // TODO: Need to check variant stock
                         isDisabled = true;
                     }
+                } else if (formData["amount"] && !product.unlimited) {
+                    isDisabled = parseInt(formData["amount"]) > product.quantity;
                 } else {
                     clearInterval(interval);
                 }
