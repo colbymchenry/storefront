@@ -26,7 +26,15 @@
     {/if}
 
     <button type="button" on:click={addToCart}
-            class={`flex-shrink bg-${props?.buttonBgColor || 'black'} text-${props?.buttonTextColor || 'white'}`}>Add to Cart
+            disabled={!product.inStock || !product.enabled}
+            class={`relative flex-shrink bg-${props?.buttonBgColor || 'black'} text-${props?.buttonTextColor || 'white'}`}>
+        {#if !product.enabled}
+            Not Available
+        {:else if !product.inStock}
+            Out of Stock
+        {:else}
+            Add to Cart
+        {/if}
     </button>
 </a>
 
@@ -50,6 +58,14 @@
       flex-grow: 1;
       width: auto;
       object-fit: contain;
+    }
+  }
+
+  button:disabled {
+    @apply cursor-not-allowed;
+    &:before {
+      @apply absolute top-0 left-0 w-full h-full bg-white opacity-50;
+      content: '';
     }
   }
 </style>
