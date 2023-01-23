@@ -2,23 +2,61 @@
     import type ILSProduct from "$lib/interfaces/lightspeed/ILSProduct";
     import ProductOptions from "./_components/ProductOptions.svelte";
     import ProductMedia from "./_components/ProductMedia.svelte";
+    import AddToCart from "$lib/components/modules/AddToCart/AddToCart.svelte";
+    import {formHelper} from "$lib/utils/form-helper";
+    import {cart} from "$lib/stores/cart";
+    import {onMount} from "svelte";
+    import {productStore} from "$lib/utils/lightspeed-utils";
 
     export let data;
 
     let product: ILSProduct = data["product"];
     let variations: ILSProduct[] = data["variations"];
 
-    console.log("product", product)
+    onMount(() => {
+        if (!$productStore.products[product.id]) {
+            $productStore.products[product.id] = product;
+        }
+        if (!$productStore.variations[product.id]) {
+            $productStore.variations[product.id] = variations;
+        }
+    });
+
+    async function onSubmit({target}) {
+        let formData = formHelper.getFormData(target);
+        Object.entries(formData.variant).map(async ([id, amount]) => {
+            if (parseInt(amount) > 0) {
+                let combo = product.combinations.find((c) => c.id === id);
+
+                await cart.addProduct(null, {
+                    id: product.id,
+                    quantity: parseInt(amount),
+                    options: {
+                        optionName: combo.options[0].value
+                    },
+                    callback: function (success, product, cart) {
+                        // todo
+                        if (!success) {
+
+                        } else {
+
+                        }
+                    }
+                });
+            }
+        })
+    }
 </script>
 
 <div class="product-container">
     <div class="product-images">
         <ProductMedia {product} {variations}/>
     </div>
-    <div class="product-form">
+    <form class="product-form" on:submit|preventDefault={onSubmit}>
         <h1 class="mb-6">{product.name}</h1>
         <ProductOptions {product} {variations}/>
-    </div>
+        <AddToCart {product}/>
+    </form>
 </div>
 
 <style lang="scss">

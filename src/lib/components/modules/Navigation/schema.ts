@@ -1,5 +1,6 @@
 import type {ISchema} from "../../component/ISchema";
 import {heightValues} from "../../component/ISchema";
+import {SchemaTemplates} from "../SchemaTemplates";
 
 export const schema: ISchema = {
     "name": "Navigation",
@@ -52,36 +53,7 @@ export const schema: ISchema = {
             "id": "dropShadow",
             "label": "Drop Shadow",
             "default": "drop-shadow-none",
-            "options": [
-                {
-                    "label": "none",
-                    "value": "drop-shadow-none"
-                },
-                {
-                    "label": "default",
-                    "value": "drop-shadow"
-                },
-                {
-                    "label": "small",
-                    "value": "drop-shadow-sm"
-                },
-                {
-                    "label": "medium",
-                    "value": "drop-shadow-md"
-                },
-                {
-                    "label": "large",
-                    "value": "drop-shadow-lg"
-                },
-                {
-                    "label": "xlarge",
-                    "value": "drop-shadow-xl"
-                },
-                {
-                    "label": "xxlarge",
-                    "value": "drop-shadow-2xl"
-                }
-            ]
+            "options": SchemaTemplates.dropShadow
         },
         {
             "type": "header",

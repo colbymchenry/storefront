@@ -5,6 +5,7 @@
 
     export let product: ILSProduct = undefined;
     export let variations: ILSProduct[] = undefined;
+
     let container: HTMLElement;
     let gallery: HTMLElement;
     let show: boolean = false;
@@ -23,6 +24,21 @@
         }
     })
 
+    function getVariation(option, choice) {
+        return variations.find((variation: any) => variation.options.find((v) => v.name === option.name && v.value === choice.text));
+    }
+
+    function getVariationImages() {
+        let images = [];
+        product.options.forEach((option) => {
+            option.choices.forEach((choice) => {
+                let variation = getVariation(option, choice);
+                if (variation && variation["imageUrl"]) images.push(variation["imageUrl"]);
+            })
+        })
+        return images;
+    }
+
     const documentHeight = () => {
         if (browser) {
             let isMobile = window.innerWidth < 1000;
@@ -34,8 +50,10 @@
         }
     };
 
-    $: if (browser && container) {
+    let addedEventListener = false;
+    $: if (browser && container && !addedEventListener) {
         window.addEventListener("resize", documentHeight);
+        addedEventListener = true;
     }
 </script>
 

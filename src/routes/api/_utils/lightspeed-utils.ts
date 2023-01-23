@@ -44,7 +44,6 @@ function createLightspeed() {
 
     const getProducts = async (queryParams?: URLSearchParams, productId?: any) => await get('products' + (productId ? "/" + productId : "") + (queryParams ? '?' + queryParams.toString() : ''));
     const getVariations = async (productId: any) => await get(`products/${productId}/combinations`);
-
     const getCategories = async (queryParams?: URLSearchParams, categoryId?: any) => await get('categories' + (categoryId ? "/" + categoryId : "") + (queryParams ? '?' + queryParams.toString() : ''));
 
     return {

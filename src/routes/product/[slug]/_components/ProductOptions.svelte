@@ -8,19 +8,12 @@
     function getVariation(option, choice) {
         return variations.find((variation: any) => variation.options.find((v) => v.name === option.name && v.value === choice.text));
     }
+
 </script>
 
 {#each product.options as option}
     <div class="options">
-        <table>
-
-            <colgroup>
-                <col span="1" style="width: 15%;">
-                <col span="1" style="width: 70%;">
-                <col span="1" style="width: 15%;">
-                <col span="1" style="width: 5px;">
-            </colgroup>
-
+        <table style="table-layout:fixed;">
             <thead>
             <tr>
                 <th></th>
@@ -54,11 +47,11 @@
                     <!-- Price -->
                     <td>{getVariation(option, choice).defaultDisplayedPriceFormatted}</td>
                     <!-- Quantity-->
-                    <td>
+                    <td style="max-width:60px;">
                         {#if getVariation(option, choice).inStock}
                             <QuantityButton name={`variant.${getVariation(option, choice).id}`}/>
                         {:else}
-                            <span class="py-1 px-3 bg-gray-300 text-red-600">Out of stock</span>
+                            <span class="py-1 px-1 bg-gray-300 text-red-600 text-sm truncate">Out of stock</span>
                         {/if}
                     </td>
                 </tr>
@@ -83,6 +76,7 @@
         @apply px-3;
         vertical-align: middle;
         text-align: left;
+        overflow: hidden;
 
         @media screen and (max-width: 600px) {
           @apply px-0;

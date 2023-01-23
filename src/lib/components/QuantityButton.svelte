@@ -6,7 +6,8 @@
 </script>
 
 <div class="flex relative rounded-md border border-solid border-gray-400 pl-3 overflow-hidden">
-    <input type="number" bind:value {name} on:input={(e) => {
+    <div class="flex-grow overflow-hidden">
+        <input type="number" bind:value {name} on:input={(e) => {
         if (e.target.value < min) {
             value = min;
             e.preventDefault();
@@ -15,7 +16,8 @@
             e.preventDefault();
         }
     }}/>
-    <div class="flex flex-col flex-center border-l border-solid border-gray-400">
+    </div>
+    <div class="flex flex-col flex-center border-l border-solid border-gray-400 flex-shrink">
         <button type="button" on:click={() => {
             if (!max || value + 1 <= max) value++;
         }} class="border-b border-solid border-gray-400">

@@ -8,14 +8,14 @@ export const cartStore = writable<ICartStore>();
 function createCart() {
     const {set, update, subscribe} = cartStore;
 
-    async function addProduct(productId: number): Promise<ICartStore> {
+    async function addProduct(productId: number, productObj?: any) {
         if (!lightspeedClientUtils.ecwid().Cart) return;
-        await lightspeedClientUtils.ecwid().Cart.addProduct(productId);
+        return await lightspeedClientUtils.ecwid().Cart.addProduct(productObj || productId);
     }
 
-    async function removeProduct(productIndex: number): Promise<ICartStore> {
+    async function removeProduct(productIndex: number) {
         if (!lightspeedClientUtils.ecwid().Cart) return;
-        await lightspeedClientUtils.ecwid().Cart.removeProduct(productIndex);
+        return await lightspeedClientUtils.ecwid().Cart.removeProduct(productIndex);
     }
 
     async function canGotoCheckout() {

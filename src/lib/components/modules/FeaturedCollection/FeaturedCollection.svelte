@@ -4,32 +4,15 @@
     import {lightspeedClientUtils} from "$lib/utils/lightspeed-utils";
     import {store} from "$lib/stores/store.js";
     import ProductGridItem from "$lib/components/ProductGridItem.svelte";
-    import {browser} from "$app/environment";
-    import ILSProduct from "$lib/interfaces/lightspeed/ILSProduct";
 
     export let key: string = undefined;
 
     let props: any;
-    let products: ILSProduct[] | undefined = undefined;
-    let fetching: boolean = false;
 
     async function fetchProducts() {
-        if (fetching) return;
-        fetching = true;
-
-        try {
-            let params = new URLSearchParams();
-            params.append('categories', props.collection);
-            let res = await lightspeedClientUtils.getProducts(params);
-            products = res;
-            fetching = false;
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    $: if (props?.collection && !products && !fetching && browser) {
-        fetchProducts();
+        let params = new URLSearchParams();
+        params.append('categories', props.collection);
+        return await lightspeedClientUtils.getProducts(params);
     }
 </script>
 
@@ -40,14 +23,17 @@
                 class={`border-b-4 border-solid border-${$store.primaryColor}`}>{props.title || "Featured Collection"}</h1>
             {#if !props.collection}
                 <h1>Pick a collection</h1>
-            {:else if fetching}
+            {:else}
+                {#await fetchProducts() then products}
+                    <div class="products">
+                        {#each products as product}
+                            <ProductGridItem {product} {props}/>
+                        {/each}
+                    </div>
+                {:catch error}
+                    <h1 class="text-red-500">An error occurred.</h1>
+                {/await}
 
-            {:else if products?.length}
-                <div class="products">
-                    {#each products as product}
-                        <ProductGridItem {product} {props} />
-                    {/each}
-                </div>
             {/if}
         </section>
     {/if}

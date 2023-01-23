@@ -1,34 +1,9 @@
 <script lang="ts">
     import {cart, cartStore} from "$lib/stores/cart.js";
-    import {lightspeedClientUtils} from "$lib/utils/lightspeed-utils";
-    import ILSProduct from "$lib/interfaces/lightspeed/ILSProduct";
+    import {lightspeedClientUtils, productStore} from "$lib/utils/lightspeed-utils";
     import {onMount} from "svelte";
 
     export let visible: boolean = false;
-
-    let productImages = {};
-
-    cartStore.subscribe(async ({cart}) => {
-        if (!cart?.items) return;
-        let productsToFetch = [];
-        cart.items.forEach((item) => {
-            if (!productImages[item.product.id]) {
-                productsToFetch.push(item.product.id);
-            }
-        })
-
-        try {
-            let products = await lightspeedClientUtils.getProducts(new URLSearchParams(`productId=${productsToFetch.join(",")}`));
-            products.forEach((item: ILSProduct) => {
-                if (item?.originalImage) {
-                    productImages[item.id] = item.originalImage.url;
-                }
-            })
-            productImages = productImages;
-        } catch (error) {
-            console.error(error);
-        }
-    });
 
     async function removeFromCart(index: number) {
         await cart.removeProduct(index);
@@ -60,19 +35,44 @@
     <div class="items">
         {#each $cartStore?.cart?.items || [] as item, index}
             <div class="item">
-                {#if productImages[item.product.id]}
-                    <img src={productImages[item.product.id]} loading="lazy" alt={item.product.name + " image"}/>
+                {#if item?.options}
+                    {#await lightspeedClientUtils.getVariations(item.product.id) then variations}
+                        {#if variations.find((v) => v.options.find((o) => o.value === Object.values(item.options)[0]))?.originalImageUrl}
+                            <img src={variations.find((v) => v.options.find((o) => o.value === Object.values(item.options)[0])).originalImageUrl}
+                                 loading="lazy" alt={item.product.name + " image"}/>
+                        {:else}
+                            <span class="material-symbols-outlined text-gray-300"
+                                  style="font-size: 4rem;">category</span>
+                        {/if}
+                    {:catch error}
+                        <span class="material-symbols-outlined text-gray-300" style="font-size: 4rem;">category</span>
+                    {/await}
                 {:else}
-                    <!--show stock photo-->
-                    <span class="material-symbols-outlined text-gray-300" style="font-size: 4rem;">category</span>
+                    {#await lightspeedClientUtils.getProducts(new URLSearchParams(`productId=${item.product.id}`)) then product}
+                        {#if product?.imageUrl}
+                            <img src={product.imageUrl} loading="lazy" alt={item.product.name + " image"}/>
+                        {:else}
+                            <span class="material-symbols-outlined text-gray-300"
+                                  style="font-size: 4rem;">category</span>
+                        {/if}
+                    {:catch error}
+                        <span class="material-symbols-outlined text-gray-300" style="font-size: 4rem;">category</span>
+                    {/await}
                 {/if}
                 <div class="flex flex-col mx-3">
-                    <a href={"#"}>{item.product.name}</a>
+                    <a href={`/product/${item.product.id}`}>{item.product.name}</a>
                 </div>
 
                 <div class="flex h-full items-start justify-end">
-                    <button type="button" on:click={() => removeFromCart(index)}><span class="material-symbols-outlined text-sm text-gray-500">close</span></button>
+                    <button type="button" on:click={() => removeFromCart(index)}><span
+                            class="material-symbols-outlined text-sm text-gray-500">close</span></button>
                 </div>
+
+                {#if item?.options}
+                    <div class="w-full flex border-t border-solid border-gray-200 col-span-3 my-2 text-gray-400 py-2">
+                        <span>{Object.keys(item.options)[0]}: {item.options[Object.keys(item.options)[0]]}</span>
+                    </div>
+                {/if}
             </div>
         {/each}
     </div>
@@ -87,7 +87,8 @@
             <span>{formatter.format($cartStore?.subtotal || 0)}</span>
         </div>
 
-        <button type="button" class="checkout-btn" disabled={!$cartStore?.cart?.items?.length} on:click={() => cart.gotoCheckout()}>
+        <button type="button" class="checkout-btn" disabled={!$cartStore?.cart?.items?.length}
+                on:click={() => cart.gotoCheckout()}>
             Checkout
         </button>
 
@@ -116,7 +117,7 @@
     user-select: none;
     cursor: pointer;
 
-    &:hover,&:disabled {
+    &:hover, &:disabled {
       background-color: rgb(48, 48, 48);
     }
 

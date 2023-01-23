@@ -1,4 +1,5 @@
 import type {ISchema} from "../../component/ISchema";
+import {SchemaTemplates} from "../SchemaTemplates";
 
 // 'header' | 'checkbox' | 'number' | 'radio' | 'range' | 'select' | 'text' | 'textarea' | 'collection' | 'color' | 'product' | 'image' | 'video'
 export const schema: ISchema = {
@@ -32,28 +33,7 @@ export const schema: ISchema = {
             "id": "objectFit",
             "label": "Image Fit",
             "default": "object-cover",
-            "options": [
-                {
-                    "label": "Contain",
-                    "value": "object-contain"
-                },
-                {
-                    "label": "Cover",
-                    "value": "object-cover"
-                },
-                {
-                    "label": "Fill",
-                    "value": "object-fill"
-                },
-                {
-                    "label": "Auto",
-                    "value": "object-none"
-                },
-                {
-                    "label": "Scale Down",
-                    "value": "object-scale-down"
-                }
-            ]
+            "options": SchemaTemplates.objectFit
         },
     ],
     "blocks": [
