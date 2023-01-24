@@ -4,7 +4,6 @@ import {lightspeedServerUtils} from "../_utils/lightspeed-utils";
 // @ts-ignore
 export async function POST({request, url}) {
     try {
-        console.log(request.data)
     } catch (error) {
         console.error(error);
         return fail(400);

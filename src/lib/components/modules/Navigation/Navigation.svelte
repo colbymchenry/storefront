@@ -166,7 +166,7 @@
                                     }
 
                                 } else {
-                                    await goto(`/collections?id=${category.id}`);
+                                    await goto(`/collection/${category.id}`);
                                 }
                             }} class={`text-md url hover:text-${props.navbarHoverTextColor}`}>
                                 {category.name}

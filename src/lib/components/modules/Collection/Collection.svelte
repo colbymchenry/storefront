@@ -5,6 +5,9 @@
     import ProductGridItem from "$lib/components/ProductGridItem.svelte";
 
     export let products: ILSProduct[];
+    export let sortOrder: number = 1;
+
+
 </script>
 
 <Component {schema} let:props>

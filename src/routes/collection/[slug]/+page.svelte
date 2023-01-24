@@ -20,13 +20,12 @@
                         Sort by
                     </label>
                     <select id="sortBy" class="bg-gray-200 rounded-md py-2 px-3 ml-2">
-                        <option value="">Default</option>
-                        <option value="">Date (Oldest - Latest)</option>
-                        <option value="">Date (Latest - Oldest)</option>
-                        <option value="">Name (A - Z)</option>
-                        <option value="">Name (Z - A)</option>
-                        <option value="">Price (Low > High)</option>
-                        <option value="">Price (High > Low)</option>
+                        <option value="1">Date (Oldest - Latest)</option>
+                        <option value="2">Date (Latest - Oldest)</option>
+                        <option value="3">Name (A - Z)</option>
+                        <option value="4">Name (Z - A)</option>
+                        <option value="5">Price (Low > High)</option>
+                        <option value="6">Price (High > Low)</option>
                     </select>
                 </div>
             </div>

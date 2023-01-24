@@ -24,7 +24,7 @@
                 <div class="w-full text-black flex-grow py-12 px-6">
                     {@html props?.content || ""}
                 </div>
-                <form method="POST" action="?/enter" class="w-full flex justify-center">
+                <form method="POST" action="/?/enter" class="w-full flex justify-center">
                     <button type="submit"
                             class={`mb-8 bg-${props?.buttonBgColor} text-${props?.buttonTextColor} py-2 px-5`}
                             style="align-self: center;">{props?.buttonText || "ENTER"}</button>
