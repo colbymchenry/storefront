@@ -5,8 +5,27 @@
     import ProductGridItem from "$lib/components/ProductGridItem.svelte";
 
     export let products: ILSProduct[];
-    export let sortOrder: number = 1;
+    export let sortBy: number = 1;
 
+    $: if (sortBy === 1) {
+        products.sort((a,b) => new Date(a.createTimestamp) - new Date(b.createTimestamp));
+        products = products;
+    } else if (sortBy === 2) {
+        products.sort((a,b) => new Date(b.createTimestamp) - new Date(a.createTimestamp));
+        products = products;
+    } else if (sortBy === 3) {
+        products.sort((a,b) => a.name.localeCompare(b.name));
+        products = products;
+    } else if (sortBy === 4) {
+        products.sort((a,b) => b.name.localeCompare(a.name));
+        products = products;
+    } else if (sortBy === 5) {
+        products.sort((a,b) => a.price - b.price);
+        products = products;
+    } else if (sortBy === 6) {
+        products.sort((a,b) => b.price - a.price);
+        products = products;
+    }
 
 </script>
 

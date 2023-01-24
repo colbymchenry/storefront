@@ -4,7 +4,6 @@
     import {schema} from "./schema";
     import {cookies} from "$lib/stores/cookies";
     import {goto} from "$app/navigation";
-    import {objectHelper} from "$lib/utils/object-helper.js";
     import {cartStore} from "$lib/stores/cart.js";
     import CartDrawer from "$lib/components/modules/Navigation/CartDrawer.svelte";
 
@@ -167,6 +166,8 @@
 
                                 } else {
                                     await goto(`/collection/${category.id}`);
+                                    console.log("BAM")
+                                    showMobileNav = false;
                                 }
                             }} class={`text-md url hover:text-${props.navbarHoverTextColor}`}>
                                 {category.name}

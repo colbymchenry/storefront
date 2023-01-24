@@ -3,7 +3,8 @@
 
     export let data;
 
-    console.log(data)
+    let sortBy = 1;
+
 </script>
 
 <div class="cc-container">
@@ -13,14 +14,14 @@
     <div class="flex flex-col w-full p-4">
         <div class="flex flex-col w-full my-4 pb-2 border-b-2 border-solid border-gray-300">
             <h1>{data.category.name}</h1>
-            <div class="flex justify-between items-center w-full mt-8">
+            <div class="flex justify-between items-center w-full mt-8 flex-wrap">
                 <div class="flex items-center text-2xl"><span class="material-symbols-outlined text-3xl mr-2">list</span> {data["products"]["total"]} item(s)</div>
-                <div class="flex items-center">
+                <div class="flex items-center mt-4 sm:mt-0">
                     <label for="sortBy">
                         Sort by
                     </label>
-                    <select id="sortBy" class="bg-gray-200 rounded-md py-2 px-3 ml-2">
-                        <option value="1">Date (Oldest - Latest)</option>
+                    <select id="sortBy" class="bg-gray-200 rounded-md py-2 px-3 ml-2" on:change={(e) => sortBy = parseInt(e.target.value)}>
+                        <option value="1" selected>Date (Oldest - Latest)</option>
                         <option value="2">Date (Latest - Oldest)</option>
                         <option value="3">Name (A - Z)</option>
                         <option value="4">Name (Z - A)</option>
@@ -30,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <Collection products={data["products"]["items"]}/>
+        <Collection products={data["products"]["items"]} {sortBy}/>
     </div>
 </div>
 
