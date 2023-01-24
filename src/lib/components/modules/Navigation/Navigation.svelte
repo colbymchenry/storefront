@@ -26,15 +26,16 @@
         node.parentNode.style.flexDirection = 'column';
     }
 
+    function flexRow(node) {
+        node.style.display = 'flex';
+    }
+
     function handleWindowClick(e) {
         if (showMobileNav && mobileNavContainer && !mobileNavContainer.contains(e.target) && !mobileMenuButton.contains(e.target)) {
             showMobileNav = false;
         }
     }
 
-    function useFlex(node) {
-        node.style.display = 'flex';
-    }
 
     let showMobileNav: boolean = false;
     let expanded: any;
@@ -112,7 +113,7 @@
                             {category.name}
 
                             {#if $cookies.categories.items.filter((cat) => cat.parentId === category.id).length}
-                                <div use:useFlex class={`bg-${props.navbarHoverMenuBgColor} text-${props.navbarHoverMenuTextColor} url-container opacity-0`} style="display: none;">
+                                <div use:flexRow class={`bg-${props.navbarHoverMenuBgColor} text-${props.navbarHoverMenuTextColor} url-container opacity-0`} style="display: none;">
                                     {#each $cookies.categories.items.filter((cat) => cat.parentId === category.id) as cat}
                                         {#if $cookies.categories.items.filter((c) => c.parentId === cat.id).length}
                                             <div class="relative flex flex-col min-w-10 mx-4">
