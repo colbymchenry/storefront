@@ -51,7 +51,14 @@
                             </div>
                         </td>
                         <!-- Price -->
-                        <td>{getVariation(option, choice).defaultDisplayedPriceFormatted}</td>
+                        <td>
+                            <div class="flex flex-col">
+                                {getVariation(option, choice).defaultDisplayedPriceFormatted}
+                                {#if !getVariation(option, choice).unlimited}
+                                    <small class="bg-gray-200 text-black px-1 rounded-md self-start">{getVariation(option, choice).quantity} in stock</small>
+                                {/if}
+                            </div>
+                        </td>
                         <!-- Quantity-->
                         <td style="max-width:60px;">
                             {#if getVariation(option, choice).inStock}

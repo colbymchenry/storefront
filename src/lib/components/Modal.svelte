@@ -1,10 +1,17 @@
 <script lang="ts">
+    import {activeModal} from "$lib/stores/modals";
+
     export let visible: boolean = true;
 
     let container: HTMLElement;
 
     function handleClick(e) {
         visible = container.contains(e.target);
+        if (!visible) {
+            setTimeout(() => {
+                $activeModal = {};
+            }, 200)
+        }
     }
 </script>
 

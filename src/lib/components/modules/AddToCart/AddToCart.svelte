@@ -26,8 +26,6 @@
 
     let cartUpdated: boolean = false
 
-    let optionsModal: boolean = false;
-
     function useFormCheck(node) {
         let form = node.closest("form");
         if (!form) return;
@@ -64,42 +62,51 @@
         loading = true;
 
         let formData = formHelper.getFormData(form);
-        Object.entries(formData.variant).map(async ([id, amount]) => {
-            if (parseInt(amount) > 0) {
-                let combo = product.combinations.find((c) => c.id === parseInt(id));
 
-                await cart.addProduct(null, {
-                    id: product.id,
-                    quantity: parseInt(amount),
-                    options: {
-                        optionName: combo.options[0].value
-                    },
-                    callback: function (success, product, cart, error, error1, error2) {
-                        // todo take into account what's in cart with what's in quantity
-                        loading = false;
-                        if (!success) {
-                            Swal.fire({
-                                title: 'Uh-oh',
-                                text: 'Product is not available.',
-                                icon: 'warning',
-                                confirmButtonText: 'Ok',
-                                confirmButtonColor: '#000'
-                            })
-                        } else {
-                            cartUpdated = true;
+        if (formData.variant) {
+            Object.entries(formData.variant).map(async ([id, amount]) => {
+                if (parseInt(amount) > 0) {
+                    let combo = product.combinations.find((c) => c.id === parseInt(id));
 
-                            setTimeout(() => {
-                                cartUpdated = false;
-                            }, 2500);
-                        }
-                    },
-                });
-            }
-        })
+                    await cart.addProduct(null, {
+                        id: product.id,
+                        quantity: parseInt(amount),
+                        options: {
+                            optionName: combo.options[0].value
+                        },
+                        callback: function (success, product, cart, error, error1, error2) {
+                            // todo take into account what's in cart with what's in quantity
+                            loading = false;
+                            if (!success) {
+                                Swal.fire({
+                                    title: 'Uh-oh',
+                                    text: 'Product is not available.',
+                                    icon: 'warning',
+                                    confirmButtonText: 'Ok',
+                                    confirmButtonColor: '#000'
+                                })
+                            } else {
+                                cartUpdated = true;
+                                setTimeout(() => {
+                                    cartUpdated = false;
+                                }, 2500);
+                            }
+                        },
+                    });
+                }
+            })
+        } else {
+            await cart.addProduct(product.id);
+            cartUpdated = true;
+            setTimeout(() => {
+                cartUpdated = false;
+            }, 2500);
+            loading = false;
+        }
     }
 
     function showOptionsModal() {
-        optionsModal = true;
+        $activeModal = {};
         $activeModal = {
             component: OptionsModal,
             props: {
@@ -110,12 +117,12 @@
 </script>
 
 <Component {schema} let:props>
-    <button use:useFormCheck type="button" on:click|preventDefault|stopPropagation={product.options.length ? showOptionsModal : onSubmit}
+    <button use:useFormCheck type="button" on:click|preventDefault|stopPropagation={showOptions ? showOptionsModal : onSubmit}
             disabled={!product.inStock || !product.enabled || isDisabled}
             class:cartUpdated
             class={`${clazz} hidden relative transition flex justify-center items-center w-full px-3 py-3 bg-${props.bgColor} text-${props.textColor} ${props.borderRadius} ${props.dropShadow} ${props.fontSize}`}>
         {#if loading}
-            <Pulse size="60" color="#FFFFFF" unit="px" duration="1s"/>
+            <Pulse color="#FFFFFF" unit="px" duration="1s"/>
         {:else if cartUpdated}
             Cart Updated! <span class="material-symbols-outlined ml-2">check_circle</span>
         {:else if product.options.length && showOptions}
