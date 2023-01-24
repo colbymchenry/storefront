@@ -23,8 +23,11 @@
         <small class="text-gray-400 flex-shrink">UPC: {product.attributes.find((att) => att.type === "UPC").value}</small>
     {/if}
 
+    <span class={`price text-${props.priceColor} text-2xl`}
+    style={`font-family: ${props.priceFont};`}>{product.defaultDisplayedPriceFormatted}</span>
+
     <form>
-        <AddToCart {product} showOptions clazz="!text-sm !p-0"/>
+        <AddToCart {product} showOptions clazz="!text-sm !h-8"/>
     </form>
 </a>
 

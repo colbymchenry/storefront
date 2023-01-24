@@ -117,7 +117,7 @@
 </script>
 
 <Component {schema} let:props>
-    <button use:useFormCheck type="button" on:click|preventDefault|stopPropagation={showOptions ? showOptionsModal : onSubmit}
+    <button use:useFormCheck type="button" on:click|preventDefault|stopPropagation={showOptions && product.options.length ? showOptionsModal : onSubmit}
             disabled={!product.inStock || !product.enabled || isDisabled}
             class:cartUpdated
             class={`${clazz} hidden relative transition flex justify-center items-center w-full px-3 py-3 bg-${props.bgColor} text-${props.textColor} ${props.borderRadius} ${props.dropShadow} ${props.fontSize}`}>

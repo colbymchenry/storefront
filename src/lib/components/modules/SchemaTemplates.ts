@@ -144,6 +144,21 @@ export class SchemaTemplates {
             "value": "text-9xl"
         }
     ]
+
+    static fontFamily = [
+        {
+            "label": "Solitreo",
+            "value": `"Solitreo", cursive`
+        },
+        {
+            "label": "Kanit",
+            "value": `"Kanit"`
+        },
+        {
+            "label": "Josefin",
+            "value": `'Josefin Sans', sans-serif`
+        }
+    ]
 }
 
 

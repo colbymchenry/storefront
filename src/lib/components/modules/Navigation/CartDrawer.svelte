@@ -69,8 +69,8 @@
                 </div>
 
                 {#if item?.options}
-                    <div class="w-full flex border-t border-solid border-gray-200 col-span-3 my-2 text-gray-400 py-2">
-                        <span>{Object.keys(item.options)[0]}: {item.options[Object.keys(item.options)[0]]}</span>
+                    <div class="w-full flex border-t border-solid border-gray-200 text-black rounded-md col-span-3 py-2">
+                        <span class="bg-gray-200 p-1 px-2 rounded-md text-sm">{Object.keys(item.options)[0]}: {item.options[Object.keys(item.options)[0]]}</span>
                     </div>
                 {/if}
             </div>
