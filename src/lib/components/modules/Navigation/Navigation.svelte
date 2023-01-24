@@ -70,12 +70,13 @@
                 {/if}
 
                 <!-- Search Bar -->
-                <div style="width: 400px;" class={`items-center pl-4 pr-2 py-2 flex-grow hidden lg:flex
-                bg-${props?.searchBgColor} text-${props?.searchTextColor} ${props?.searchTextColor}`}>
+                <form style="width: 400px;" class={`items-center pl-4 pr-2 py-2 flex-grow hidden lg:flex
+                bg-${props?.searchBgColor} text-${props?.searchTextColor} ${props?.searchTextColor}`} method="GET" action="/search">
                     <input type="text" placeholder="Search entire store..." class="outline-none flex-grow"
-                           style="background: none;"/>
+                           name="search" style="background: none;"/>
                     <span class="material-symbols-outlined">search</span>
-                </div>
+                    <button type="submit" class="hidden">SUBMIT</button>
+                </form>
 
                 <div class="flex">
                     {#if $store?.businessPhone}
@@ -138,12 +139,14 @@
 
             <!-- Mobile searchbar  -->
             <!-- Search Bar -->
-            <div class={`w-full items-center pl-4 pr-2 py-3 flex-grow lg:hidden flex
-                bg-${props?.searchBgColor} text-${props?.searchTextColor} ${props?.searchTextColor}`}>
+            <form class={`w-full items-center pl-4 pr-2 py-3 flex-grow lg:hidden flex
+                bg-${props?.searchBgColor} text-${props?.searchTextColor} ${props?.searchTextColor}`}
+                  method="GET" action="/search">
                 <input type="text" placeholder="Search entire store..." class="outline-none flex-grow"
-                       style="background: none;"/>
+                       name="search" style="background: none;"/>
                 <span class="material-symbols-outlined">search</span>
-            </div>
+                <button type="submit" class="hidden"></button>
+            </form>
 
             <div class={`mobileNav`} class:hide={!showMobileNav}>
                 <div bind:this={mobileNavContainer}

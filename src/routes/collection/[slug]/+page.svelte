@@ -20,7 +20,7 @@
                     <label for="sortBy">
                         Sort by
                     </label>
-                    <select id="sortBy" class="bg-gray-200 rounded-md py-2 px-3 ml-2" on:change={(e) => sortBy = parseInt(e.target.value)}>
+                    <select id="sortBy" class="border border-solid border-gray-500 rounded-md py-2 px-3 ml-2" on:change={(e) => sortBy = parseInt(e.target.value)}>
                         <option value="1" selected>Date (Oldest - Latest)</option>
                         <option value="2">Date (Latest - Oldest)</option>
                         <option value="3">Name (A - Z)</option>
