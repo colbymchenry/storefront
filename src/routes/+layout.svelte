@@ -9,7 +9,7 @@
     import {cookies} from "$lib/stores/cookies";
     import EditorLogin from "$lib/components/EditorLogin.svelte";
     import {browser} from "$app/environment";
-    import {onMount} from "svelte";
+    import {activeModal} from "$lib/stores/modals.js";
 
     export let data;
 
@@ -66,6 +66,10 @@
         <StoreSettingsCog/>
     {/if}
 
+{/if}
+
+{#if $activeModal?.component}
+    <svelte:component this={$activeModal.component} {...$activeModal.props} />
 {/if}
 
 <style lang="scss">

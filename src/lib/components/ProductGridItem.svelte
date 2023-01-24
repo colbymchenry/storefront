@@ -1,15 +1,13 @@
 <script lang="ts">
     import ILSProduct from "$lib/interfaces/lightspeed/ILSProduct";
     import {cart} from "$lib/stores/cart";
+    import Modal from "$lib/components/Modal.svelte";
+    import ProductOptions from "./ProductOptions.svelte";
+    import {lightspeedClientUtils} from "$lib/utils/lightspeed-utils";
+    import AddToCart from "$lib/components/modules/AddToCart/AddToCart.svelte";
 
     export let product: ILSProduct = undefined;
     export let props: any = undefined;
-
-    async function addToCart(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        await cart.addProduct(product.id);
-    }
 </script>
 
 <a href={`/product/${product.id}`} class="product">
@@ -25,18 +23,11 @@
         <small class="text-gray-400 flex-shrink">UPC: {product.attributes.find((att) => att.type === "UPC").value}</small>
     {/if}
 
-    <button type="button" on:click={addToCart}
-            disabled={!product.inStock || !product.enabled}
-            class={`relative flex-shrink bg-${props?.buttonBgColor || 'black'} text-${props?.buttonTextColor || 'white'}`}>
-        {#if !product.enabled}
-            Not Available
-        {:else if !product.inStock}
-            Out of Stock
-        {:else}
-            Add to Cart
-        {/if}
-    </button>
+    <form>
+        <AddToCart {product} showOptions clazz="!text-sm !p-0"/>
+    </form>
 </a>
+
 
 <style lang="scss">
   .product {

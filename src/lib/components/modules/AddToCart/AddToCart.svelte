@@ -4,35 +4,50 @@
     import ILSProduct from "$lib/interfaces/lightspeed/ILSProduct";
     import {onDestroy} from "svelte";
     import {formHelper} from "$lib/utils/form-helper";
+    import {cart} from "$lib/stores/cart";
+    import Swal from "sweetalert2";
+    import {Pulse} from 'svelte-loading-spinners';
+    import OptionsModal from "$lib/components/modules/AddToCart/OptionsModal.svelte";
+    import {activeModal} from "$lib/stores/modals";
+
+    export let clazz: string = undefined;
 
     export let product: ILSProduct = undefined;
 
-    let isDisabled = false;
+    export let showOptions: boolean = false;
+
+    let loading: boolean = false;
+
+    let isDisabled: boolean = false;
 
     let button: HTMLFormElement;
 
     let interval;
 
+    let cartUpdated: boolean = false
+
+    let optionsModal: boolean = false;
+
     function useFormCheck(node) {
         let form = node.closest("form");
-        if (form) {
-            interval = setInterval(() => {
-                node.classList.remove("hidden");
-                let formData = formHelper.getFormData(form);
-                if (formData["variant"]) {
-                    if (Object.values(formData["variant"]).find((amount) => parseInt(amount) > 0)) {
-                        isDisabled = false;
-                    } else {
-                        // TODO: Need to check variant stock
-                        isDisabled = true;
-                    }
-                } else if (formData["amount"] && !product.unlimited) {
-                    isDisabled = parseInt(formData["amount"]) > product.quantity;
+        if (!form) return;
+
+        interval = setInterval(() => {
+            node.classList.remove("hidden");
+            let formData = formHelper.getFormData(form);
+            if (formData["variant"]) {
+                if (Object.values(formData["variant"]).find((amount) => parseInt(amount) > 0)) {
+                    isDisabled = false;
                 } else {
-                    clearInterval(interval);
+                    // TODO: Need to check variant stock
+                    isDisabled = true;
                 }
-            }, 100);
-        }
+            } else if (formData["amount"] && !product.unlimited) {
+                isDisabled = parseInt(formData["amount"]) > product.quantity;
+            } else {
+                clearInterval(interval);
+            }
+        }, 100);
     }
 
     onDestroy(() => {
@@ -40,13 +55,72 @@
             clearInterval(interval);
         }
     })
+
+
+    async function onSubmit(e) {
+        if (loading) return;
+        let form = e.target.closest("form");
+        if (!form) return;
+        loading = true;
+
+        let formData = formHelper.getFormData(form);
+        Object.entries(formData.variant).map(async ([id, amount]) => {
+            if (parseInt(amount) > 0) {
+                let combo = product.combinations.find((c) => c.id === parseInt(id));
+
+                await cart.addProduct(null, {
+                    id: product.id,
+                    quantity: parseInt(amount),
+                    options: {
+                        optionName: combo.options[0].value
+                    },
+                    callback: function (success, product, cart, error, error1, error2) {
+                        // todo take into account what's in cart with what's in quantity
+                        loading = false;
+                        if (!success) {
+                            Swal.fire({
+                                title: 'Uh-oh',
+                                text: 'Product is not available.',
+                                icon: 'warning',
+                                confirmButtonText: 'Ok',
+                                confirmButtonColor: '#000'
+                            })
+                        } else {
+                            cartUpdated = true;
+
+                            setTimeout(() => {
+                                cartUpdated = false;
+                            }, 2500);
+                        }
+                    },
+                });
+            }
+        })
+    }
+
+    function showOptionsModal() {
+        optionsModal = true;
+        $activeModal = {
+            component: OptionsModal,
+            props: {
+                product
+            }
+        }
+    }
 </script>
 
 <Component {schema} let:props>
-    <button use:useFormCheck type="submit"
+    <button use:useFormCheck type="button" on:click|preventDefault|stopPropagation={product.options.length ? showOptionsModal : onSubmit}
             disabled={!product.inStock || !product.enabled || isDisabled}
-            class={`hidden relative w-full px-3 py-3 bg-${props.bgColor} text-${props.textColor} ${props.borderRadius} ${props.dropShadow} ${props.fontSize}`}>
-        {#if !product.enabled}
+            class:cartUpdated
+            class={`${clazz} hidden relative transition flex justify-center items-center w-full px-3 py-3 bg-${props.bgColor} text-${props.textColor} ${props.borderRadius} ${props.dropShadow} ${props.fontSize}`}>
+        {#if loading}
+            <Pulse size="60" color="#FFFFFF" unit="px" duration="1s"/>
+        {:else if cartUpdated}
+            Cart Updated! <span class="material-symbols-outlined ml-2">check_circle</span>
+        {:else if product.options.length && showOptions}
+            View Options
+        {:else if !product.enabled}
             Not Available
         {:else if !product.inStock}
             Out of Stock
@@ -57,11 +131,16 @@
 </Component>
 
 <style lang="scss">
+
   button:disabled {
     @apply cursor-not-allowed;
     &:before {
       @apply absolute top-0 left-0 w-full h-full bg-white opacity-50;
       content: '';
     }
+  }
+
+  .cartUpdated {
+    @apply bg-green-600 text-white;
   }
 </style>
