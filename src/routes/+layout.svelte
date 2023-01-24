@@ -53,9 +53,7 @@
 {:else}
     <main>
         <Navigation/>
-        <section>
-            <slot/>
-        </section>
+        <slot/>
     </main>
 
     {#if !is18}
@@ -69,7 +67,7 @@
 {/if}
 
 {#if $activeModal?.component}
-    <svelte:component this={$activeModal.component} {...$activeModal.props} />
+    <svelte:component this={$activeModal.component} {...$activeModal.props}/>
 {/if}
 
 <style lang="scss">
