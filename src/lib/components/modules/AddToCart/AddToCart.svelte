@@ -2,7 +2,7 @@
     import Component from "$lib/components/component/Component.svelte";
     import {schema} from "./schema";
     import ILSProduct from "$lib/interfaces/lightspeed/ILSProduct";
-    import {onDestroy} from "svelte";
+    import {onDestroy, tick} from "svelte";
     import {formHelper} from "$lib/utils/form-helper";
     import {cart} from "$lib/stores/cart";
     import Swal from "sweetalert2";
@@ -105,8 +105,9 @@
         }
     }
 
-    function showOptionsModal() {
-        $activeModal = {};
+    async function showOptionsModal() {
+        $activeModal = undefined;
+        await tick();
         $activeModal = {
             component: OptionsModal,
             props: {
@@ -117,7 +118,8 @@
 </script>
 
 <Component {schema} let:props>
-    <button use:useFormCheck type="button" on:click|preventDefault|stopPropagation={showOptions && product.options.length ? showOptionsModal : onSubmit}
+    <button use:useFormCheck type="button"
+            on:click|preventDefault|stopPropagation={showOptions && product.options.length ? showOptionsModal : onSubmit}
             disabled={!product.inStock || !product.enabled || isDisabled}
             class:cartUpdated
             class={`${clazz} hidden relative transition flex justify-center items-center w-full px-3 py-3 bg-${props.bgColor} text-${props.textColor} ${props.borderRadius} ${props.dropShadow} ${props.fontSize}`}>

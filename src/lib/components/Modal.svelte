@@ -41,6 +41,7 @@
         grid-template-rows: 50px 1fr;
         max-height: 80vh;
         transition: all 0.4s ease;
+        width: clamp(500px, 50vw, 800px);
 
         @media screen and (max-width: 500px) {
           width: 95%;
