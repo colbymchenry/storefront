@@ -10,7 +10,7 @@
 </script>
 
 <section>
-    <div class="flex justify-end w-full border-b border-solid border-gray-200 pb-4 mb-4">
+    <div class="flex w-full border-b border-solid border-gray-200 pb-4 mb-4">
         <Input type="select" on:change={update} options={[
             {
                 "label": "Needs Approval",
