@@ -1,6 +1,7 @@
 import {project_id} from "$lib/stores/cookies";
 import type ICookie from "$lib/interfaces/ICookie";
 import {firebaseAdminUtils} from "../api/_utils/firebase-admin-utils";
+import {redirect} from "@sveltejs/kit";
 
 // @ts-ignore
 export async function load({url, cookies}) {
@@ -11,6 +12,8 @@ export async function load({url, cookies}) {
 
     if (cookie?.user_id && cookie?.authenticated) {
         profileData = await firebaseAdminUtils.getDoc("customers", cookie.user_id);
+    } else {
+        throw redirect(303, '/');
     }
 
     return {

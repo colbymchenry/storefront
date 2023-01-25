@@ -39,5 +39,16 @@ export const actions = {
 
         cookies.set(project_id, JSON.stringify(cookie));
         throw redirect(303, '/');
+    },
+    // @ts-ignore
+    logout: async ({request, cookies}) => {
+        let cookie = JSON.parse(cookies.get(project_id) || "{}");
+        delete cookie["authenticated"];
+        delete cookie["idToken"];
+        delete cookie["email"];
+        delete cookie["email_verified"];
+        delete cookie["user_id"];
+        cookies.set(project_id, JSON.stringify(cookie));
+        throw redirect(303, '/');
     }
 };

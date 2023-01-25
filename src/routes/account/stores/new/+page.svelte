@@ -3,6 +3,7 @@
     import Input from "$lib/components/component/Input.svelte";
     import {formHelper} from "$lib/utils/form-helper";
     import {lightspeedClientUtils} from "$lib/utils/lightspeed-utils";
+    import {statesTemplate} from "$lib/states.js";
 
     export let data;
 
@@ -27,7 +28,7 @@
             Store name
         </Input>
         <Input name="email" type="email" required>
-            Last name
+            Email
         </Input>
         <Input name="phoneNumber" type="text" placeholder="000-000-0000" regex="^\d{3}\-\d{3}\-\d{4}$" required>
             Phone number
@@ -46,13 +47,8 @@
         ]}>
             Country
         </Input>
-        <Input name="stateOrProvinceCode" type="select" required options={[
-            {
-                label: "United States",
-                value: "US"
-            }
-        ]}>
-            Country
+        <Input name="stateOrProvinceCode" type="select" required options={statesTemplate}>
+            State
         </Input>
         <Input name="postalCode" required>
             Zip Code

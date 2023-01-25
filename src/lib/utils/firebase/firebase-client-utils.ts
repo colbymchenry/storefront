@@ -37,7 +37,6 @@ import type {Auth} from "@firebase/auth";
 import type {FirebaseStorage} from "@firebase/storage";
 import { browser } from '$app/environment';
 import {authStore} from "../../stores/auth";
-import {page} from "$app/stores";
 
 function removeUndefined(obj: any) {
     Object.keys(obj).forEach(key => obj[key] === undefined ? delete obj[key] : {})
