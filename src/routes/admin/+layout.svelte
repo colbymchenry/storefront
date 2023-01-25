@@ -4,13 +4,14 @@
     import {authStore} from "$lib/stores/auth";
     import {goto} from "$app/navigation";
     import {cookies} from "$lib/stores/cookies";
+    import {browser} from "$app/environment";
 
     async function logout() {
         await firebaseClientUtils.signOut();
         $authStore = undefined;
         let body = new FormData();
-        await fetch('/?/logout', {
-            method: 'POST',
+        await fetch('/?/logout',{
+            method:'POST',
             headers: {
                 'Accept': 'application/json'
             },
@@ -22,32 +23,15 @@
 
 <section>
     <div class="navigation">
-        <a href="/account" class:active={$page.url.pathname === "/account"}>
-            <span class="material-symbols-outlined mr-2">speed</span>
-            Dashboard
+        <a href="/admin" class:active={$page.url.pathname === "/admin"}>
+            <span class="material-symbols-outlined mr-2">support</span>
+            Disputes
         </a>
         <hr/>
-        <a href="/account/stores" class:active={$page.url.pathname.includes("/account/stores")}>
-            <span class="material-symbols-outlined mr-2">store</span>
-            Stores
-        </a>
-        <hr/>
-        <a href="/account/profile" class:active={$page.url.pathname.includes("/account/profile")}>
-            <span class="material-symbols-outlined mr-2">person</span>
-            Profile
-        </a>
-        <hr/>
-        <a href="/account/pact-act-form" class:active={$page.url.pathname.includes("/account/pact-act-form")}>
+        <a href="/admin/pact-act-forms" class:active={$page.url.pathname.includes("/account/pact-act-form")}>
             <span class="material-symbols-outlined mr-2">description</span>
-            Pact Act Form
+            Pact Act Forms
         </a>
-        {#if $cookies.admin}
-            <hr/>
-            <a href="/admin">
-                <span class="material-symbols-outlined mr-2">admin_panel_settings</span>
-                Admin Dashboard
-            </a>
-        {/if}
         <hr/>
         <button on:click={logout} class="text-red-500">
             <span class="material-symbols-outlined mr-2">logout</span>
@@ -62,7 +46,7 @@
 <style lang="scss">
   section {
     @apply w-full grid m-4 p-4 relative max-h-fit overflow-auto;
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: 200px 1fr;
 
     @media screen and (max-width: 740px) {
       @apply m-0;

@@ -5,6 +5,7 @@
     import AddToCart from "$lib/components/modules/AddToCart/AddToCart.svelte";
     import {onMount} from "svelte";
     import {productStore} from "$lib/utils/lightspeed-utils";
+    import {store} from "$lib/stores/store.js";
 
     export let data;
 
@@ -21,6 +22,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>{$store.businessName} | {data.product.seoTitle || data.product.name}</title>
+    <meta name="description" content={data.product.seoDescription} />
+</svelte:head>
 
 <div class="product-container">
     <div class="product-images">

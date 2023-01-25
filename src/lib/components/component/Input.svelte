@@ -17,9 +17,10 @@
     export let required: boolean = false;
     export let values: any[] = undefined;
     export let error: string = undefined;
-
     export let accept: string = undefined;
     export let disabled: boolean = false;
+
+    export let clazz: string = undefined;
 
     function typeAction(node) {
         node.type = type;
@@ -28,7 +29,7 @@
     let localCheck = value;
 </script>
 
-<div class="flex flex-col">
+<div class={"flex flex-col " + clazz}>
     <div class="flex relative"
          class:items-center={type === 'checkbox'}
          class:flex-row={type === 'color'}
@@ -51,7 +52,7 @@
                 {value || ""}
             </textarea>
         {:else if type === 'select'}
-            <select {disabled} {name} {placeholder} {required} id={name} bind:value>
+            <select {disabled} {name} {placeholder} {required} id={name} bind:value on:change>
                 {#each options as option}
                     <option value={option.value} selected={value === option.value}>{option.label}</option>
                 {/each}
@@ -70,7 +71,7 @@
             <input type="hidden" {name} {disabled} {required} value={localCheck}/>
         {:else}
             <input use:typeAction {disabled} {required} {name} {placeholder} {min} {max} {step} pattern={regex} {accept}
-                   id={name} bind:value/>
+                   id={name} on:change on:input bind:value/>
         {/if}
     </div>
     {#if error}

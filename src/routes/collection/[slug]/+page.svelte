@@ -2,6 +2,7 @@
     import Collection from "$lib/components/modules/Collection/Collection.svelte";
     import {cookies} from "$lib/stores/cookies.js";
     import {goto} from "$app/navigation";
+    import {store} from "$lib/stores/store.js";
 
     export let data;
 
@@ -19,6 +20,11 @@
     }
 
 </script>
+
+<svelte:head>
+    <title>{$store.businessName} | {data.category.seoTitle || data.category.name}</title>
+    <meta name="description" content={data.category.seoDescription} />
+</svelte:head>
 
 <div class="w-full max-h-fit overflow-hidden">
     <div class="cc-container">

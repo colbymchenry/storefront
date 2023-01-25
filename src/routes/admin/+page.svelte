@@ -6,17 +6,22 @@
 
 <section>
     <div class="flex w-full items-end justify-between">
-        <Input type="text" placeholder="Search order #">
-            Order #
+        <Input type="text" placeholder="Search ticket #">
+            Ticket #
         </Input>
-        <div class="flex items-center">
-            <Input type="date" name="startDate">
-                Start date
-            </Input>
-            <Input type="date" name="endDate" clazz="ml-2">
-                End date
-            </Input>
-        </div>
+        <Input type="select" options={[
+            {
+                "label": "Open",
+                "value": "open"
+            },
+            {
+                 "label": "Closed",
+                 "value": "closed"
+            }
+        ]}>
+            Filter by status
+        </Input>
+
     </div>
 
     <div class="orders">
@@ -26,7 +31,7 @@
                 <th>
                     <div class="flex items-center">
                         <span class="material-symbols-outlined mr-1">receipt_long</span>
-                        Order #
+                        Ticket
                     </div>
                 </th>
                 <th>
@@ -37,14 +42,8 @@
                 </th>
                 <th>
                     <div class="flex items-center">
-                        <span class="material-symbols-outlined mr-1">store</span>
-                        Ship To
-                    </div>
-                </th>
-                <th>
-                    <div class="flex items-center">
-                        <span class="material-symbols-outlined mr-1">attach_money</span>
-                        Cost
+                        <span class="material-symbols-outlined mr-1">person</span>
+                        Customer
                     </div>
                 </th>
                 <th>

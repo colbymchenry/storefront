@@ -8,7 +8,7 @@ let cookieStorage: ICookie = {
     "authenticated": false,
     "idToken": undefined,
     "categories": undefined,
-    "editorEnabled": false,
+    "admin": false,
     "pactActApproved": false
 }
 
@@ -38,7 +38,7 @@ export async function load({url, cookies}) {
         let userAcct = await firebaseAdminUtils.getDoc("users", cookie.user_id);
 
         if (userAcct?.admin) {
-            cookie.editorEnabled = true;
+            cookie.admin = true;
         }
 
         let pactActForm = await firebaseAdminUtils.getDoc("pactactforms", cookie.user_id);

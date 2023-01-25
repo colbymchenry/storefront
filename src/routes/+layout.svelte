@@ -31,7 +31,7 @@
         $store = conf["store"] || {};
     })
 
-    $editor.enabled = $cookies.editorEnabled;
+    $editor.enabled = $cookies.admin;
 
     const documentHeight = () => {
         if (browser) {
@@ -45,6 +45,11 @@
     }
 
 </script>
+
+<svelte:head>
+    <title>{$store.businessName}</title>
+</svelte:head>
+
 {#if data["editor"] !== null && !data?.cookies?.authenticated}
     <main>
         <EditorLogin/>

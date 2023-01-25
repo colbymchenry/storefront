@@ -8,6 +8,6 @@ export default interface ICookie {
     email?: string;
     email_verified?: boolean;
     user_id?: string;
-    editorEnabled?: boolean;
+    admin?: boolean;
     pactActApproved?: boolean;
 }

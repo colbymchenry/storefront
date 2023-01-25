@@ -11,8 +11,10 @@ export async function POST({request}) {
         data["user_id"] = user_id;
 
         if (data["id"]) {
-            await firebaseAdminUtils.firestore().collection("pact-act-forms").doc(data["id"]).set(data)
+            await firebaseAdminUtils.firestore().collection("pact-act-forms").doc(data["id"]).update(data)
         } else {
+            data["approved"] = false;
+            data["denied"] = false;
             await firebaseAdminUtils.firestore().collection("pact-act-forms").add(data)
         }
 
