@@ -9,7 +9,12 @@ export async function POST({request}) {
         let {user_id} = await firebaseAdminUtils.auth().verifyIdToken(request.headers.get("authorization"));
 
         data["user_id"] = user_id;
-        await firebaseAdminUtils.firestore().collection("stores").add(data)
+
+        if (data["id"]) {
+            await firebaseAdminUtils.firestore().collection("stores").doc(data["id"]).set(data)
+        } else {
+            await firebaseAdminUtils.firestore().collection("stores").add(data)
+        }
 
         return json({});
     } catch (error) {

@@ -45,8 +45,9 @@
             <InputColor {name} bind:value/>
         {:else if type === 'textarea'}
             <InputQuill {name} bind:value/>
-            {:else if type === 'htmltextarea'}
+        {:else if type === 'htmltextarea'}
             <textarea {name} {disabled} {required} class="border border-solid border-gray-300">
+                {value || ""}
             </textarea>
         {:else if type === 'select'}
             <select {disabled} {name} {placeholder} {required} id={name} bind:value>
@@ -57,17 +58,18 @@
         {:else if type === 'range'}
             <InputRange {name} bind:value {min} {max} {step} {unit} {values}/>
         {:else if type === 'url'}
-            <InputURL {name} bind:value />
+            <InputURL {name} bind:value/>
         {:else if type === 'collection'}
             <InputURL {name} bind:value hideProducts/>
         {:else if type === 'product'}
             <InputURL {name} bind:value hideCollections/>
         {:else if type === 'checkbox'}
-            <input type="checkbox"  id={name} checked={value} class:checkbox={type === 'checkbox'}
+            <input type="checkbox" id={name} checked={value} class:checkbox={type === 'checkbox'}
                    on:change={(e) => localCheck = e.target.checked}/>
             <input type="hidden" {name} {disabled} {required} value={localCheck}/>
         {:else}
-            <input use:typeAction {disabled} {required} {name} {placeholder} {min} {max} {step} pattern={regex} id={name} bind:value/>
+            <input use:typeAction {disabled} {required} {name} {placeholder} {min} {max} {step} pattern={regex}
+                   id={name} bind:value/>
         {/if}
     </div>
     {#if error}

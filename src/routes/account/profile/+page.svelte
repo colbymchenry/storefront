@@ -9,8 +9,12 @@
     export let data;
 
     let success: boolean = false;
+    let loading: boolean = false;
 
     async function submitForm(e) {
+        if (loading || success) return;
+        loading = true;
+
         let formData = formHelper.getFormData(e.target);
 
         try {
@@ -19,6 +23,7 @@
         } catch (error) {
             console.error(error);
         }
+        loading = false;
     }
 </script>
 
@@ -44,7 +49,7 @@
         </Input>
     </div>
 
-    <button type="submit">Update Profile</button>
+    <button type="submit" class:success>Update Profile</button>
 </form>
 
 <style lang="scss">
@@ -57,5 +62,9 @@
 
   button {
     @apply bg-black text-white px-2 py-1 rounded-lg self-start mt-6 transition;
+
+    &.success {
+      @apply bg-green-500 text-white;
+    }
   }
 </style>
