@@ -21,6 +21,13 @@ export async function load({url, cookies}) {
         }
     }
 
+    forms = forms.map((row: any) => {
+        if (row?.created_at) {
+            row["created_at"] = firebaseAdminUtils.toDate(row["created_at"])
+        }
+        return row;
+    });
+
     return {
        forms
     }

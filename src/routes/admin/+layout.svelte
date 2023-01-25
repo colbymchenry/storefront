@@ -28,9 +28,14 @@
             Disputes
         </a>
         <hr/>
-        <a href="/admin/pact-act-forms" class:active={$page.url.pathname.includes("/account/pact-act-form")}>
+        <a href="/admin/pact-act-forms" class:active={$page.url.pathname.includes("/admin/pact-act-forms")}>
             <span class="material-symbols-outlined mr-2">description</span>
             Pact Act Forms
+        </a>
+        <hr/>
+        <a href="/account">
+            <span class="material-symbols-outlined mr-2">person</span>
+            Customer Dashboard
         </a>
         <hr/>
         <button on:click={logout} class="text-red-500">
@@ -46,7 +51,7 @@
 <style lang="scss">
   section {
     @apply w-full grid m-4 p-4 relative max-h-fit overflow-auto;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 250px 1fr;
 
     @media screen and (max-width: 740px) {
       @apply m-0;

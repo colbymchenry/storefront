@@ -51,10 +51,11 @@ export async function load({url, cookies}) {
     try {
         let res = await lightspeedServerUtils.get("categories");
         cookie.categories = res.data;
-        cookies.set(project_id, JSON.stringify(cookie));
     } catch (error) {
         console.error(error)
     }
+
+    cookies.set(project_id, JSON.stringify(cookie));
 
     return {
         theme: themeDoc,

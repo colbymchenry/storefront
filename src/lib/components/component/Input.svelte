@@ -19,7 +19,7 @@
     export let error: string = undefined;
     export let accept: string = undefined;
     export let disabled: boolean = false;
-
+    export let readOnly: boolean = undefined;
     export let clazz: string = undefined;
 
     function typeAction(node) {
@@ -52,7 +52,8 @@
                 {value || ""}
             </textarea>
         {:else if type === 'select'}
-            <select {disabled} {name} {placeholder} {required} id={name} bind:value on:change>
+            <select {disabled} class:readOnly {name} {placeholder}
+                    {required} id={name} bind:value on:change>
                 {#each options as option}
                     <option value={option.value} selected={value === option.value}>{option.label}</option>
                 {/each}
@@ -66,11 +67,12 @@
         {:else if type === 'product'}
             <InputURL {name} bind:value hideCollections/>
         {:else if type === 'checkbox'}
-            <input type="checkbox" id={name} checked={value} class:checkbox={type === 'checkbox'}
+            <input type="checkbox" id={name} class:readOnly checked={value} class:checkbox={type === 'checkbox'}
                    on:change={(e) => localCheck = e.target.checked}/>
-            <input type="hidden" {name} {disabled} {required} value={localCheck}/>
+            <input type="hidden" {name} {disabled} class:readOnly {required} value={localCheck}/>
         {:else}
-            <input use:typeAction {disabled} {required} {name} {placeholder} {min} {max} {step} pattern={regex} {accept}
+            <input use:typeAction {disabled} class:readOnly {required} {name} {placeholder} {min} {max} {step}
+                   pattern={regex} {accept}
                    id={name} on:change on:input bind:value/>
         {/if}
     </div>
@@ -83,8 +85,8 @@
   input, select {
     @apply px-2 py-3 text-slate-800 bg-gray-50 rounded-lg cursor-text border border-solid border-gray-300;
 
-    &:disabled {
-      @apply text-gray-400 cursor-not-allowed bg-gray-200;
+    &:disabled, &.readOnly {
+      @apply text-gray-400 cursor-not-allowed bg-gray-200 pointer-events-none;
     }
   }
 

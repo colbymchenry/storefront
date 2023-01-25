@@ -72,7 +72,7 @@
         <Input name="companyName" required value={data?.profile?.companyName}>
             Company name
         </Input>
-        <Input name="email" type="email" disabled value={$cookies?.email}>
+        <Input name="email" type="email" value={$cookies?.email} readOnly>
             Email
         </Input>
         <Input name="phoneNumber" type="text" placeholder="000-000-0000" required value={data?.profile?.phoneNumber}>
@@ -95,14 +95,14 @@
     <p class="mb-6">Upload pictures of your EIN card or Business Certificate / License and Tobacco License if required
         by state. You can upload multiple files if necessary.</p>
     <div>
-        <Input name="businessLicense" type="file" required accept="image/*,application/pdf"
+        <Input name="businessLicense" type="file" required accept="image/*" readOnly={false} disabled={false}
                error={errors["businessLicense"]}>
             Upload a Photo of Your Business License
         </Input>
 
         <div></div>
 
-        <Input name="tobaccoLicense" type="file" accept="image/*,application/pdf" error={errors["tobaccoLicense"]}>
+        <Input name="tobaccoLicense" type="file" accept="image/*" error={errors["tobaccoLicense"]}>
             Upload a Photo of Your Tobacco License (IF REQUIRED BY STATE)
         </Input>
     </div>

@@ -1,6 +1,6 @@
 import {firebaseAdminUtils} from "../../api/_utils/firebase-admin-utils";
-import type ICookie from "../../../lib/interfaces/ICookie";
-import {project_id} from "../../../lib/stores/cookies";
+import type ICookie from "$lib/interfaces/ICookie";
+import {project_id} from "$lib/stores/cookies";
 
 // @ts-ignore
 export async function load({url, cookies}) {
