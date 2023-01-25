@@ -69,8 +69,10 @@
                 },
                 body
             });
-            await invalidateAll();
-            $activeModal = undefined;
+            setTimeout(async () => {
+                await invalidateAll();
+                $activeModal = undefined;
+            }, 1000)
         } catch (error) {
             if (error?.code === 'auth/user-not-found') {
                 errors['email'] = "User not found.";
