@@ -47,6 +47,9 @@ export async function load({url, cookies}) {
         if (data.length) {
             cookie.pactActApproved = true;
         }
+
+        let {emailVerified} = await firebaseAdminUtils.auth().getUser(cookie.user_id)
+        cookie.email_verified = emailVerified;
     }
 
     // TODO: Figure out refreshing this, caching and waiting

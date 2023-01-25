@@ -44,7 +44,10 @@
                     password: formData["password"],
                     acceptMarketing: formData["marketing"]
                 })
+
             }
+
+            await firebaseClientUtils.sendVerificationEmail(user)
 
             let body = new FormData();
             await fetch('/?/authenticate',{
