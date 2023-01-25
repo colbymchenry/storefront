@@ -5,6 +5,8 @@
     import {formHelper} from "$lib/utils/form-helper";
     import {firebaseClientUtils} from "$lib/utils/firebase/firebase-client-utils";
     import {lightspeedClientUtils} from "$lib/utils/lightspeed-utils";
+    import {invalidateAll} from "$app/navigation";
+    import {activeModal} from "$lib/stores/modals";
 
     export let visible = true;
 
@@ -39,15 +41,24 @@
             await firebaseClientUtils.signIn(formData["email"], formData["password"]);
 
             if (signup) {
-                await lightspeedClientUtils.createCustomer({
-                    email: formData["email"],
-                    password: formData["password"],
-                    acceptMarketing: formData["marketing"]
-                })
+                try {
+                    await lightspeedClientUtils.createCustomer({
+                        email: formData["email"],
+                        password: formData["password"],
+                        acceptMarketing: formData["marketing"]
+                    })
+                } catch (error) {
+
+                }
+
+                try {
+                    await firebaseClientUtils.sendVerificationEmail(user)
+                } catch (error) {
+
+                }
 
             }
 
-            await firebaseClientUtils.sendVerificationEmail(user)
 
             let body = new FormData();
             await fetch('/?/authenticate',{
@@ -58,7 +69,8 @@
                 },
                 body
             });
-            await location.reload();
+            await invalidateAll();
+            $activeModal = undefined;
         } catch (error) {
             if (error?.code === 'auth/user-not-found') {
                 errors['email'] = "User not found.";
@@ -67,6 +79,7 @@
             } else if (error?.code === 'auth/email-already-in-use') {
                 errors['email'] = "Email already taken."
             }
+            console.error(error);
         }
 
         loading = false;
