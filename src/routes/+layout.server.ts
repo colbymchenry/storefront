@@ -41,8 +41,10 @@ export async function load({url, cookies}) {
             cookie.admin = true;
         }
 
-        let pactActForm = await firebaseAdminUtils.getDoc("pactactforms", cookie.user_id);
-        if (pactActForm?.approved) {
+        let query = firebaseAdminUtils.firestore().collection("pact-act-forms").where("user_id", "==", cookie.user_id).where("approved", "==", true);
+        let data = await firebaseAdminUtils.query(query);
+
+        if (data.length) {
             cookie.pactActApproved = true;
         }
     }

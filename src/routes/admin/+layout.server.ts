@@ -7,8 +7,7 @@ import {redirect} from "@sveltejs/kit";
 export async function load({url, cookies}) {
     let cookie: ICookie = JSON.parse(cookies.get(project_id));
 
-    let profileData: any = {
-    };
+    let profileData: any = {};
 
     if (cookie?.user_id && cookie?.authenticated) {
         let userAcct = await firebaseAdminUtils.getDoc("users", cookie.user_id);
