@@ -36,9 +36,11 @@ export async function load({url, cookies}) {
 
     if (cookie?.user_id && cookie?.authenticated) {
         let userAcct = await firebaseAdminUtils.getDoc("users", cookie.user_id);
+
         if (userAcct?.admin) {
             cookie.editorEnabled = true;
         }
+
         let pactActForm = await firebaseAdminUtils.getDoc("pactactforms", cookie.user_id);
         if (pactActForm?.approved) {
             cookie.pactActApproved = true;

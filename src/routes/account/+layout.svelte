@@ -10,17 +10,17 @@ import {page} from "$app/stores";
             Dashboard
         </a>
         <hr />
-        <a href="/account/stores" class:active={$page.url.pathname === "/account/stores"}>
+        <a href="/account/stores" class:active={$page.url.pathname.includes("/account/stores")}>
             <span class="material-symbols-outlined mr-2">store</span>
             Stores
         </a>
         <hr />
-        <a href="/account/profile" class:active={$page.url.pathname === "/account/profile"}>
+        <a href="/account/profile" class:active={$page.url.pathname.includes("/account/profile")}>
             <span class="material-symbols-outlined mr-2">person</span>
             Profile
         </a>
         <hr />
-        <a href="/account/pact-act-form" class:active={$page.url.pathname === "/account/pact-act-form"}>
+        <a href="/account/pact-act-form" class:active={$page.url.pathname.includes("/account/pact-act-form")}>
             <span class="material-symbols-outlined mr-2">description</span>
             Pact Act Form
         </a>
@@ -37,7 +37,7 @@ import {page} from "$app/stores";
     }
 
     .navigation {
-      @apply flex flex-col w-full shadow-md rounded-lg border border-solid border-gray-200 px-3 py-1;
+      @apply flex flex-col w-full shadow-md rounded-lg border border-solid border-gray-200 px-3 py-1 self-start;
 
       a {
         @apply flex items-center font-medium my-2 p-2 cursor-pointer rounded-lg transition;
@@ -54,6 +54,6 @@ import {page} from "$app/stores";
     }
 
     .content {
-      @apply ml-6;
+      @apply ml-6 px-6;
     }
 </style>

@@ -16,8 +16,9 @@
     export let regex: string = undefined;
     export let required: boolean = false;
     export let values: any[] = undefined;
-
     export let error: string = undefined;
+
+    export let disabled: boolean = false;
 
     function typeAction(node) {
         node.type = type;
@@ -44,8 +45,11 @@
             <InputColor {name} bind:value/>
         {:else if type === 'textarea'}
             <InputQuill {name} bind:value/>
+            {:else if type === 'htmltextarea'}
+            <textarea {name} {disabled} {required} class="border border-solid border-gray-300">
+            </textarea>
         {:else if type === 'select'}
-            <select {name} {placeholder} {required} id={name} bind:value>
+            <select {disabled} {name} {placeholder} {required} id={name} bind:value>
                 {#each options as option}
                     <option value={option.value} selected={value === option.value}>{option.label}</option>
                 {/each}
@@ -61,9 +65,9 @@
         {:else if type === 'checkbox'}
             <input type="checkbox"  id={name} checked={value} class:checkbox={type === 'checkbox'}
                    on:change={(e) => localCheck = e.target.checked}/>
-            <input type="hidden" {name} {required} value={localCheck}/>
+            <input type="hidden" {name} {disabled} {required} value={localCheck}/>
         {:else}
-            <input use:typeAction {required} {name} {placeholder} {min} {max} {step} pattern={regex} id={name} bind:value/>
+            <input use:typeAction {disabled} {required} {name} {placeholder} {min} {max} {step} pattern={regex} id={name} bind:value/>
         {/if}
     </div>
     {#if error}
@@ -73,7 +77,15 @@
 
 <style lang="scss">
   input, select {
-    @apply px-2 py-3 text-slate-800 bg-gray-200 rounded-lg cursor-text;
+    @apply px-2 py-3 text-slate-800 bg-gray-100 rounded-lg cursor-text border border-solid border-gray-300;
+
+    &:disabled {
+      @apply text-gray-400 cursor-not-allowed bg-gray-200;
+    }
+  }
+
+  select {
+    @apply cursor-pointer;
   }
 
   .checkbox {

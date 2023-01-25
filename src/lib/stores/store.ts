@@ -1,7 +1,7 @@
 import {type Writable, writable} from 'svelte/store';
 
 export interface IStore {
-    storeName?: string | undefined;
+    businessName?: string | undefined;
     primaryColor?: string | undefined;
     secondaryColor?: string | undefined;
 }

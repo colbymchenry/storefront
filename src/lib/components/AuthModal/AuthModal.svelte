@@ -34,15 +34,17 @@
         loading = true;
 
         try {
+
+            let user = signup ? await firebaseClientUtils.createUser(formData["email"], formData["password"]) :
+            await firebaseClientUtils.signIn(formData["email"], formData["password"]);
+
             if (signup) {
-                let resp = await lightspeedClientUtils.createCustomer({
+                await lightspeedClientUtils.createCustomer({
                     email: formData["email"],
                     password: formData["password"],
                     acceptMarketing: formData["marketing"]
                 })
             }
-            let user = signup ? await firebaseClientUtils.createUser(formData["email"], formData["password"]) :
-            await firebaseClientUtils.signIn(formData["email"], formData["password"]);
 
             let body = new FormData();
             await fetch('/?/authenticate',{
