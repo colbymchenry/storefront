@@ -64,7 +64,7 @@
             <hr/>
             <a href="/account/pact-act-form" class:active={$page.url.pathname.includes("/account/pact-act-form")}>
                 <span class="material-symbols-outlined mr-2">description</span>
-                Pact Act Form
+                New Pact Act Form
             </a>
             {#if $cookies.admin}
                 <hr/>

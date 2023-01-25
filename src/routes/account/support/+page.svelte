@@ -1,79 +1,49 @@
 <script lang="ts">
-    import Input from "$lib/components/component/Input.svelte";
-    import {formHelper} from "$lib/utils/form-helper";
-    import {lightspeedClientUtils} from "$lib/utils/lightspeed-utils";
-    import {cookies} from "$lib/stores/cookies.js";
-    import {goto} from "$app/navigation";
-
     export let data;
-
-    let success: boolean = false;
-    let loading: boolean = false;
-
-    async function submitForm(e) {
-        if (loading || success) return;
-        loading = true;
-
-        let formData = formHelper.getFormData(e.target);
-
-        try {
-             await lightspeedClientUtils.createCustomer(formData);
-             success = true;
-
-            setTimeout(() => {
-                success = false;
-            }, 2000);
-        } catch (error) {
-            console.error(error);
-        }
-        loading = false;
-    }
 </script>
 
-<form on:submit|preventDefault={submitForm}>
-    <div>
-        <Input name="firstName" required value={data?.profile?.firstName}>
-            First name
-        </Input>
-        <Input name="lastName" required value={data?.profile?.lastName}>
-            Last name
-        </Input>
-        <Input name="companyName" required value={data?.profile?.companyName}>
-            Company name
-        </Input>
-        <Input name="email" type="email" disabled value={$cookies?.email}>
-            Email
-        </Input>
-        <Input name="phoneNumber" type="text" placeholder="000-000-0000" regex="^\d{3}\-\d{3}\-\d{4}$" value={data?.profile?.phoneNumber}>
-            Phone number
-        </Input>
-        <Input name="taxId" type="text" value={data?.profile?.taxId}>
-            Tax ID
-        </Input>
+<section>
+    <div class="w-full flex justify-between items-center border-b border-solid border-gray-200 pb-4 mb-6">
+        <h1 class="text-2xl font-medium">Support Tickets</h1>
+        <a href="/account/support/new-ticket" class="btn">New Ticket</a>
     </div>
 
-    <button type="submit" class:success disabled={loading || success}>{success ? "Profile Updated!" : loading ? "Please wait..." : "Update Profile"}</button>
-</form>
+    {#each data["tickets"] as ticket}
+        <div class="store">
+            <div class="flex w-full justify-between items-center border-b border-solid border-gray-200 pb-4">
+                <h2 class="text-xl font-medium">{ticket.subject}</h2>
+                <a href={"/account/support/ticket/" + ticket.id} class="btn">View Ticket</a>
+            </div>
+            <div class="flex w-full pt-2">
+                <div class="flex-shrink flex flex-col border-r border-solid border-gray-200 pr-3">
+                    <small>Store. <strong>{ticket.store || 'N/A'}</strong></small>
+                    <small>Date. <strong>{ticket?.created_at ? new Date(ticket.created_at).toLocaleDateString() : 'N/A'}</strong></small>
+
+                </div>
+                <div class="flex-grow flex flex-col pl-3">
+                    <small>Email. <strong>{ticket.email}</strong></small>
+                    <small>Status. <strong
+                            class:text-green-600={ticket.open}
+                            class:text-gray-400={!ticket.open}
+                    >{ticket.open ? "Open" : "Closed"}</strong></small>
+                </div>
+
+            </div>
+        </div>
+    {/each}
+</section>
 
 <style lang="scss">
-  form {
-    @apply flex flex-col w-full;
-    > div {
-      @apply grid grid-cols-2 gap-4;
-    }
-
-    @media screen and (max-width: 740px) {
-      > div {
-        @apply grid-cols-1;
-      }
-    }
+  section {
+    @apply flex flex-col;
   }
 
-  button {
-    @apply bg-black text-white px-2 py-1 rounded-lg self-start mt-6 transition;
+  .btn {
+    @apply bg-black text-white px-2 py-1 rounded-lg transition;
+  }
 
-    &.success {
-      @apply bg-green-500 text-white;
-    }
+  .store {
+    @apply flex flex-col border border-solid border-gray-200 shadow-md p-3 my-2;
   }
 </style>
+
