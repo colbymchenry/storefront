@@ -9,6 +9,7 @@
     import {Pulse} from 'svelte-loading-spinners';
     import OptionsModal from "$lib/components/modules/AddToCart/OptionsModal.svelte";
     import {activeModal} from "$lib/stores/modals";
+    import {authStore} from "$lib/stores/auth.js";
 
     export let clazz: string = undefined;
 
@@ -120,10 +121,12 @@
 <Component {schema} let:props>
     <button use:useFormCheck type="button"
             on:click|preventDefault|stopPropagation={showOptions && product.options.length ? showOptionsModal : onSubmit}
-            disabled={!product.inStock || !product.enabled || isDisabled}
+            disabled={$authStore && (!product.inStock || !product.enabled || isDisabled)}
             class:cartUpdated
             class={`${clazz} hidden relative transition flex justify-center items-center w-full px-3 py-3 bg-${props.bgColor} text-${props.textColor} ${props.borderRadius} ${props.dropShadow} ${props.fontSize}`}>
-        {#if loading}
+        {#if !$authStore}
+            Login Required
+        {:else if loading}
             <Pulse color="#FFFFFF" unit="px" duration="1s"/>
         {:else if cartUpdated}
             Cart Updated! <span class="material-symbols-outlined ml-2">check_circle</span>

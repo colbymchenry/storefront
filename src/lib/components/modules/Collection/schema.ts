@@ -4,7 +4,7 @@ import {SchemaTemplates} from "../SchemaTemplates";
 export const schema: ISchema = {
     "name": "Collection",
     "tag": "collection",
-    "class": "w-full h-full flex",
+    "class": "w-full h-full max-h-fit overflow-hidden relative flex",
     "settings": [
         {
             "type": "color",

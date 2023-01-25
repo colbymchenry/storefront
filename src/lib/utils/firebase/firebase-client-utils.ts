@@ -28,13 +28,16 @@ import {
 } from 'firebase/firestore';
 import {getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL} from "firebase/storage";
 import {getAnalytics} from "firebase/analytics";
-import {writable} from "svelte/store";
+import {get, writable} from "svelte/store";
 import type IFirebase from "../../interfaces/IFirebase";
 import type {FirebaseApp} from "@firebase/app";
 import type {Analytics} from "@firebase/analytics";
 import type {Firestore} from "@firebase/firestore";
 import type {Auth} from "@firebase/auth";
 import type {FirebaseStorage} from "@firebase/storage";
+import { browser } from '$app/environment';
+import {authStore} from "../../stores/auth";
+import {page} from "$app/stores";
 
 function removeUndefined(obj: any) {
     Object.keys(obj).forEach(key => obj[key] === undefined ? delete obj[key] : {})
@@ -117,6 +120,19 @@ function createFirebase() {
             result.push({...doc.data(), id: doc.id})
         });
         return result;
+    }
+
+    if (browser) {
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                authStore.set(user);
+                console.log(user);
+                console.log("AUTHENTICATION UPDATED");
+            } else {
+                authStore.set(undefined)
+                console.log("LOGGED OUT");
+            }
+        });
     }
 
 

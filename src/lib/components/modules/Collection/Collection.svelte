@@ -48,7 +48,7 @@
   }
 
   .products {
-    @apply overflow-x-auto overflow-y-hidden max-h-full relative grid w-full gap-4;
+    @apply overflow-x-hidden overflow-y-auto max-h-fit relative grid w-full gap-4;
     grid-auto-rows: 1fr;
   }
 </style>
