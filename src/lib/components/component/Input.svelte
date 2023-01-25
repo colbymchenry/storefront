@@ -84,7 +84,7 @@
 <style lang="scss">
   input, select {
     @apply px-2 py-3 text-slate-800 bg-gray-50 rounded-lg cursor-text border border-solid border-gray-300;
-
+    font-size: 16px;
     &:disabled, &.readOnly {
       @apply text-gray-400 cursor-not-allowed bg-gray-200 pointer-events-none;
     }
