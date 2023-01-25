@@ -252,16 +252,16 @@
                                                clazz="bg-white shadow-sm my-1 rounded border border-solid border-gray-200 flex-grow">
                                         <svelte:fragment slot="title" let:open>
                                             <div class="flex">
-                                                <div class="reorder" class:open>
-                                                    <button type="button"
-                                                            on:click|preventDefault|stopPropagation={() => move(blockIndex, block, true)}>
-                                                        <span class="material-symbols-outlined">arrow_drop_down</span>
-                                                    </button>
-                                                    <button type="button"
-                                                            on:click|preventDefault|stopPropagation={() => move(blockIndex, block, false)}>
-                                                        <span class="material-symbols-outlined">arrow_drop_down</span>
-                                                    </button>
-                                                </div>
+<!--                                                <div class="reorder" class:open>-->
+<!--                                                    <button type="button"-->
+<!--                                                            on:click|preventDefault|stopPropagation={() => move(blockIndex, block, true)}>-->
+<!--                                                        <span class="material-symbols-outlined">arrow_drop_down</span>-->
+<!--                                                    </button>-->
+<!--                                                    <button type="button"-->
+<!--                                                            on:click|preventDefault|stopPropagation={() => move(blockIndex, block, false)}>-->
+<!--                                                        <span class="material-symbols-outlined">arrow_drop_down</span>-->
+<!--                                                    </button>-->
+<!--                                                </div>-->
 
                                                 <div class="flex ml-8">
                                                     <span contenteditable="true"
