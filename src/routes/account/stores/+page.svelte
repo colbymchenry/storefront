@@ -5,7 +5,7 @@
 </script>
 
 <section>
-    <div class="w-full flex justify-between items-center border-b border-solid border-gray-200 pb-4 mb-10">
+    <div class="w-full flex justify-between items-center border-b border-solid border-gray-200 pb-4 mb-6">
         <h1 class="text-2xl font-medium">Manage Stores</h1>
         <a href="/account/stores/new" class="btn">New Store</a>
     </div>

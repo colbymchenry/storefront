@@ -55,12 +55,24 @@
 
 <style lang="scss">
   section {
-    @apply w-full grid m-4 p-4;
+    @apply w-full grid m-4 p-4 relative max-h-fit overflow-auto;
     grid-template-columns: 200px 1fr;
+
+    @media screen and (max-width: 740px) {
+      @apply m-0;
+      grid-template-columns: 1fr;
+      > div:first-of-type {
+        @apply hidden;
+      }
+
+      .content {
+        @apply ml-0 px-2;
+      }
+    }
   }
 
   .navigation {
-    @apply flex flex-col w-full shadow-md rounded-lg border border-solid border-gray-200 px-3 py-1 self-start;
+    @apply sticky top-0 left-0 flex flex-col w-full shadow-md rounded-lg border border-solid border-gray-200 px-3 py-1 self-start;
 
     a, button {
       @apply flex items-center font-medium my-2 p-2 cursor-pointer rounded-lg transition;
@@ -79,4 +91,6 @@
   .content {
     @apply ml-6 px-6;
   }
+
+
 </style>

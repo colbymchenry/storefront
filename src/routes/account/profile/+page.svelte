@@ -1,10 +1,9 @@
 <script lang="ts">
-
     import Input from "$lib/components/component/Input.svelte";
-    import {authStore} from "$lib/stores/auth";
     import {formHelper} from "$lib/utils/form-helper";
     import {lightspeedClientUtils} from "$lib/utils/lightspeed-utils";
     import {cookies} from "$lib/stores/cookies.js";
+    import {goto} from "$app/navigation";
 
     export let data;
 
@@ -20,6 +19,10 @@
         try {
              await lightspeedClientUtils.createCustomer(formData);
              success = true;
+
+            setTimeout(() => {
+                success = false;
+            }, 2000);
         } catch (error) {
             console.error(error);
         }
@@ -49,7 +52,7 @@
         </Input>
     </div>
 
-    <button type="submit" class:success>Update Profile</button>
+    <button type="submit" class:success disabled={loading || success}>{success ? "Profile Updated!" : loading ? "Please wait..." : "Update Profile"}</button>
 </form>
 
 <style lang="scss">
@@ -57,6 +60,12 @@
     @apply flex flex-col w-full;
     > div {
       @apply grid grid-cols-2 gap-4;
+    }
+
+    @media screen and (max-width: 740px) {
+      > div {
+        @apply grid-cols-1;
+      }
     }
   }
 

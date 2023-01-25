@@ -74,7 +74,7 @@
         {/if}
     </div>
 
-    <button type="submit" class:success>{success ? `Store ${data.new ? "Created" : "Updated"}!` : data.new ? "Create Store" : "Update Store"}</button>
+    <button type="submit" class:success disabled={loading || success}>{success ? `Store ${data.new ? "Created" : "Updated"}!` : loading ? "Please wait..." : data.new ? "Create Store" : "Update Store"}</button>
 </form>
 
 <style lang="scss">
@@ -82,6 +82,12 @@
     @apply flex flex-col w-full;
     > div {
       @apply grid grid-cols-2 gap-4;
+    }
+
+    @media screen and (max-width: 740px) {
+      > div {
+        @apply grid-cols-1;
+      }
     }
   }
 

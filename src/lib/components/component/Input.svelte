@@ -18,6 +18,7 @@
     export let values: any[] = undefined;
     export let error: string = undefined;
 
+    export let accept: string = undefined;
     export let disabled: boolean = false;
 
     function typeAction(node) {
@@ -68,7 +69,7 @@
                    on:change={(e) => localCheck = e.target.checked}/>
             <input type="hidden" {name} {disabled} {required} value={localCheck}/>
         {:else}
-            <input use:typeAction {disabled} {required} {name} {placeholder} {min} {max} {step} pattern={regex}
+            <input use:typeAction {disabled} {required} {name} {placeholder} {min} {max} {step} pattern={regex} {accept}
                    id={name} bind:value/>
         {/if}
     </div>
