@@ -38,7 +38,7 @@
         try {
 
             let user = signup ? await firebaseClientUtils.createUser(formData["email"], formData["password"]) :
-            await firebaseClientUtils.signIn(formData["email"], formData["password"]);
+                await firebaseClientUtils.signIn(formData["email"], formData["password"]);
 
             if (signup) {
                 try {
@@ -61,18 +61,18 @@
 
 
             let body = new FormData();
-            await fetch('/?/authenticate',{
-                method:'POST',
+            await fetch('/?/authenticate', {
+                method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'idtoken': user["_tokenResponse"]["idToken"]
                 },
                 body
             });
-            setTimeout(async () => {
-                await invalidateAll();
-                $activeModal = undefined;
-            }, 1000)
+
+            await invalidateAll();
+            $activeModal = undefined;
+            window.location.reload()
         } catch (error) {
             if (error?.code === 'auth/user-not-found') {
                 errors['email'] = "User not found.";
@@ -106,9 +106,9 @@
                     <br/>
                     <Input type="password" name="passwordConfirm" required error={errors["passwordConfirm"]}>Confirm
                         Password</Input>
-                    <br />
+                    <br/>
                     <div class="flex items-center">
-                        <Input type="checkbox" name="marketing" />
+                        <Input type="checkbox" name="marketing"/>
                         <label class="ml-2 font-medium" for="marketing">Sign up for marketing/newsletter</label>
                     </div>
                 {/if}

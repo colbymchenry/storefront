@@ -22,17 +22,7 @@ export async function load({url, cookies}) {
         delete themeDoc['created_at'];
     }
 
-    if (!cookies.get(project_id)) {
-        cookies.set(project_id, JSON.stringify(cookieStorage));
-    }
-
-    try {
-        JSON.parse(cookies.get(project_id));
-    } catch (error) {
-        cookies.set(project_id, JSON.stringify(cookieStorage));
-    }
-
-    let cookie = JSON.parse(cookies.get(project_id));
+    let cookie: ICookie = JSON.parse(cookies.get(project_id) || "{}");
 
     if (cookie?.user_id && cookie?.authenticated) {
         let userAcct = await firebaseAdminUtils.getDoc("users", cookie.user_id);
@@ -60,6 +50,7 @@ export async function load({url, cookies}) {
         console.error(error)
     }
 
+    console.log(cookie)
     cookies.set(project_id, JSON.stringify(cookie));
 
     return {

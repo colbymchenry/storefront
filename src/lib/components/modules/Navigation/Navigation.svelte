@@ -6,7 +6,6 @@
     import {goto} from "$app/navigation";
     import {cartStore} from "$lib/stores/cart";
     import CartDrawer from "$lib/components/modules/Navigation/CartDrawer.svelte";
-    import {authStore} from "$lib/stores/auth";
     import {activeModal} from "$lib/stores/modals.js";
     import {tick} from "svelte";
     import AuthModal from "$lib/components/AuthModal/AuthModal.svelte";
@@ -96,7 +95,7 @@
                     {/if}
 
                     <button type="button" class="flex items-center relative mr-3" on:click={async () => {
-                        if ($authStore) {
+                        if ($cookies.authenticated) {
                             goto("/account");
                         } else {
                             $activeModal = undefined;

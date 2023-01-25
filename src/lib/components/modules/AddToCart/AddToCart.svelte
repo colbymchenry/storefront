@@ -9,7 +9,6 @@
     import {Pulse} from 'svelte-loading-spinners';
     import OptionsModal from "$lib/components/modules/AddToCart/OptionsModal.svelte";
     import {activeModal} from "$lib/stores/modals";
-    import {authStore} from "$lib/stores/auth.js";
     import AuthModal from "$lib/components/AuthModal/AuthModal.svelte";
     import {cookies} from "$lib/stores/cookies.js";
     import {goto} from "$app/navigation";
@@ -132,11 +131,11 @@
 
 <Component {schema} let:props>
     <button use:useFormCheck type="button"
-            on:click|preventDefault|stopPropagation={!$authStore ? showAuthModal() : !$cookies.pactActApproved ? goto("/account/pact-act-form") : showOptions && product.options.length ? showOptionsModal : onSubmit}
-            disabled={$authStore && $cookies.pactActApproved && $cookies.email_verified && (!product.inStock || !product.enabled || isDisabled)}
+            on:click|preventDefault|stopPropagation={!$cookies.authenticated ? showAuthModal() : !$cookies.pactActApproved ? goto("/account/pact-act-form") : showOptions && product.options.length ? showOptionsModal : onSubmit}
+            disabled={$cookies.authenticated && $cookies.pactActApproved && $cookies.email_verified && (!product.inStock || !product.enabled || isDisabled)}
             class:cartUpdated
             class={`${clazz} hidden relative transition flex justify-center items-center w-full px-3 py-3 bg-${props.bgColor} text-${props.textColor} ${props.borderRadius} ${props.dropShadow} ${props.fontSize}`}>
-        {#if !$authStore}
+        {#if !$cookies.authenticated}
             Login Required
         {:else if !$cookies.email_verified}
             Verify Email
