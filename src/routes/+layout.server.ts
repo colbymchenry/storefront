@@ -22,7 +22,7 @@ export async function load({url, cookies}) {
         delete themeDoc['created_at'];
     }
 
-    let cookie: ICookie = JSON.parse(cookies.get(project_id) || "{}");
+    let cookie: ICookie = JSON.parse(cookies.get(project_id) || JSON.stringify(cookieStorage));
 
     if (cookie?.user_id && cookie?.authenticated) {
         let userAcct = await firebaseAdminUtils.getDoc("users", cookie.user_id);
@@ -50,7 +50,6 @@ export async function load({url, cookies}) {
         console.error(error)
     }
 
-    console.log(cookie)
     cookies.set(project_id, JSON.stringify(cookie));
 
     return {
