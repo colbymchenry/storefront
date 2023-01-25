@@ -8,6 +8,15 @@ export async function POST({request}) {
 
         let {user_id} = await firebaseAdminUtils.auth().verifyIdToken(request.headers.get("authorization"));
 
+        let ticket = await firebaseAdminUtils.getDoc("tickets", data["ticket_id"]);
+
+        if (!ticket.user_id) {
+            let user = await firebaseAdminUtils.getDoc("users", user_id);
+            if (!user.admin) {
+                return fail(402);
+            }
+        }
+
         data["user_id"] = user_id;
         data["created_at"] = firebaseAdminUtils.serverTimestamp();
 

@@ -25,7 +25,7 @@
     <div class="navigation">
         <a href="/admin" class:active={$page.url.pathname === "/admin"}>
             <span class="material-symbols-outlined mr-2">support</span>
-            Disputes
+            Support Tickets
         </a>
         <hr/>
         <a href="/admin/pact-act-forms" class:active={$page.url.pathname.includes("/admin/pact-act-forms")}>

@@ -1,4 +1,4 @@
-import {firebaseAdminUtils} from "../../../../api/_utils/firebase-admin-utils";
+import {firebaseAdminUtils} from "../../../api/_utils/firebase-admin-utils";
 
 export async function load(req: any) {
     if (req.params.slug) {

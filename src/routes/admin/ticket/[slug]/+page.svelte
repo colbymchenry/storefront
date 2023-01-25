@@ -4,6 +4,7 @@
     import {api} from "$lib/stores/api";
     import Input from "$lib/components/component/Input.svelte";
     import {cookies} from "$lib/stores/cookies.js";
+    import Swal from "sweetalert2";
 
     export let data;
 
@@ -38,25 +39,82 @@
         loading = false;
     }
 
+    async function closeTicket() {
+        try {
+            await api.post('/api/support/ticket/close', {
+                ticket_id: data.ticket.id
+            })
+            await invalidateAll();
+            Swal.fire({
+                icon: 'success',
+                title: 'Ticket closed!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function openTicket() {
+        try {
+            await api.post('/api/support/ticket/open', {
+                ticket_id: data.ticket.id
+            })
+            await invalidateAll();
+            Swal.fire({
+                icon: 'success',
+                title: 'Ticket opened!',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
 </script>
 
 <section>
     <h2>Support Ticket - #{data.ticket.id}</h2>
-    <div>
-        <div class="flex">
-            Store - <strong class="ml-2">{data?.ticket?.store}</strong>
+    <div class="flex w-full justify-between items-start mt-4">
+        <div class="flex flex-col">
+            <div class="flex">
+                Store - <strong class="ml-2">{data?.ticket?.store}</strong>
+            </div>
+            <div class="flex">
+                Email - <strong class="ml-2">{data?.ticket?.email}</strong>
+            </div>
+            <div class="flex">
+                Status - <strong class="ml-2"
+                                 class:text-green-600={data?.ticket.open}
+                                 class:text-gray-400={!data?.ticket.open}
+            >{data?.ticket.open ? "Open" : "Closed"}</strong>
+            </div>
+            <div class="flex">
+                Subject - <strong class="ml-2">{data?.ticket?.subject}</strong>
+            </div>
         </div>
-        <div class="flex">
-            Email - <strong class="ml-2">{data?.ticket?.email}</strong>
-        </div>
-        <div class="flex">
-            Status - <strong class="ml-2"
-                             class:text-green-600={data?.ticket.open}
-                             class:text-gray-400={!data?.ticket.open}
-        >{data?.ticket.open ? "Open" : "Closed"}</strong>
-        </div>
-        <div class="flex">
-            Subject - <strong class="ml-2">{data?.ticket?.subject}</strong>
+        <div class="flex flex-col align-end justify-start h-full">
+            {#if data.ticket.open}
+                <button type="button" class="!bg-red-500 !hover:bg-red-600 text-white !px-6 !py-4 !text-3xl !mt-0" on:click={closeTicket}>Close</button>
+            {:else}
+                <button type="button" class="!bg-green-500 !hover:bg-green-600 text-white !px-6 !py-4 !text-3xl !mt-0" on:click={openTicket}>Open</button>
+            {/if}
         </div>
     </div>
 
@@ -87,10 +145,6 @@
 <style lang="scss">
   section {
     @apply flex flex-col w-full min-h-full max-h-fit;
-
-    > div:first-of-type {
-      @apply flex flex-col mt-4 flex-shrink;
-    }
 
     .conversation {
       @apply flex flex-col flex-grow overflow-auto mt-8 border border-solid border-gray-200 shadow-md rounded-2xl;

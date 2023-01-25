@@ -1,7 +1,12 @@
 <script lang="ts">
     import Input from "$lib/components/component/Input.svelte";
+    import {goto} from "$app/navigation";
 
     export let data;
+
+    async function update(e) {
+        await goto("/admin?status=" + e.target.value)
+    }
 </script>
 
 <section>
@@ -9,7 +14,7 @@
         <Input type="text" placeholder="Search ticket #">
             Ticket #
         </Input>
-        <Input type="select" options={[
+        <Input type="select" on:change={update} options={[
             {
                 "label": "Open",
                 "value": "open"
@@ -52,18 +57,40 @@
                         Status
                     </div>
                 </th>
+                <th></th>
             </tr>
             </thead>
 
             <tbody>
-            {#if !data?.orders?.length}
+            {#if !data?.tickets?.length}
                 <tr>
                     <td>
                         No data to display
                     </td>
                 </tr>
             {:else}
-
+                {#each data.tickets as ticket}
+                    <tr>
+                        <td>
+                            {ticket.id}
+                        </td>
+                        <td>
+                            {new Date(ticket.created_at).toLocaleDateString()}
+                        </td>
+                        <td>
+                            {ticket.email}
+                        </td>
+                        <td>
+                            <strong class="ml-2"
+                                    class:text-green-600={ticket.open}
+                                    class:text-gray-400={!ticket.open}
+                            >{ticket.open ? "Open" : "Closed"}</strong>
+                        </td>
+                        <td>
+                            <a href={"/admin/ticket/" + ticket.id} class="btn">View Ticket</a>
+                        </td>
+                    </tr>
+                {/each}
             {/if}
             </tbody>
         </table>
@@ -92,9 +119,12 @@
     }
 
     td {
-      @apply px-2 py-1;
+      @apply px-3 py-3;
     }
   }
 
+  .btn {
+    @apply bg-black text-white px-2 py-1 rounded-lg transition;
+  }
 
 </style>
