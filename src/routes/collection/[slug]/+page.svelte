@@ -20,9 +20,9 @@
 
 </script>
 
-<div class="max-h-fit overflow-hidden w-full">
-    <div class="cc-container max-h-screen overflow-hidden">
-        <div class="flex flex-col p-2 mt-6 sticky top-0 left-0 overflow-auto">
+<div class="w-full max-h-fit md:overflow-hidden">
+    <div class="cc-container">
+        <div class="flex flex-col p-2 mt-6 sticky top-0 left-0 md:overflow-auto">
             <span class="text-2xl font-medium mb-4">Product Categories</span>
             <div class={`flex flex-col w-full items-stretch items-center text-black overflow-auto rounded-lg border border-solid border-gray-300`}>
                 {#each $cookies.categories.items as category, index}
@@ -66,7 +66,7 @@
                 {/each}
             </div>
         </div>
-        <div class="flex flex-col w-full p-4 overflow-auto">
+        <div class="flex flex-col w-full p-4 md:overflow-auto">
             <div class="flex flex-col w-full my-4 pb-2 border-b-2 border-solid border-gray-300">
                 <h1>{data.category.name}</h1>
                 <div class="flex justify-between items-center w-full mt-8 flex-wrap">
@@ -97,12 +97,15 @@
 
 <style lang="scss">
   .cc-container {
-    @apply grid grid-cols-1 lg:grid-cols-2 w-full h-full;
+    @apply grid w-full h-full;
     grid-template-columns: 300px 1fr;
     grid-template-rows: 1fr;
 
     @media screen and (max-width: 740px) {
       grid-template-columns: 1fr;
+      > div:first-of-type {
+        @apply hidden;
+      }
     }
   }
 
