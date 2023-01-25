@@ -5,8 +5,15 @@ import type ILSProduct from "../interfaces/lightspeed/ILSProduct";
 import Ecommerce from "@ecwid/sdk";
 import {cart} from "../stores/cart";
 import {get, writable} from "svelte/store";
+import type ILSCustomer from "../interfaces/lightspeed/ILSCustomer";
 
-export const productStore = writable({
+export interface IProductStore {
+    categories?: any;
+    products?: any;
+    variations?: any;
+}
+
+export const productStore = writable<IProductStore>({
     categories: {},
     products: {},
     variations: {}
@@ -25,8 +32,10 @@ function createLightspeed() {
     })
 
     if (typeof window !== 'undefined') {
-        window.Ecwid.OnCartChanged.add(function(c: any){
+        // @ts-ignore
+        window.Ecwid.OnCartChanged.add(function (c: any) {
             cart.update((oldVal) => c)
+            // @ts-ignore
             window.Ecwid.Cart.calculateTotal((order: any) => {
                 cart.update((oldVal) => order)
             });
@@ -40,6 +49,7 @@ function createLightspeed() {
         // Check local storage to return product from store
         if (queryParams.has("productId")) {
             if (queryParams.get("productId").includes(",")) {
+                // @ts-ignore
                 toReturn = storage.products.filter((prod: ILSProduct) => queryParams.get("productId").includes(prod.id))
                 if (toReturn.length === queryParams.get("productId").split(",").length) {
                     return toReturn;
@@ -66,7 +76,7 @@ function createLightspeed() {
         }
 
         data.items.forEach((item: any) => {
-            let prod:ILSProduct = {...item};
+            let prod: ILSProduct = {...item};
             if (!storage.products[item.id]) {
                 storage.products[item.id] = item;
             }
@@ -92,18 +102,22 @@ function createLightspeed() {
 
     const createOrder = async (order: ILSOrderRequest): Promise<ILSOrderResponse> => {
         let {data} = await api.post('/api/orders', order);
-        let res:ILSOrderResponse = {
+        let res: ILSOrderResponse = {
             orderid: data.orderid
         }
         return res;
     };
 
+    const createCustomer = async (customer: ILSCustomer) => {
+        return await api.post('/api/customer', customer);
+    }
+
     return {
-       getProducts, getCategories, getVariations, createOrder, sdk: ecommerce, ecwid: () => {
-           if (typeof window !== 'undefined') {
-               // @ts-ignore
-               return window.Ecwid;
-           }
+        getProducts, getCategories, getVariations, createOrder, createCustomer, sdk: ecommerce, ecwid: () => {
+            if (typeof window !== 'undefined') {
+                // @ts-ignore
+                return window.Ecwid;
+            }
         }
     };
 }

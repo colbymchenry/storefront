@@ -31,7 +31,7 @@
         $store = conf["store"] || {};
     })
 
-    $editor.enabled = data?.cookies?.authenticated;
+    $editor.enabled = $cookies.editorEnabled;
 
     const documentHeight = () => {
         if (browser) {
@@ -45,7 +45,6 @@
     }
 
 </script>
-
 {#if data["editor"] !== null && !data?.cookies?.authenticated}
     <main>
         <EditorLogin/>

@@ -4,8 +4,12 @@
     import {schema} from "./schema";
     import {cookies} from "$lib/stores/cookies";
     import {goto} from "$app/navigation";
-    import {cartStore} from "$lib/stores/cart.js";
+    import {cartStore} from "$lib/stores/cart";
     import CartDrawer from "$lib/components/modules/Navigation/CartDrawer.svelte";
+    import {authStore} from "$lib/stores/auth";
+    import {activeModal} from "$lib/stores/modals.js";
+    import {tick} from "svelte";
+    import AuthModal from "$lib/components/AuthModal/AuthModal.svelte";
 
     let mobileNavContainer: HTMLElement;
     let mobileMenuButton: HTMLElement;
@@ -91,6 +95,21 @@
                         </a>
                     {/if}
 
+                    <button type="button" class="flex items-center relative mr-3" on:click={async () => {
+                        if ($authStore) {
+                            goto("/account");
+                        } else {
+                            $activeModal = undefined;
+                            await tick();
+                            $activeModal = {
+                                component: AuthModal,
+                                props: {}
+                            }
+                        }
+                    }}>
+                        <span class="material-symbols-outlined text-2xl md:text-4xl">account_circle</span>
+                    </button>
+
                     <button type="button" class="flex items-center relative" on:click={() => {
                         cartVisible = true;
                     }}>
@@ -100,6 +119,7 @@
                             {$cartStore?.cart?.productsQuantity || 0}
                         </span>
                     </button>
+
                 </div>
             </div>
 
@@ -170,7 +190,6 @@
 
                                 } else {
                                     await goto(`/collection/${category.id}`);
-                                    console.log("BAM")
                                     showMobileNav = false;
                                 }
                             }} class={`text-md url hover:text-${props.navbarHoverTextColor}`}>

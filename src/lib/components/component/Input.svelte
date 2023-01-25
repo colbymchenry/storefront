@@ -17,6 +17,8 @@
     export let required: boolean = false;
     export let values: any[] = undefined;
 
+    export let error: string = undefined;
+
     function typeAction(node) {
         node.type = type;
     }
@@ -24,41 +26,48 @@
     let localCheck = value;
 </script>
 
-<div class="flex relative"
-     class:items-center={type === 'checkbox'}
-     class:flex-row={type === 'color'}
-     class:flex-col={type !== 'color' && type !== 'checkbox'}>
-    <label for={name} class="font-medium" class:mr-2={type === 'color'} class:mb-2={type !== 'color' && type !== 'checkbox'}>
-        <slot/>
-        {#if required}*{/if}
-    </label>
-    {#if type === 'image'}
-        <InputMedia {name} bind:src={value}/>
-    {:else if type === 'video'}
-        <InputMedia {name} video={true} bind:src={value}/>
-    {:else if type === 'color'}
-        <InputColor {name} bind:value/>
-    {:else if type === 'textarea'}
-        <InputQuill {name} bind:value/>
-    {:else if type === 'select'}
-        <select {name} {placeholder} id={name} bind:value>
-            {#each options as option}
-                <option value={option.value} selected={value === option.value}>{option.label}</option>
-            {/each}
-        </select>
-    {:else if type === 'range'}
-        <InputRange {name} bind:value {min} {max} {step} {unit} {values}/>
-    {:else if type === 'url'}
-        <InputURL {name} bind:value/>
-    {:else if type === 'collection'}
-        <InputURL {name} bind:value hideProducts />
-    {:else if type === 'product'}
-        <InputURL {name} bind:value hideCollections />
-    {:else if type === 'checkbox'}
-        <input type="checkbox" id={name} checked={value} class:checkbox={type === 'checkbox'} on:change={(e) => localCheck = e.target.checked}/>
-        <input type="hidden" {name} value={localCheck} />
-    {:else}
-        <input use:typeAction {name} {placeholder} {min} {max} {step} pattern={regex} id={name} bind:value/>
+<div class="flex flex-col">
+    <div class="flex relative"
+         class:items-center={type === 'checkbox'}
+         class:flex-row={type === 'color'}
+         class:flex-col={type !== 'color' && type !== 'checkbox'}>
+        <label for={name} class="font-medium" class:mr-2={type === 'color'}
+               class:mb-2={type !== 'color' && type !== 'checkbox'}>
+            <slot/>
+            {#if required}*{/if}
+        </label>
+        {#if type === 'image'}
+            <InputMedia {name} bind:src={value}/>
+        {:else if type === 'video'}
+            <InputMedia {name} video={true} bind:src={value}/>
+        {:else if type === 'color'}
+            <InputColor {name} bind:value/>
+        {:else if type === 'textarea'}
+            <InputQuill {name} bind:value/>
+        {:else if type === 'select'}
+            <select {name} {placeholder} {required} id={name} bind:value>
+                {#each options as option}
+                    <option value={option.value} selected={value === option.value}>{option.label}</option>
+                {/each}
+            </select>
+        {:else if type === 'range'}
+            <InputRange {name} bind:value {min} {max} {step} {unit} {values}/>
+        {:else if type === 'url'}
+            <InputURL {name} bind:value />
+        {:else if type === 'collection'}
+            <InputURL {name} bind:value hideProducts/>
+        {:else if type === 'product'}
+            <InputURL {name} bind:value hideCollections/>
+        {:else if type === 'checkbox'}
+            <input type="checkbox"  id={name} checked={value} class:checkbox={type === 'checkbox'}
+                   on:change={(e) => localCheck = e.target.checked}/>
+            <input type="hidden" {name} {required} value={localCheck}/>
+        {:else}
+            <input use:typeAction {required} {name} {placeholder} {min} {max} {step} pattern={regex} id={name} bind:value/>
+        {/if}
+    </div>
+    {#if error}
+        <small class="font-medium text-red-500">{error}</small>
     {/if}
 </div>
 

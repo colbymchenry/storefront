@@ -25,11 +25,13 @@ export const actions = {
             };
         }
         const data = await request.formData();
-
         try {
-            await firebaseAdminUtils.auth().verifyIdToken(data.get("idToken"));
+            let res = await firebaseAdminUtils.auth().verifyIdToken(request.headers.get("idtoken"));
             cookie.authenticated = true;
             cookie.idToken = data.get("idToken");
+            cookie.email = res.email;
+            cookie.email_verified = res.email_verified;
+            cookie.user_id = res.user_id;
         } catch (error) {
             cookie.authenticated = false;
             throw fail(400);

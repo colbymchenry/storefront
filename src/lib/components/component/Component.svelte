@@ -20,13 +20,13 @@
     let editing = false;
 
     function onKeyDown(e) {
-        if (e.code.toLowerCase().includes("alt")) {
+        if (e?.code?.toLowerCase().includes("alt")) {
             editing = true;
         }
     }
 
     function onKeyUp(e) {
-        if (e.code.toLowerCase().includes("alt")) {
+        if (e?.code?.toLowerCase().includes("alt")) {
             editing = false;
         }
     }

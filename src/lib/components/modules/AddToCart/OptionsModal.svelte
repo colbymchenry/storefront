@@ -32,3 +32,12 @@
         </form>
     </Modal>
 {/if}
+
+<style lang="scss">
+  form {
+    width: clamp(500px, 50vw, 800px);
+    @media screen and (max-width: 500px) {
+      width: 90vw;
+    }
+  }
+</style>

@@ -7,7 +7,9 @@ let cookieStorage: ICookie = {
     "is18": false,
     "authenticated": false,
     "idToken": undefined,
-    "categories": undefined
+    "categories": undefined,
+    "editorEnabled": false,
+    "pactActApproved": false
 }
 
 // @ts-ignore
@@ -31,6 +33,17 @@ export async function load({url, cookies}) {
     }
 
     let cookie = JSON.parse(cookies.get(project_id));
+
+    if (cookie?.user_id && cookie?.authenticated) {
+        let userAcct = await firebaseAdminUtils.getDoc("users", cookie.user_id);
+        if (userAcct?.admin) {
+            cookie.editorEnabled = true;
+        }
+        let pactActForm = await firebaseAdminUtils.getDoc("pactactforms", cookie.user_id);
+        if (pactActForm?.approved) {
+            cookie.pactActApproved = true;
+        }
+    }
 
     // TODO: Figure out refreshing this, caching and waiting
     try {

@@ -5,4 +5,9 @@ export default interface ICookie {
     authenticated: boolean;
     idToken: string | undefined;
     categories: ILSCategories | undefined;
+    email?: string;
+    email_verified?: boolean;
+    user_id?: string;
+    editorEnabled?: boolean;
+    pactActApproved?: boolean;
 }

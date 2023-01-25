@@ -41,11 +41,7 @@
         grid-template-rows: 50px 1fr;
         max-height: 80vh;
         transition: all 0.4s ease;
-        width: clamp(500px, 50vw, 800px);
-
-        @media screen and (max-width: 500px) {
-          width: 95%;
-        }
+        animation: fadeIn 0.4s ease;
       }
 
       &.visible {
@@ -58,6 +54,17 @@
         > div:first-of-type {
           @apply opacity-100 mt-0;
         }
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        margin-top: 10rem;
+      }
+      to {
+        opacity: 1;
+        margin-top: 0;
       }
     }
 </style>

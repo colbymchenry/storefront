@@ -126,7 +126,6 @@ function createFirebase() {
         auth.onAuthStateChanged((user) => {
             if (user) {
                 authStore.set(user);
-                console.log(user);
                 console.log("AUTHENTICATION UPDATED");
             } else {
                 authStore.set(undefined)

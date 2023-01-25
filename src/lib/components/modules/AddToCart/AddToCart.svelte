@@ -10,6 +10,9 @@
     import OptionsModal from "$lib/components/modules/AddToCart/OptionsModal.svelte";
     import {activeModal} from "$lib/stores/modals";
     import {authStore} from "$lib/stores/auth.js";
+    import AuthModal from "$lib/components/AuthModal/AuthModal.svelte";
+    import {cookies} from "$lib/stores/cookies.js";
+    import {goto} from "$app/navigation";
 
     export let clazz: string = undefined;
 
@@ -116,16 +119,27 @@
             }
         }
     }
+
+    async function showAuthModal() {
+        $activeModal = undefined;
+        await tick();
+        $activeModal = {
+            component: AuthModal,
+            props: {}
+        }
+    }
 </script>
 
 <Component {schema} let:props>
     <button use:useFormCheck type="button"
-            on:click|preventDefault|stopPropagation={showOptions && product.options.length ? showOptionsModal : onSubmit}
-            disabled={$authStore && (!product.inStock || !product.enabled || isDisabled)}
+            on:click|preventDefault|stopPropagation={!$authStore ? showAuthModal() : !$cookies.pactActApproved ? goto("/account/pact-act-form") : showOptions && product.options.length ? showOptionsModal : onSubmit}
+            disabled={$authStore && $cookies.pactActApproved && (!product.inStock || !product.enabled || isDisabled)}
             class:cartUpdated
             class={`${clazz} hidden relative transition flex justify-center items-center w-full px-3 py-3 bg-${props.bgColor} text-${props.textColor} ${props.borderRadius} ${props.dropShadow} ${props.fontSize}`}>
         {#if !$authStore}
             Login Required
+        {:else if !$cookies.pactActApproved}
+            Pact Act Form
         {:else if loading}
             <Pulse color="#FFFFFF" unit="px" duration="1s"/>
         {:else if cartUpdated}

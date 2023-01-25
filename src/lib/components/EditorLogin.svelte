@@ -15,11 +15,11 @@
         try {
             let user = await firebaseClientUtils.signIn(formData['email'], formData['password']);
             let body = new FormData();
-            body.set("idToken", user["_tokenResponse"]["idToken"]);
             await fetch('/?/authenticate',{
                 method:'POST',
                 headers: {
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'idtoken': user["_tokenResponse"]["idToken"]
                 },
                 body
             });
