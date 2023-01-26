@@ -19,7 +19,10 @@
              }>
 
             <Splide aria-label={props.alt} options={ {
-                type: 'loop',
+                type: props.getBlocks("Slide").filter(useFilter)?.length > 1 ? 'loop' : 'carousel',
+                arrows: props.getBlocks("Slide").filter(useFilter)?.length > 1,
+                pagination: props.getBlocks("Slide").filter(useFilter)?.length > 1,
+                drag: props.getBlocks("Slide").filter(useFilter)?.length > 1
             }}>
                 {#each props.getBlocks("Slide").filter(useFilter) as block, index}
                     <SplideSlide>
