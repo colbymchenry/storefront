@@ -75,7 +75,7 @@
         <div class="flex flex-col w-full p-4 overflow-hidden">
             <div class="flex flex-col w-full my-4 pb-2 border-b-2 border-solid border-gray-300">
                 <h1>{data.category.name}</h1>
-                <div class="flex justify-between items-center w-full mt-8 flex-wrap">
+                <div class="flex justify-between items-center w-full mt-4 lg:mt-8 flex-wrap">
                     <div class="flex items-center text-2xl"><span
                             class="material-symbols-outlined text-3xl mr-2">list</span> {data["products"]["total"]}
                         item(s)
