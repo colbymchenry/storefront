@@ -24,7 +24,7 @@
           style={`font-family: ${props.priceFont};`}>{product.defaultDisplayedPriceFormatted}</span>
 
     <form>
-        <AddToCart {product} showOptions clazz="!text-lg !h-12"/>
+        <AddToCart {product} showOptions clazz="!text-lg !h-12" style={`font-family: ${props.priceFont};`}/>
     </form>
 </a>
 

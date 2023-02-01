@@ -19,6 +19,8 @@
 
     export let showOptions: boolean = false;
 
+    export let style: string = undefined;
+
     let loading: boolean = false;
 
     let isDisabled: boolean = false;
@@ -134,6 +136,7 @@
             on:click|preventDefault|stopPropagation={!$cookies.authenticated ? showAuthModal() : !$cookies.pactActApproved ? goto("/account/pact-act-form") : showOptions && product.options.length ? showOptionsModal : onSubmit}
             disabled={$cookies.authenticated && $cookies.pactActApproved && $cookies.email_verified && (!product.inStock || !product.enabled || isDisabled)}
             class:cartUpdated
+            {style}
             class={`${clazz} hidden relative transition flex justify-center items-center w-full px-3 py-3 bg-${props.bgColor} text-${props.textColor} ${props.borderRadius} ${props.dropShadow} ${props.fontSize}`}>
         {#if !$cookies.authenticated}
             Login Required

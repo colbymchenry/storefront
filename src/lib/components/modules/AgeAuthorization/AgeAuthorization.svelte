@@ -20,8 +20,8 @@
 
     <Component {schema} let:props>
         <div class="flex flex-col parent bg-white">
-            <div class={`w-full p-3 text-center bg-${props?.titleBgColor}`}>
-                <h1 class={`text-${props?.titleTextColor}`}>{props.title}</h1>
+            <div class={`w-full p-3 text-center bg-${props?.titleBgColor} shadow-md`}>
+                <h1 class={`text-${props?.titleTextColor}`} style={`font-family: "Kanit", sans-serif;`}>{props.title}</h1>
             </div>
 
             {#if props?.logo || $store?.logo}
@@ -35,8 +35,8 @@
                 </div>
                 <form method="POST" action="/?/enter" class="w-full flex justify-center">
                     <button type="submit"
-                            class={`mb-8 bg-${props?.buttonBgColor} text-${props?.buttonTextColor} py-2 px-5`}
-                            style="align-self: center;">{props?.buttonText || "ENTER"}</button>
+                            class={`mb-8 bg-${props?.buttonBgColor} text-${props?.buttonTextColor} py-2 px-5 rounded-xl shadow-md`}
+                            style={`align-self: center;font-family: "Kanit", sans-serif;`}>{props?.buttonText || "ENTER"}</button>
                 </form>
             </div>
 
@@ -56,10 +56,16 @@
       min-width: 400px;
       height: 500px;
     }
+
   }
 
   .parent {
+    @apply rounded-lg overflow-hidden;
     max-width: 400px;
+
+    @media screen and (max-width: 600px) {
+      width: 95vw;
+    }
   }
 
   .video {
