@@ -3,25 +3,17 @@
     import {schema} from "./schema";
     import {store} from "$lib/stores/store.js";
 </script>
-<!--use:enhance={() => {-->
-<!--    return ({ update }) => {-->
-<!--        update({ reset: false });-->
-<!--    };-->
-<!--}}-->
 <div class="topContainer">
     <div class="video">
         <video autoplay muted loop playsinline style="opacity: 1;">
-            <source type="video/mp4" src="https://storage.googleapis.com/mifland2/mp4_V1.mp4">
+            <source type="video/mp4" src="/smoke.mp4">
         </video>
-        <span class="video-text__image" aria-hidden="true">
+        <span class="image" aria-hidden="true">
             <figure>
-                <img src="//cdn.shopify.com/s/files/1/0273/8107/1925/files/M_Pattern_hat_860x.jpg?v=1638200841" alt=""
-                     srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-                     data-srcset="//cdn.shopify.com/s/files/1/0273/8107/1925/files/M_Pattern_hat_320x.jpg?v=1638200841 260w, //cdn.shopify.com/s/files/1/0273/8107/1925/files/M_Pattern_hat_600x.jpg?v=1638200841 480w, //cdn.shopify.com/s/files/1/0273/8107/1925/files/M_Pattern_hat_860x.jpg?v=1638200841 720w, //cdn.shopify.com/s/files/1/0273/8107/1925/files/M_Pattern_hat_1100x.jpg?v=1638200841 960w, //cdn.shopify.com/s/files/1/0273/8107/1925/files/M_Pattern_hat_1600x.jpg?v=1638200841 1440w, //cdn.shopify.com/s/files/1/0273/8107/1925/files/M_Pattern_hat_2100x.jpg?v=1638200841 1920w"
-                     data-sizes="auto" class="img lazyload" itemprop="image">
+                <img src="/smoke.gif" alt="" itemprop="image">
                     <span class="lazy-preloader"></span>
                 <noscript><span class="ll-fallback"
-                                style="background-image:url('//cdn.shopify.com/s/files/1/0273/8107/1925/files/M_Pattern_hat_860x.jpg?v=1638200841')"></span></noscript>
+                                style="background-image:url('/smoke.gif')"></span></noscript>
             </figure>
         </span>
     </div>
@@ -71,17 +63,57 @@
   }
 
   .video {
-    @apply absolute top-0 left-0 w-screen h-screen;
-    
-    min-width: 100vw !important;
-    min-height: 100vh !important;
+    position: absolute;
+    min-width: calc(100vw + 2px) !important;
+    min-height: calc(100vh + 2px);
+    width: auto;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity .1s linear, background .2s linear;
+    object-fit: contain;
+    overflow-clip-margin: content-box;
+    overflow: clip;
+    z-index: -1;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      content: "";
+      opacity: .36;
+      z-index: 9;
+    }
 
     video {
       @apply w-full h-full object-cover min-w-full min-h-full;
     }
   }
 
+  .image {
+    @apply opacity-0;
+  }
+
   figure {
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
+    transform: scale(1) translateZ(0);
+    overflow: hidden;
+    transition: background .2s linear,transform .3s linear;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%!important;
+    z-index: 0;
+    padding-top: 0!important;
+
     img {
       position: absolute;
       top: 0;
