@@ -9,5 +9,7 @@ export default interface ICookie {
     email_verified?: boolean;
     user_id?: string;
     admin?: boolean;
+    staff?: boolean;
+    salesRep?: boolean;
     pactActApproved?: boolean;
 }

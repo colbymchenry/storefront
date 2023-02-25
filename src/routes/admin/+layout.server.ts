@@ -9,19 +9,47 @@ export async function load({url, cookies}) {
 
     let profileData: any = {};
 
-    if (cookie?.user_id && cookie?.authenticated) {
-        let userAcct = await firebaseAdminUtils.getDoc("users", cookie.user_id);
-
-        if (!userAcct?.admin) {
+    if (cookie?.idToken) {
+        let res: any;
+        try {
+            res = await firebaseAdminUtils.auth().verifyIdToken(cookie.idToken);
+        } catch (error) {
+            cookie.authenticated = false;
+            cookie.user_id = undefined;
+            cookie.idToken = undefined;
+            try {
+                cookies.set(project_id, JSON.stringify(cookie));
+            } catch (error){}
             throw redirect(303, '/');
         }
 
+        let isAdmin = await firebaseAdminUtils.getDoc("admins", res.uid);
+        let isSalesRep = await firebaseAdminUtils.getDoc("reps", res.uid);
+        let isStaff = await firebaseAdminUtils.getDoc("staff", res.uid);
+
+        cookie.admin = isAdmin !== undefined;
+        cookie.salesRep = isSalesRep !== undefined;
+        cookie.staff = isStaff !== undefined;
+        let {emailVerified} = await firebaseAdminUtils.auth().getUser(cookie.user_id);
+        cookie.email_verified = emailVerified;
+        
+        try {
+            cookies.set(project_id, JSON.stringify(cookie));
+        } catch (error) {}
+
+        if (!isAdmin && !isStaff && !isSalesRep) {
+            throw redirect(303, '/account');
+        }
+
         profileData = await firebaseAdminUtils.getDoc("customers", cookie.user_id);
+
+
     } else {
-        throw redirect(303, '/');
+        throw redirect(303, '/account');
     }
 
     return {
-        profile: profileData
+        profile: profileData,
+        cookies: cookie
     }
 }

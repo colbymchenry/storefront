@@ -2,11 +2,15 @@ import {fail, redirect} from "@sveltejs/kit";
 import {firebaseAdminUtils} from "./api/_utils/firebase-admin-utils";
 import type ICookie from "../lib/interfaces/ICookie";
 import {project_id} from "../lib/stores/cookies";
+import {cookieStorage} from "./+layout.server";
 
 export const actions = {
     // @ts-ignore
     enter: async ({request, cookies}) => {
-        const cookie: ICookie = JSON.parse(cookies.get(project_id) || "{}");
+        let cookie: ICookie = JSON.parse(cookies.get(project_id) || "{}");
+        if (cookie.authenticated && !cookie.idToken) {
+            cookie = cookieStorage;
+        }
         cookie.is18 = true;
         cookies.set(project_id, JSON.stringify(cookie));
         throw redirect(303, '/');
@@ -20,7 +24,7 @@ export const actions = {
             cookie = {
                 authenticated: false,
                 categories: undefined,
-                idToken: "",
+                idToken: undefined,
                 is18: false
             };
         }
@@ -28,7 +32,7 @@ export const actions = {
         try {
             let res = await firebaseAdminUtils.auth().verifyIdToken(request.headers.get("idtoken"));
             cookie.authenticated = true;
-            cookie.idToken = data.get("idToken");
+            cookie.idToken = request.headers.get("idtoken");
             cookie.email = res.email;
             cookie.email_verified = res.email_verified;
             cookie.user_id = res.user_id;
@@ -36,7 +40,6 @@ export const actions = {
             cookie.authenticated = false;
             throw fail(400);
         }
-
         cookies.set(project_id, JSON.stringify(cookie));
         throw redirect(303, '/');
     },

@@ -10,6 +10,8 @@
     import EditorLogin from "$lib/components/EditorLogin.svelte";
     import {browser} from "$app/environment";
     import {activeModal} from "$lib/stores/modals.js";
+    import {onMount} from "svelte";
+    import {firebaseClientUtils} from "$lib/utils/firebase/firebase-client-utils";
 
     export let data;
 
@@ -43,6 +45,17 @@
         window.addEventListener("resize", documentHeight)
         documentHeight();
     }
+
+    onMount(() => {
+        firebaseClientUtils.auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                firebaseClientUtils.updateStore((oldVal: any) => {
+                    console.log("AUTHENTICATION STORE UPDATED.", user);
+                    return {...oldVal, currentUser: user};
+                });
+            }
+        });
+    })
 
 </script>
 

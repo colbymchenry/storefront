@@ -17,7 +17,10 @@
 
 <modal-container class:visible on:click={handleClick}>
     <div bind:this={container}>
-        <div class="flex w-full justify-end">
+        <div class="flex w-full justify-between items-center">
+            <div>
+                <slot name="title"></slot>
+            </div>
             <button type="button" on:click|preventDefault|stopPropagation={() => visible = false}>
                 <span class="material-symbols-outlined">close</span>
             </button>

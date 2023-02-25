@@ -112,8 +112,33 @@ function createLightspeed() {
         return await api.post('/api/customer', customer);
     }
 
+    const createSalesRep = async (userId: string) => {
+        return await api.post('/api/rep?create', {userId});
+    }
+
+    const deleteSalesRep = async (userId: string) => {
+        return await api.post('/api/rep?delete', {userId});
+    }
+
+    const createStaff = async (userId: string) => {
+        return await api.post('/api/staff?create', {userId});
+    }
+
+    const deleteStaff = async (userId: string) => {
+        return await api.post('/api/staff?delete', {userId});
+    }
+
+    const createAdmin = async (userId: string) => {
+        return await api.post('/api/admins?create', {userId});
+    }
+
+    const deleteAdmin = async (userId: string) => {
+        return await api.post('/api/admins?delete', {userId});
+    }
+
     return {
-        getProducts, getCategories, getVariations, createOrder, createCustomer, sdk: ecommerce, ecwid: () => {
+        getProducts, getCategories, getVariations, createOrder, createCustomer, createSalesRep, deleteSalesRep,
+        createStaff, deleteStaff, createAdmin, deleteAdmin, sdk: ecommerce, ecwid: () => {
             if (typeof window !== 'undefined') {
                 // @ts-ignore
                 return window.Ecwid;

@@ -59,6 +59,7 @@ function createFirebase() {
 
     const store = writable<IFirebase>(defaultValue);
     const {subscribe, set, update} = store;
+    let updateStore = update;
 
     try {
         app = initializeApp(config, "[DEFAULT]")
@@ -66,12 +67,6 @@ function createFirebase() {
         firestore = getFirestore(app)
         auth = getAuth();
         storage = getStorage();
-
-        auth.onAuthStateChanged(async (user) => {
-            update((oldVal: any) => {
-                return {...oldVal, currentUser: user};
-            });
-        });
 
         set({app, analytics, firestore, auth, storage});
         console.log("FIREBASE CLIENT INITIALIZED.");
@@ -121,21 +116,8 @@ function createFirebase() {
         return result;
     }
 
-    if (browser) {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                authStore.set(user);
-                console.log("AUTHENTICATION UPDATED");
-            } else {
-                authStore.set(undefined)
-                console.log("LOGGED OUT");
-            }
-        });
-    }
-
-
     return {
-        subscribe, queryIds,
+        subscribe, queryIds, auth, updateStore,
         toDate: (timestamp: any) => {
             if (!timestamp) return undefined;
             return timestamp["_seconds"] ? new Date(timestamp["_seconds"] * 1000) : new Date(timestamp.seconds * 1000);

@@ -5,6 +5,8 @@
     import {goto} from "$app/navigation";
     import {cookies} from "$lib/stores/cookies";
 
+    export let data;
+
     let emailSent = false;
 
     async function logout() {
@@ -25,6 +27,10 @@
         if (emailSent) return;
         await firebaseClientUtils.sendVerificationEmail($authStore);
         emailSent = true;
+    }
+
+    if (data["cookies"]) {
+        $cookies = {...$cookies, ...data["cookies"]};
     }
 </script>
 
@@ -66,7 +72,7 @@
                 <span class="material-symbols-outlined mr-2">description</span>
                 New Pact Act Form
             </a>
-            {#if $cookies.admin}
+            {#if ($cookies?.staff || $cookies?.admin || $cookies?.salesRep)}
                 <hr/>
                 <a href="/admin">
                     <span class="material-symbols-outlined mr-2">admin_panel_settings</span>

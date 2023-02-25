@@ -4,20 +4,25 @@
     import {authStore} from "$lib/stores/auth";
     import {goto} from "$app/navigation";
     import {cookies} from "$lib/stores/cookies";
-    import {browser} from "$app/environment";
+
+    export let data;
 
     async function logout() {
         await firebaseClientUtils.signOut();
         $authStore = undefined;
         let body = new FormData();
-        await fetch('/?/logout',{
-            method:'POST',
+        await fetch('/?/logout', {
+            method: 'POST',
             headers: {
                 'Accept': 'application/json'
             },
             body
         });
         await goto('/')
+    }
+
+    if (data["cookies"]) {
+        $cookies = {...$cookies, ...data["cookies"]};
     }
 </script>
 
@@ -33,6 +38,25 @@
             Pact Act Forms
         </a>
         <hr/>
+        {#if $cookies.staff || $cookies.admin}
+            <a href="/admin/reps" class:active={$page.url.pathname.includes("/admin/reps")}>
+                <span class="material-symbols-outlined mr-2">supervisor_account</span>
+                Sales Reps
+            </a>
+            <hr/>
+        {/if}
+        {#if $cookies.admin}
+            <a href="/admin/staff" class:active={$page.url.pathname.includes("/admin/staff")}>
+                <span class="material-symbols-outlined mr-2">badge</span>
+                Staff
+            </a>
+            <hr/>
+            <a href="/admin/admins" class:active={$page.url.pathname.includes("/admin/admins")}>
+                <span class="material-symbols-outlined mr-2">admin_panel_settings</span>
+                Admins
+            </a>
+            <hr/>
+        {/if}
         <a href="/account">
             <span class="material-symbols-outlined mr-2">person</span>
             Customer Dashboard

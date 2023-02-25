@@ -3,18 +3,19 @@ import type ICookie from "../lib/interfaces/ICookie";
 import {project_id} from "../lib/stores/cookies";
 import {lightspeedServerUtils} from "./api/_utils/lightspeed-utils";
 
-let cookieStorage: ICookie = {
+export let cookieStorage: ICookie = {
     "is18": false,
     "authenticated": false,
     "idToken": undefined,
     "categories": undefined,
     "admin": false,
+    "staff": false,
+    "salesRep": false,
     "pactActApproved": false
 }
 
 // @ts-ignore
 export async function load({url, cookies}) {
-
     let themeDoc = await firebaseAdminUtils.getDoc("settings", "theme");
 
     if (themeDoc) {
@@ -25,21 +26,19 @@ export async function load({url, cookies}) {
     let cookie: ICookie = JSON.parse(cookies.get(project_id) || JSON.stringify(cookieStorage));
 
     if (cookie?.user_id && cookie?.authenticated) {
-        let userAcct = await firebaseAdminUtils.getDoc("users", cookie.user_id);
+        if (cookie?.idToken) {
+            let query = firebaseAdminUtils.firestore().collection("pact-act-forms").where("user_id", "==", cookie.user_id).where("approved", "==", true);
+            let data = await firebaseAdminUtils.query(query);
 
-        if (userAcct?.admin) {
-            cookie.admin = true;
+            if (data.length) {
+                cookie.pactActApproved = true;
+            }
+
+            let {emailVerified} = await firebaseAdminUtils.auth().getUser(cookie.user_id);
+            cookie.email_verified = emailVerified;
+        } else {
+            cookie = cookieStorage;
         }
-
-        let query = firebaseAdminUtils.firestore().collection("pact-act-forms").where("user_id", "==", cookie.user_id).where("approved", "==", true);
-        let data = await firebaseAdminUtils.query(query);
-
-        if (data.length) {
-            cookie.pactActApproved = true;
-        }
-
-        let {emailVerified} = await firebaseAdminUtils.auth().getUser(cookie.user_id)
-        cookie.email_verified = emailVerified;
     }
 
     // TODO: Figure out refreshing this, caching and waiting
@@ -50,12 +49,14 @@ export async function load({url, cookies}) {
         console.error(error)
     }
 
-    cookies.set(project_id, JSON.stringify(cookie));
+    try {
+        cookies.set(project_id, JSON.stringify(cookie));
+    } catch (error){}
 
     return {
         theme: themeDoc,
         editor: url.searchParams.get('editor'),
-        cookies: JSON.parse(cookies.get(project_id))
+        cookies: cookie
     };
 }
 
