@@ -8,6 +8,12 @@ export async function POST({request, url}) {
 
         let {user_id} = await firebaseAdminUtils.auth().verifyIdToken(request.headers.get("authorization"));
 
+        let userPerms = await firebaseAdminUtils.getUserPerms(user_id);
+
+        if (!userPerms.admin && !userPerms.staff) {
+            return fail(400);
+        }
+
         if (url.searchParams.has("create")) {
             await firebaseAdminUtils.firestore().collection("reps").doc(data.userId).set({});
         } else if (url.searchParams.has("delete")) {

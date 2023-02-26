@@ -23,21 +23,20 @@ export async function load({url, cookies}) {
             throw redirect(303, '/');
         }
 
-        let isAdmin = await firebaseAdminUtils.getDoc("admins", res.uid);
-        let isSalesRep = await firebaseAdminUtils.getDoc("reps", res.uid);
-        let isStaff = await firebaseAdminUtils.getDoc("staff", res.uid);
+        let userPerms = await firebaseAdminUtils.getUserPerms(res.uid);
 
-        cookie.admin = isAdmin !== undefined;
-        cookie.salesRep = isSalesRep !== undefined;
-        cookie.staff = isStaff !== undefined;
+        cookie.admin = userPerms.admin;
+        cookie.salesRep = userPerms.rep;
+        cookie.staff = userPerms.staff;
+
         let {emailVerified} = await firebaseAdminUtils.auth().getUser(cookie.user_id);
         cookie.email_verified = emailVerified;
-        
+
         try {
             cookies.set(project_id, JSON.stringify(cookie));
         } catch (error) {}
 
-        if (!isAdmin && !isStaff && !isSalesRep) {
+        if (!userPerms.admin && !userPerms.staff && !userPerms.rep) {
             throw redirect(303, '/account');
         }
 

@@ -2,14 +2,14 @@ import {fail, redirect} from "@sveltejs/kit";
 import {firebaseAdminUtils} from "./api/_utils/firebase-admin-utils";
 import type ICookie from "../lib/interfaces/ICookie";
 import {project_id} from "../lib/stores/cookies";
-import {cookieStorage} from "./+layout.server";
+import {cookieStorage} from "./_cookieStorage";
 
 export const actions = {
     // @ts-ignore
     enter: async ({request, cookies}) => {
         let cookie: ICookie = JSON.parse(cookies.get(project_id) || "{}");
         if (cookie.authenticated && !cookie.idToken) {
-            cookie = cookieStorage;
+            cookie = {...cookieStorage};
         }
         cookie.is18 = true;
         cookies.set(project_id, JSON.stringify(cookie));
@@ -45,13 +45,7 @@ export const actions = {
     },
     // @ts-ignore
     logout: async ({request, cookies}) => {
-        let cookie = JSON.parse(cookies.get(project_id) || "{}");
-        delete cookie["authenticated"];
-        delete cookie["idToken"];
-        delete cookie["email"];
-        delete cookie["email_verified"];
-        delete cookie["user_id"];
-        cookies.set(project_id, JSON.stringify(cookie));
+        cookies.set(project_id, JSON.stringify({...cookieStorage, is18: true }));
         throw redirect(303, '/');
     }
 };

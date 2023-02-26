@@ -18,7 +18,7 @@
             },
             body
         });
-        await goto('/')
+        window.location.href = "/"
     }
 
     if (data["cookies"]) {
@@ -57,15 +57,21 @@
             </a>
             <hr/>
         {/if}
-        <a href="/account">
-            <span class="material-symbols-outlined mr-2">person</span>
-            Customer Dashboard
-        </a>
-        <hr/>
         <button on:click={logout} class="text-red-500">
             <span class="material-symbols-outlined mr-2">logout</span>
             Sign out
         </button>
+        <hr />
+        <div class="p-2">
+            {#if $cookies.admin}
+                <span class="font-medium text-orange-500">Admin</span>
+            {:else if $cookies.staff}
+                <span class="font-medium text-indigo-500">Staff</span>
+            {:else if $cookies.salesRep}
+                <span class="font-medium text-blue-500">Sales Rep</span>
+            {/if}
+        </div>
+
     </div>
     <div class="content">
         <slot/>

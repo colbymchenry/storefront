@@ -72,13 +72,6 @@
                 <span class="material-symbols-outlined mr-2">description</span>
                 New Pact Act Form
             </a>
-            {#if ($cookies?.staff || $cookies?.admin || $cookies?.salesRep)}
-                <hr/>
-                <a href="/admin">
-                    <span class="material-symbols-outlined mr-2">admin_panel_settings</span>
-                    Admin Dashboard
-                </a>
-            {/if}
             <hr/>
             <button on:click={logout} class="text-red-500">
                 <span class="material-symbols-outlined mr-2">logout</span>

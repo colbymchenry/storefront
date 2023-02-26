@@ -67,8 +67,15 @@ function createFirebase() {
         return (await (await firestore().collection(collection).doc(docId).get()).data());
     }
 
+    async function getUserPerms(userId: string) {
+        let isAdmin = await firebaseAdminUtils.getDoc("admins", userId);
+        let isSalesRep = await firebaseAdminUtils.getDoc("reps", userId);
+        let isStaff = await firebaseAdminUtils.getDoc("staff", userId);
+        return {admin: isAdmin !== undefined, rep: isSalesRep !== undefined, staff: isStaff !== undefined}
+    }
+
     return {
-        query, getDoc, firestore, passwordRegex, serverTimestamp, auth, toTimestamp, toDate, getCollectionArray
+        query, getDoc, firestore, passwordRegex, serverTimestamp, auth, toTimestamp, toDate, getCollectionArray, getUserPerms
     }
 
 }

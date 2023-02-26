@@ -2,17 +2,7 @@ import {firebaseAdminUtils} from "./api/_utils/firebase-admin-utils";
 import type ICookie from "../lib/interfaces/ICookie";
 import {project_id} from "../lib/stores/cookies";
 import {lightspeedServerUtils} from "./api/_utils/lightspeed-utils";
-
-export let cookieStorage: ICookie = {
-    "is18": false,
-    "authenticated": false,
-    "idToken": undefined,
-    "categories": undefined,
-    "admin": false,
-    "staff": false,
-    "salesRep": false,
-    "pactActApproved": false
-}
+import {cookieStorage} from "./_cookieStorage";
 
 // @ts-ignore
 export async function load({url, cookies}) {
@@ -37,7 +27,7 @@ export async function load({url, cookies}) {
             let {emailVerified} = await firebaseAdminUtils.auth().getUser(cookie.user_id);
             cookie.email_verified = emailVerified;
         } else {
-            cookie = cookieStorage;
+            cookie = {...cookieStorage};
         }
     }
 
