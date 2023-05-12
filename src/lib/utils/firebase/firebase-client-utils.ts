@@ -1,42 +1,29 @@
-import {initializeApp} from 'firebase/app';
-import {getFirestore} from 'firebase/firestore';
+import type { Analytics } from "@firebase/analytics";
+import type { FirebaseApp } from "@firebase/app";
+import type { Auth } from "@firebase/auth";
+import type { Firestore } from "@firebase/firestore";
+import type { FirebaseStorage } from "@firebase/storage";
+import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from 'firebase/app';
 import {
-    getAuth,
     createUserWithEmailAndPassword,
+    deleteUser as deleteUserAccount,
+    getAuth,
+    sendEmailVerification,
+    sendPasswordResetEmail,
     signInWithEmailAndPassword,
     signOut,
-    updateProfile,
     updateEmail,
     updatePassword,
-    sendEmailVerification,
-    deleteUser as deleteUserAccount,
-    sendPasswordResetEmail
+    updateProfile
 } from 'firebase/auth';
 import {
-    collection,
-    addDoc,
-    doc,
-    getDoc,
-    query,
-    getDocs,
-    setDoc,
-    serverTimestamp,
-    deleteDoc,
-    updateDoc,
-    where,
-    documentId
+    addDoc, collection, deleteDoc, doc, documentId, getDoc, getDocs, getFirestore, query, serverTimestamp, setDoc, updateDoc,
+    where
 } from 'firebase/firestore';
-import {getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL} from "firebase/storage";
-import {getAnalytics} from "firebase/analytics";
-import {get, writable} from "svelte/store";
+import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
+import { writable } from "svelte/store";
 import type IFirebase from "../../interfaces/IFirebase";
-import type {FirebaseApp} from "@firebase/app";
-import type {Analytics} from "@firebase/analytics";
-import type {Firestore} from "@firebase/firestore";
-import type {Auth} from "@firebase/auth";
-import type {FirebaseStorage} from "@firebase/storage";
-import { browser } from '$app/environment';
-import {authStore} from "../../stores/auth";
 
 function removeUndefined(obj: any) {
     Object.keys(obj).forEach(key => obj[key] === undefined ? delete obj[key] : {})

@@ -76,7 +76,7 @@
 </script>
 
 <form>
-    <h2 class="text-xl font-medium mb-4">Pact Act Form - {data?.form?.created_at ? new Date(data.form.created_at).toLocaleDateString() : 'N/A'}</h2>
+    <h2 class="text-xl font-medium mb-4">Pact Act Form - {data?.form?.created_at ? new Date(data.form.created_at).toLocaleDateString() : 'N/A'} {@html data?.form?.denied ? '- <span class="text-white bg-red-600 px-2 py-1 rounded-lg">DENIED</span>' : data?.form?.approved ? '- <span class="text-white bg-green-600 px-2 py-1 rounded-lg">APPROVED</span>' : ''}</h2>
     <div>
         <Input name="firstName" required value={data?.form?.firstName} disabled>
             First name
@@ -126,10 +126,11 @@
     </div>
 
     <div class="!flex items-center justify-start">
-        <button type="button" on:click={deny}
-                class="bg-white !px-8 !text-black border border-solid border-gray-300 hover:bg-gray-100">Deny
+        <button type="button" on:click={deny} disabled={data?.form?.denied || data?.form?.approved}
+                class="disabled:cursor-not-allowed disabled:hover:bg-white bg-white !px-8 !text-black border border-solid border-gray-300 hover:bg-gray-100">Deny
         </button>
-        <button type="button" on:click={approve} class="bg-green-600 !px-8 hover:bg-green-700">Approve</button>
+        <button type="button" on:click={approve}  disabled={data?.form?.denied || data?.form?.approved}
+         class="disabled:cursor-not-allowed disabled:!bg-green-800 disabled:hover:!bg-green-800 bg-green-600 !px-8 hover:bg-green-700">Approve</button>
     </div>
 
 </form>

@@ -69,6 +69,11 @@
     </main>
 {:else}
     <main>
+        {#if $cookies.admin}
+            <div class="w-full p-4 bg-black">
+                Admin
+            </div>
+        {/if}
         <Navigation/>
         <slot/>
     </main>
